@@ -10,7 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, LogIn, UserPlus, ChevronLeft, ChevronRight, Link, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function SupportThisCreator() {
   const [heartCount, setHeartCount] = useState(1)
@@ -46,7 +46,7 @@ export default function SupportThisCreator() {
     { 
       name: 'Bronze', 
       price: 5, 
-      icon: <Shield className="h-8 w-8 mb-2 text-orange-500" />,
+      icon: <Shield className="h-8 w-8 mb-2 text-orange-400" />,
       benefits: [
         { text: 'Early access to content', icon: <Clock className="h-4 w-4 mr-2" /> },
         { text: 'Monthly newsletter', icon: <Mail className="h-4 w-4 mr-2" /> }
@@ -80,11 +80,51 @@ export default function SupportThisCreator() {
     { title: 'Future Plans', content: 'We aim to launch a beta version within the next 3 months, followed by a full release by the end of the year.', icon: <Calendar className="h-5 w-5" /> },
   ]  
 
+ const [direction, setDirection] = useState(0)
   const projectImages = [
     "/product.webp?height=360&width=640",
     "/product2.webp?height=360&width=640",
     "/product3.webp?height=360&width=640"
   ]
+
+  const nextImage = () => {
+    setDirection(1)
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % projectImages.length)
+  }
+
+  const prevImage = () => {
+    setDirection(-1)
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + projectImages.length) % projectImages.length)
+  }
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextImage()
+    }, 20000) 
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const variants = {
+    enter: (direction: number) => {
+      return {
+        x: direction > 0 ? 1000 : -1000,
+        opacity: 0
+      }
+    },
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => {
+      return {
+        zIndex: 0,
+        x: direction < 0 ? 1000 : -1000,
+        opacity: 0
+      }
+    }
+  }
 
   const shopItems = [
     { name: 'T-Shirt', price: 25, image: '/tshirt.jpg?height=360&width=640' },
@@ -136,13 +176,6 @@ export default function SupportThisCreator() {
     }
   }, [])
 
-  const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % projectImages.length)
-  }
-
-  const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + projectImages.length) % projectImages.length)
-  }
 
   return (
     <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -209,24 +242,34 @@ export default function SupportThisCreator() {
               </div>
 
               {/* Project Images Slider */}
-              <div className="relative mb-8 rounded-xl overflow-hidden">
-                <Image 
-                  src={projectImages[currentImageIndex]} 
-                  alt={`Project image ${currentImageIndex + 1}`}
-                  className="w-full h-auto rounded-xl"
-                  width={640}
-                  height={360}
-                />
+              <div className="relative mb-8 rounded-xl overflow-hidden w-full" style={{ paddingTop: '56.25%' }}>
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.img
+                    key={currentImageIndex}
+                    src={projectImages[currentImageIndex]}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.2 }
+                    }}
+                    className="absolute top-0 left-0 w-full h-full object-cover rounded-xl"
+                    alt={`Project image ${currentImageIndex + 1}`}
+                  />
+                </AnimatePresence>
                 <Button 
                   variant="ghost" 
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-200"
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 hover:text-gray-400 p-2 z-10 "
                   onClick={prevImage}
                 >
                   <ChevronLeft className="h-6 w-6" />
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-200"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2  text-gray-200 hover:text-gray-400 p-2 z-10"
                   onClick={nextImage}
                 >
                   <ChevronRight className="h-6 w-6" />
@@ -382,9 +425,9 @@ export default function SupportThisCreator() {
                           <AvatarFallback>{supporter.name[0]}</AvatarFallback>
                         </Avatar>
                         <span className={
-                          index === 0 ? 'text-xl font-bold' :
-                          index === 1 ? 'text-lg font-semibold' :
-                          index === 2 ? 'text-base font-semibold' : ''
+                          index === 0 ? 'text-xl font-bold tracking-tight' :
+                          index === 1 ? 'text-lg font-semibold tracking-tight' :
+                          index === 2 ? 'text-base font-semibold tracking-tight' : ''
                         }>{supporter.name}</span>
                       </div>
                       <div className="flex items-center text-black dark:text-white">
@@ -418,7 +461,7 @@ export default function SupportThisCreator() {
 
               {/* Creators love us */}
               <div className="text-center mb-16">
-                <p className="text-lg font-semibold tracking-[-0.5px]">Creators love us</p>
+                <p className="text-lg font-semibold tracking-[-0.5px]">Creators love us.</p>
               </div>
             </div>
           </>
@@ -467,8 +510,9 @@ export default function SupportThisCreator() {
                     <Image src={item.image} alt={item.name} className="w-full h-48 object-cover mb-4 rounded-lg" width={200} height={200} />
                     <h3 className="font-semibold text-lg mb-2">{item.name}</h3>
                     <p className="text-gray-600 dark:text-gray-300 mb-4">${item.price}</p>
-                    <Button className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 rounded-xl">
-                      Add to Cart
+                    <Button className="w-full bg-transparent border-2 border-gray-600 text-black text-gray-800 dark:text-gray-200 hover:bg-black dark:hover:bg-white hover:text-white rounded-xl font-semibold">
+                     Add to Cart 
+                    <ShoppingCart className="h-4 w-4 ml-2" />
                     </Button>
                   </CardContent>
                 </Card>
@@ -479,7 +523,7 @@ export default function SupportThisCreator() {
       </main>
 
       {/* Sticky send hearts and share buttons */}
-      <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20'}`}>
+      <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20 z-100'}`}>
         <div className="flex space-x-2 px-4 max-w-xl mx-auto">
           <Button className="flex-grow bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl w-[73%]">
             Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
