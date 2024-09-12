@@ -2,12 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import Link from 'next/link'
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet" 
 import Image from 'next/image'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, LogIn, UserPlus, ChevronLeft, ChevronRight, Link, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb } from 'lucide-react' 
+import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, LogIn, UserPlus, ChevronLeft, ChevronRight, LinkIcon, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, AnimatePresence } from 'framer-motion'
@@ -127,9 +128,9 @@ export default function SupportThisCreator() {
   }
 
   const shopItems = [
-    { name: 'T-Shirt', price: 25, image: '/t-shirt.jpg?height=360&width=640' },
-    { name: 'Mug', price: 15, image: '/mug.jpg?height=360&width=640' },
-    { name: 'Sticker Pack', price: 10, image: '/stickerpack.webp?height=360&width=640' },
+    { name: 'T-Shirt', price: 25, image: '/t-shirt.jpg?height=360&width=640', rating: 4.3 },
+    { name: 'Mug', price: 15, image: '/mug.jpg?height=360&width=640', rating: null },
+    { name: 'Sticker Pack', price: 10, image: '/stickerpack.webp?height=360&width=640', rating: 4.7 },
   ]
 
   useEffect(() => {
@@ -505,17 +506,30 @@ export default function SupportThisCreator() {
             <p className="text-gray-600 dark:text-gray-300 mb-8">Support your favorite creator by purchasing exclusive merchandise.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {shopItems.map((item, index) => (
-                <Card key={index} className="bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
-                  <CardContent className="p-4">
-                    <Image src={item.image} alt={item.name} className="w-full h-48 object-cover mb-4 rounded-lg" width={200} height={200} />
-                    <h3 className="font-semibold text-lg mb-2">{item.name}</h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4">${item.price}</p>
-                    <Button className="w-full bg-transparent border-2 border-gray-600 text-black text-gray-800 dark:text-gray-200 hover:bg-black dark:hover:bg-white hover:text-white rounded-xl font-semibold" href="/product">
-                     Add to Cart 
-                    <ShoppingCart className="h-4 w-4 ml-2" />
-                    </Button>
-                  </CardContent>
-                </Card>
+                <Link href="/support/product" key={index} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl p-3 shadow-sm">
+                  <div className="mb-4">
+                    <Image 
+                      src={item.image} 
+                      alt={item.name} 
+                      width={640} 
+                      height={360} 
+                      className="w-full h-48 object-cover rounded-lg transition-transform group-hover:scale-105"  />
+                  </div>
+                  <div className="flex justify-between items-start px-3">
+                    <div className="w-[60%]">
+                      <h3 className="font-semibold text-lg mb-1 tracking-tight">{item.name}</h3>
+                      <div className="flex items-center text-sm">
+                        <Star className="h-4 w-4 fill-black text-black dark:fill-white dark:text-white mr-1" />
+                        {item.rating ? (
+                          <span>{item.rating.toFixed(1)}</span>
+                        ) : (
+                          <span>No ratings</span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="w-[35%] text-right font-semibold tracking-tight text-lg">${item.price}</p>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -548,7 +562,7 @@ export default function SupportThisCreator() {
                     <Instagram className="h-5 w-5" />
                   </Button>
                   <Button variant="outline" className="rounded-full p-2">
-                    <Link className="h-5 w-5" />
+                    <LinkIcon className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
