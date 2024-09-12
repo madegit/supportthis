@@ -517,7 +517,7 @@ export default function SupportThisCreator() {
                   </div>
                   <div className="flex justify-between items-start px-3">
                     <div className="w-[60%]">
-                      <h3 className="font-semibold text-lg mb-1 tracking-tight">{item.name}</h3>
+                      <h3 href="/support/product" className="font-semibold text-lg mb-1 tracking-tight">{item.name}</h3>
                       <div className="flex items-center text-sm">
                         <Star className="h-4 w-4 fill-black text-black dark:fill-white dark:text-white mr-1" />
                         {item.rating ? (
@@ -574,7 +574,7 @@ export default function SupportThisCreator() {
       {/* Footer */}
       <footer ref={footerRef} className="bg-black dark:bg-gray-800 text-white dark:text-gray-200 py-8">
         <div className="container mx-auto px-4 text-center">
-          <p>Powered by SupportThis.org</p>
+          <p >Powered by <a href="https://supportthis.org/" target="_blank" rel="noopener noreferrer">SupportThis.org</a></p>
         </div>
       </footer>
     </div>
