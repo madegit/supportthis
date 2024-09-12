@@ -188,7 +188,7 @@ export function ComponentsProductDetails() {
                     </p>
                   </Label>
                 </div>
- <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />               
+ <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />               
                 <div className="flex items-start space-x-2 mt-4">
                   <RadioGroupItem value="extended" id="extended" className="mt-1 min-w-4" />
                   <Label htmlFor="extended" className="flex-grow">
