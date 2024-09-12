@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet" 
 import Image from 'next/image'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, LogIn, UserPlus, ChevronLeft, ChevronRight, Link, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb } from 'lucide-react' 
+import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, LogIn, UserPlus, ChevronLeft, ChevronRight, Link, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, AnimatePresence } from 'framer-motion'
@@ -82,9 +82,9 @@ export default function SupportThisCreator() {
 
  const [direction, setDirection] = useState(0)
   const projectImages = [
-    "/product.webp?height=360&width=640",
-    "/product2.webp?height=360&width=640",
-    "/product3.webp?height=360&width=640"
+    "/bike.jpg?height=360&width=640",
+    "/project.jpg?height=360&width=640",
+    "/project4.jpg?height=360&width=640"
   ]
 
   const nextImage = () => {
@@ -100,7 +100,7 @@ export default function SupportThisCreator() {
   useEffect(() => {
     const timer = setInterval(() => {
       nextImage()
-    }, 20000) 
+    }, 12000) 
 
     return () => clearInterval(timer)
   }, [])
@@ -113,7 +113,7 @@ export default function SupportThisCreator() {
       }
     },
     center: {
-      zIndex: 1,
+      zIndex: 0,
       x: 0,
       opacity: 1
     },
@@ -127,9 +127,9 @@ export default function SupportThisCreator() {
   }
 
   const shopItems = [
-    { name: 'T-Shirt', price: 25, image: '/tshirt.jpg?height=360&width=640' },
-    { name: 'Mug', price: 15, image: '/mug.png?height=360&width=640' },
-    { name: 'Sticker Pack', price: 10, image: '/stickers.jpg?height=360&width=640' },
+    { name: 'T-Shirt', price: 25, image: '/t-shirt.jpg?height=360&width=640' },
+    { name: 'Mug', price: 15, image: '/mug.jpg?height=360&width=640' },
+    { name: 'Sticker Pack', price: 10, image: '/stickerpack.webp?height=360&width=640' },
   ]
 
   useEffect(() => {
@@ -207,7 +207,7 @@ export default function SupportThisCreator() {
             <SheetContent className="w-[300px]">
               <nav className="flex flex-col space-y-4 items-end mt-8">
                 <Button variant="outline" className="border-gray-200 w-[90%] justify-center rounded-xl">
-                  <LogIn className="mr-2 h-4 w-4" /> Sign In
+                  <Compass className="mr-2 h-4 w-4" /> Discover
                 </Button>
                 <Button className="bg-black text-white hover:bg-red-600 w-[90%] justify-center rounded-xl">
                   <UserPlus className="mr-2 h-4 w-4" /> Get Started
@@ -262,14 +262,14 @@ export default function SupportThisCreator() {
                 </AnimatePresence>
                 <Button 
                   variant="ghost" 
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 hover:text-gray-400 p-2 z-10 "
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 hover:bg-gray-200/20 p-2 z-5 "
                   onClick={prevImage}
                 >
                   <ChevronLeft className="h-6 w-6" />
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2  text-gray-200 hover:text-gray-400 p-2 z-10"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2  text-gray-200 rounded-xl hover:text-gray-400 p-2 z-5 hover:bg-gray-200/20"
                   onClick={nextImage}
                 >
                   <ChevronRight className="h-6 w-6" />
@@ -510,7 +510,7 @@ export default function SupportThisCreator() {
                     <Image src={item.image} alt={item.name} className="w-full h-48 object-cover mb-4 rounded-lg" width={200} height={200} />
                     <h3 className="font-semibold text-lg mb-2">{item.name}</h3>
                     <p className="text-gray-600 dark:text-gray-300 mb-4">${item.price}</p>
-                    <Button className="w-full bg-transparent border-2 border-gray-600 text-black text-gray-800 dark:text-gray-200 hover:bg-black dark:hover:bg-white hover:text-white rounded-xl font-semibold">
+                    <Button className="w-full bg-transparent border-2 border-gray-600 text-black text-gray-800 dark:text-gray-200 hover:bg-black dark:hover:bg-white hover:text-white rounded-xl font-semibold" href="/product">
                      Add to Cart 
                     <ShoppingCart className="h-4 w-4 ml-2" />
                     </Button>
@@ -523,7 +523,7 @@ export default function SupportThisCreator() {
       </main>
 
       {/* Sticky send hearts and share buttons */}
-      <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20 z-100'}`}>
+      <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20 z-200'}`}>
         <div className="flex space-x-2 px-4 max-w-xl mx-auto">
           <Button className="flex-grow bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl w-[73%]">
             Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
@@ -534,7 +534,7 @@ export default function SupportThisCreator() {
                 <Share2 className="h-5 w-5" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] rounded-none">
+            <DialogContent className="sm:w-[425px] w-5/6 rounded-xl">
               <div className="flex flex-col space-y-4 items-center">
                 <h3 className="text-lg font-semibold">Share</h3>
                 <div className="flex space-x-4">
