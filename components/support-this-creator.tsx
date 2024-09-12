@@ -517,7 +517,7 @@ export default function SupportThisCreator() {
                   </div>
                   <div className="flex justify-between items-start px-3">
                     <div className="w-[60%]">
-                      <h3 href="/support/product" className="font-semibold text-lg mb-1 tracking-tight">{item.name}</h3>
+                      <h3 className="font-semibold text-lg mb-1 tracking-tight">{item.name}</h3>
                       <div className="flex items-center text-sm">
                         <Star className="h-4 w-4 fill-black text-black dark:fill-white dark:text-white mr-1" />
                         {item.rating ? (
