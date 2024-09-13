@@ -11,14 +11,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, LogIn, UserPlus, ChevronLeft, ChevronRight, LinkIcon, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 
 export default function SupportThisCreator() {
   const [heartCount, setHeartCount] = useState(1)
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
   const [isSticky, setIsSticky] = useState(false)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [activePage, setActivePage] = useState('home')
   const [isHeartJarVisible, setIsHeartJarVisible] = useState(false)
   const incrementalSectionRef = useRef(null)
@@ -81,51 +80,46 @@ export default function SupportThisCreator() {
     { title: 'Future Plans', content: 'We aim to launch a beta version within the next 3 months, followed by a full release by the end of the year.', icon: <Calendar className="h-5 w-5" /> },
   ]  
 
- const [direction, setDirection] = useState(0)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [sliderWidth, setSliderWidth] = useState(0)
+  const sliderRef = useRef<HTMLDivElement>(null)
+  const controls = useAnimation()
+
   const projectImages = [
     "/bike.jpg?height=360&width=640",
     "/project.jpg?height=360&width=640",
     "/project4.jpg?height=360&width=640"
   ]
 
+  useEffect(() => {
+    if (sliderRef.current) {
+      setSliderWidth(sliderRef.current.scrollWidth - sliderRef.current.offsetWidth)
+    }
+  }, [])
+
   const nextImage = () => {
-    setDirection(1)
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % projectImages.length)
+    setCurrentImageIndex((prevIndex) => {
+      const newIndex = (prevIndex + 1) % projectImages.length
+      controls.start({ x: -newIndex * 100 + '%' })
+      return newIndex
+    })
   }
 
   const prevImage = () => {
-    setDirection(-1)
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + projectImages.length) % projectImages.length)
+    setCurrentImageIndex((prevIndex) => {
+      const newIndex = (prevIndex - 1 + projectImages.length) % projectImages.length
+      controls.start({ x: -newIndex * 100 + '%' })
+      return newIndex
+    })
   }
 
   useEffect(() => {
     const timer = setInterval(() => {
       nextImage()
-    }, 12000) 
+    }, 5000) // Change image every 5 seconds
 
     return () => clearInterval(timer)
   }, [])
-
-  const variants = {
-    enter: (direction: number) => {
-      return {
-        x: direction > 0 ? 1000 : -1000,
-        opacity: 0
-      }
-    },
-    center: {
-      zIndex: 0,
-      x: 0,
-      opacity: 1
-    },
-    exit: (direction: number) => {
-      return {
-        zIndex: 0,
-        x: direction < 0 ? 1000 : -1000,
-        opacity: 0
-      }
-    }
-  }
 
   const shopItems = [
     { name: 'T-Shirt', price: 25, image: '/t-shirt.jpg?height=360&width=640', rating: 4.3 },
@@ -244,37 +238,52 @@ export default function SupportThisCreator() {
 
               {/* Project Images Slider */}
               <div className="relative mb-8 rounded-xl overflow-hidden w-full" style={{ paddingTop: '56.25%' }}>
-                <AnimatePresence initial={false} custom={direction}>
-                  <motion.img
-                    key={currentImageIndex}
-                    src={projectImages[currentImageIndex]}
-                    custom={direction}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{
-                      x: { type: "spring", stiffness: 300, damping: 30 },
-                      opacity: { duration: 0.2 }
-                    }}
-                    className="absolute top-0 left-0 w-full h-full object-cover rounded-xl"
-                    alt={`Project image ${currentImageIndex + 1}`}
-                  />
-                </AnimatePresence>
+                <motion.div 
+                  ref={sliderRef}
+                  className="absolute top-0 left-0 w-full h-full cursor-grab active:cursor-grabbing"
+                  drag="x"
+                  dragConstraints={{ right: 0, left: -sliderWidth }}
+                  animate={controls}
+                  transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                >
+                  <motion.div className="flex w-full h-full">
+                    {projectImages.map((image, index) => (
+                      <motion.div
+                        key={index}
+                        className="min-w-full h-full"
+                        style={{ 
+                          backgroundImage: `url(${image})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}
+                      />
+                    ))}
+                  </motion.div>
+                </motion.div>
                 <Button 
                   variant="ghost" 
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 hover:bg-gray-200/20 p-2 z-5 "
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 hover:bg-gray-200/20 p-2 z-10"
                   onClick={prevImage}
                 >
                   <ChevronLeft className="h-6 w-6" />
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2  text-gray-200 rounded-xl hover:text-gray-400 p-2 z-5 hover:bg-gray-200/20"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 p-2 z-10 hover:bg-gray-200/20"
                   onClick={nextImage}
                 >
                   <ChevronRight className="h-6 w-6" />
                 </Button>
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                  {projectImages.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`w-3 h-1 rounded-full ${
+                        index === currentImageIndex ? ' w-5 bg-white' : 'bg-gray-400 ease-in-out duration-300'
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
 
               {/* Hearts Jar */}
@@ -511,9 +520,9 @@ export default function SupportThisCreator() {
                     <Image 
                       src={item.image} 
                       alt={item.name} 
-                      width={640} 
-                      height={360} 
-                      className="w-full h-48 object-cover rounded-lg transition-transform group-hover:scale-105"  />
+                      width={400} 
+                      height={440} 
+                      className="w-full h-60 object-cover rounded-lg transition-transform group-hover:scale-105"  />
                   </div>
                   <div className="flex justify-between items-start px-3">
                     <div className="w-[60%]">

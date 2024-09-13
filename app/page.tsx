@@ -1,12 +1,7 @@
-import React from 'react';
+'use client'
 
-const Page: React.FC = () => {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-50">
-      <h1 className="text-2xl font-bold mb-4 tracking-tight">SupportThis.Org</h1>
-      <h2 className="text-1xl text-gray-600 tracking-tight">A Crowdfunding Platform for Independent & Open-Source Projects.</h2>
-    </div>
-  );
-};
+import ComingSoonComponent from '@/components/coming-soon'
 
-export default Page;
+export default function Home() {
+  return <ComingSoonComponent/>
+}

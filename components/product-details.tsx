@@ -8,15 +8,18 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { ChevronLeft, ChevronRight, Star, Minus, Plus, ShoppingCart, Truck, RotateCw, CreditCard } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 
 export function ComponentsProductDetails() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [quantity, setQuantity] = useState(1)
-  const [direction, setDirection] = useState(0)
   const [selectedLicense, setSelectedLicense] = useState('regular')
   const [isSticky, setIsSticky] = useState(false)
   const addToCartRef = useRef(null)
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [sliderWidth, setSliderWidth] = useState(0)
+  const sliderRef = useRef<HTMLDivElement>(null)
+  const controls = useAnimation()
 
   const productImages = [
     "/t-shirt.jpg?height=400&width=400",
@@ -24,18 +27,38 @@ export function ComponentsProductDetails() {
     "/t-shirt3.jpg?height=400&width=400"
   ]
 
-  const basePrice = 68
-  const extendedPrice = 300
+  useEffect(() => {
+    if (sliderRef.current) {
+      setSliderWidth(sliderRef.current.scrollWidth - sliderRef.current.offsetWidth)
+    }
+  }, [])
 
   const nextImage = () => {
-    setDirection(1)
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % productImages.length)
+    setCurrentImageIndex((prevIndex) => {
+      const newIndex = (prevIndex + 1) % productImages.length
+      controls.start({ x: -newIndex * 100 + '%' })
+      return newIndex
+    })
   }
 
   const prevImage = () => {
-    setDirection(-1)
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + productImages.length) % productImages.length)
+    setCurrentImageIndex((prevIndex) => {
+      const newIndex = (prevIndex - 1 + productImages.length) % productImages.length
+      controls.start({ x: -newIndex * 100 + '%' })
+      return newIndex
+    })
   }
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextImage()
+    }, 5000) // Change image every 5 seconds
+
+    return () => clearInterval(timer)
+  }, [])
+  
+  const basePrice = 68
+  const extendedPrice = 300
 
   const incrementQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1)
@@ -69,35 +92,7 @@ export function ComponentsProductDetails() {
     }
   }, [])
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      nextImage()
-    }, 5000) // Change image every 5 seconds
-
-    return () => clearInterval(timer)
-  }, [])
-
-  const variants = {
-    enter: (direction: number) => {
-      return {
-        x: direction > 0 ? 1000 : -1000,
-        opacity: 0
-      }
-    },
-    center: {
-      zIndex: 0,
-      x: 0,
-      opacity: 1
-    },
-    exit: (direction: number) => {
-      return {
-        zIndex: 0,
-        x: direction < 0 ? 1000 : -1000,
-        opacity: 0
-      }
-    }
-  }
-
+  
   return (
     <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       {/* Header */}
@@ -120,43 +115,58 @@ export function ComponentsProductDetails() {
       <main className="container mx-auto pt-8 px-4 pb-32 lg:grid lg:grid-cols-2 lg:gap-8 lg:max-w-6xl">
         {/* Product Image Slider */}
         <div className="relative mb-8 rounded-xl overflow-hidden aspect-square">
-          <AnimatePresence initial={false} custom={direction}>
-            <motion.img
-              key={currentImageIndex}
-              src={productImages[currentImageIndex]}
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 }
-              }}
-              className="absolute top-0 left-0 w-full h-full object-cover rounded-xl"
-              alt={`Product image ${currentImageIndex + 1}`}
-            />
-          </AnimatePresence>
+          <motion.div 
+            ref={sliderRef}
+            className="absolute top-0 left-0 w-full h-full cursor-grab active:cursor-grabbing"
+            drag="x"
+            dragConstraints={{ right: 0, left: -sliderWidth }}
+            animate={controls}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+          >
+            <motion.div className="flex w-full h-full">
+              {productImages.map((image, index) => (
+                <motion.div
+                  key={index}
+                  className="min-w-full h-full"
+                  style={{ 
+                    backgroundImage: `url(${image})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                  }}
+                />
+              ))}
+            </motion.div>
+          </motion.div>
           <Button 
             variant="ghost" 
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 hover:bg-gray-200/20 p-2"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 hover:bg-gray-200/20 p-2 z-10"
             onClick={prevImage}
           >
             <ChevronLeft className="h-6 w-6" />
           </Button>
           <Button 
             variant="ghost" 
-            className="absolute right-2 top-1/2 transform -translate-y-1/2  text-gray-200 rounded-xl hover:text-gray-400 hover:bg-gray-200/20 p-2"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 p-2 z-10 hover:bg-gray-200/20"
             onClick={nextImage}
           >
             <ChevronRight className="h-6 w-6" />
           </Button>
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+            {productImages.map((_, index) => (
+              <div
+                key={index}
+                className={`w-3 h-1 rounded-full ${
+                        index === currentImageIndex ? ' w-5 bg-white' : 'bg-gray-400 ease-in-out duration-300'
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Product Details */}
         <div>
           <h1 className="text-3xl font-bold mb-4 tracking-tight">Limited Edition T-Shirt</h1>
-          
+
           {/* Product Rating */}
           <div className="flex items-center mb-4">
             <div className="flex items-center">
@@ -262,7 +272,7 @@ export function ComponentsProductDetails() {
         </div>
       </div>
 
-      
+
       {/* Footer */}
       <footer className="bg-black dark:bg-gray-800 text-white dark:text-gray-200 py-8">
         <div className="container mx-auto px-4 text-center">
