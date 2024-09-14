@@ -28,7 +28,7 @@ export default function ComingSoonComponent() {
    
 
       <main className="flex-grow container mx-auto px-8 py-12 flex flex-col items-center justify-center relative z-10">
-        <Card className="w-full max-w-lg bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
+        <Card className="w-full max-w-md bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
           <CardHeader className="text-center">
             <CardTitle className="text-4xl font-bold mb-4 flex items-center tracking-tight justify-center mr-8">
               <ChefHat className="mr-2 h-8 w-8" /> Cooking the Perfect Digital Recipe.
