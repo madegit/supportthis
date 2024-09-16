@@ -21,6 +21,23 @@ export function ComponentsProductDetails() {
   const sliderRef = useRef<HTMLDivElement>(null)
   const controls = useAnimation()
 
+  const [pageTexts, setPageTexts] = useState({
+    creatorName: 'John Doe',
+    productName: 'Limited Edition T-Shirt',
+    productDescription: 'Show your support with this limited edition t-shirt featuring custom artwork by John Doe. Made from 100% organic cotton for ultimate comfort. Available in multiple sizes and colors.',
+    reviewCount: '125 reviews',
+    regularLicenseTitle: 'Regular license — Super file!',
+    regularLicenseDescription: 'You can use this resource in Sketch, Adobe XD, Figma formats and edit it according to your needs. Use free for non-commercial projects.',
+    extendedLicenseTitle: 'Extended license — For your next projects!',
+    extendedLicenseDescription: 'You can use this resource in Sketch, Adobe XD, Figma formats and edit it according to your needs. For creating digital end products for resale such as static designs, static website elements, and inside site constructors.',
+    addToCartText: 'Add to Cart',
+    totalText: 'Total',
+    shippingInfo: 'Free shipping on orders over $50',
+    returnPolicy: '30-day return policy',
+    paymentInfo: 'Secure payment process',
+    footerText: 'Powered by SupportThis.org'
+  })
+
   const productImages = [
     "/t-shirt.jpg?height=400&width=400",
     "/t-shirt2.jpg?height=400&width=400",
@@ -56,7 +73,7 @@ export function ComponentsProductDetails() {
 
     return () => clearInterval(timer)
   }, [])
-  
+
   const basePrice = 68
   const extendedPrice = 300
 
@@ -92,7 +109,6 @@ export function ComponentsProductDetails() {
     }
   }, [])
 
-  
   return (
     <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       {/* Header */}
@@ -100,10 +116,10 @@ export function ComponentsProductDetails() {
         <div className="container mx-auto h-16 flex items-center justify-between px-4">
           <div className="flex items-center space-x-2">
             <Avatar className="h-8 w-8 rounded-full">
-              <AvatarImage src="/avatar.png" alt="Creator" />
-              <AvatarFallback>JD</AvatarFallback>
+              <AvatarImage src="/avatar.png" alt={pageTexts.creatorName} />
+              <AvatarFallback>{pageTexts.creatorName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
             </Avatar>
-            <span className="font-semibold tracking-tight">John Doe</span>
+            <span className="font-semibold tracking-tight">{pageTexts.creatorName}</span>
           </div>
           <Button variant="ghost" className="p-1">
             <ShoppingCart className="h-5 w-5" />
@@ -165,7 +181,7 @@ export function ComponentsProductDetails() {
 
         {/* Product Details */}
         <div>
-          <h1 className="text-3xl font-bold mb-4 tracking-tight">Limited Edition T-Shirt</h1>
+          <h1 className="text-3xl font-bold mb-4 tracking-tight">{pageTexts.productName}</h1>
 
           {/* Product Rating */}
           <div className="flex items-center mb-4">
@@ -174,12 +190,12 @@ export function ComponentsProductDetails() {
                 <Star key={star} className="w-5 h-5 fill-black text-black dark:fill-white dark:text-white" />
               ))}
             </div>
-            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">(125 reviews)</span>
+            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">({pageTexts.reviewCount})</span>
           </div>
 
           {/* Product Description */}
           <p className="text-gray-600 dark:text-gray-300 mb-6 tracking-tight">
-            Show your support with this limited edition t-shirt featuring custom artwork by John Doe. Made from 100% organic cotton for ultimate comfort. Available in multiple sizes and colors.
+            {pageTexts.productDescription}
           </p>
 
           {/* Pricing Options */}
@@ -191,23 +207,23 @@ export function ComponentsProductDetails() {
                   <Label htmlFor="regular" className="flex-grow">
                     <div className="flex justify-between items-center w-full">
                       <span className="text-2xl font-bold mr-[10px]">${basePrice}</span>
-                      <span className="text-sm text-gray-600 mb-[5px] dark:text-gray-400">Regular license — Super file!</span>
+                      <span className="text-sm text-gray-600 mb-[5px] dark:text-gray-400">{pageTexts.regularLicenseTitle}</span>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 tracking-tight">
-                      You can use this resource in Sketch, Adobe XD, Figma formats and edit it according to your needs. Use free for non-commercial projects.
+                      {pageTexts.regularLicenseDescription}
                     </p>
                   </Label>
                 </div>
- <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />               
+                <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />               
                 <div className="flex items-start space-x-2 mt-4">
                   <RadioGroupItem value="extended" id="extended" className="mt-1 min-w-4" />
                   <Label htmlFor="extended" className="flex-grow">
                     <div className="flex justify-between items-center w-full">
                       <span className="text-2xl font-bold mr-[10px]">${extendedPrice}</span>
-                      <span className="text-sm text-gray-600 dark:text-gray-400 mr-[5px]">Extended license — For your next projects!</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400 mr-[5px]">{pageTexts.extendedLicenseTitle}</span>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 tracking-tight">
-                      You can use this resource in Sketch, Adobe XD, Figma formats and edit it according to your needs. For creating digital end products for resale such as static designs, static website elements, and inside site constructors.
+                      {pageTexts.extendedLicenseDescription}
                     </p>
                   </Label>
                 </div>
@@ -233,28 +249,28 @@ export function ComponentsProductDetails() {
               </Button>
             </div>
             <Button ref={addToCartRef} className="flex-grow bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl tracking-tight">
-              Add to Cart <ShoppingCart className="ml-2 h-5 w-5" />
+              {pageTexts.addToCartText} <ShoppingCart className="ml-2 h-5 w-5" />
             </Button>
           </div>
 
           {/* Total Price */}
           <div className="text-xl font-bold mb-6">
-            Total: ${calculateTotal()}
+            {pageTexts.totalText}: ${calculateTotal()}
           </div>
 
           {/* Additional Product Info */}
           <div className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
             <div className="flex items-center">
               <Truck className="h-5 w-5 mr-2" />
-              <p>Free shipping on orders over $50</p>
+              <p>{pageTexts.shippingInfo}</p>
             </div>
             <div className="flex items-center">
               <RotateCw className="h-5 w-5 mr-2" />
-              <p>30-day return policy</p>
+              <p>{pageTexts.returnPolicy}</p>
             </div>
             <div className="flex items-center">
               <CreditCard className="h-5 w-5 mr-2" />
-              <p>Secure payment process</p>
+              <p>{pageTexts.paymentInfo}</p>
             </div>
           </div>
         </div>
@@ -266,18 +282,16 @@ export function ComponentsProductDetails() {
           <Button className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl flex items-center justify-between">
             <span>${calculateTotal()}</span>
             <span className="flex items-center">
-              Add to Cart <ShoppingCart className="ml-2 h-5 w-5" />
+              {pageTexts.addToCartText} <ShoppingCart className="ml-2 h-5 w-5" />
             </span>
           </Button>
         </div>
       </div>
 
-
       {/* Footer */}
       <footer className="bg-black dark:bg-gray-800 text-white dark:text-gray-200 py-8">
         <div className="container mx-auto px-4 text-center">
-          <p >Powered by <a href="https://supportthis.org/" target="_blank" rel="noopener noreferrer">SupportThis.org</a></p>
-
+          <p>{pageTexts.footerText}</p>
         </div>
       </footer>
     </div>

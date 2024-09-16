@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useRef } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -24,6 +26,13 @@ export default function SupportThisCreator() {
   const headerRef = useRef(null)
   const footerRef = useRef(null)
   const heartJarRef = useRef(null)
+
+  const creatorInfo = {
+    name: "John Doe",
+    username: "@johndoe",
+    avatar: "/avatar.png",
+    bio: "Help support the development of this amazing project that aims to revolutionize the way we interact with technology."
+  }
 
   const heartProgress = 75 // Percentage of heart goal reached
   const contributors = [
@@ -171,6 +180,31 @@ export default function SupportThisCreator() {
     }
   }, [])
 
+  const pageContent = {
+    home: {
+      title: "Support This Creator",
+      description: "Help support the development of this amazing project."
+    },
+    club: {
+      title: "Join Our Club",
+      description: "Become a member and get exclusive benefits to support your favorite creator."
+    },
+    shop: {
+      title: "Shop",
+      description: "Support your favorite creator by purchasing exclusive merchandise."
+    }
+  }
+
+  const ctaSection = {
+    title: "Make money doing what you love",
+    description: "No fees on donations!",
+    buttonText: "Get Started"
+  }
+
+  const siteRating = {
+    rating: 4.0,
+    text: "Creators love us."
+  }
 
   return (
     <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -178,7 +212,7 @@ export default function SupportThisCreator() {
       <header ref={headerRef} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md sticky top-0 z-10">
         <div className="container mx-auto h-16 flex items-center justify-between px-4">
           <nav className="flex space-x-4">
-            {['home', 'club', 'shop'].map((page) => (
+            {Object.keys(pageContent).map((page) => (
               <Button
                 key={page}
                 variant="ghost"
@@ -215,24 +249,27 @@ export default function SupportThisCreator() {
 
       {/* Main content */}
       <main className="container mx-auto pt-8 px-4 pb-32 lg:grid lg:grid-cols-2 lg:gap-8 lg:max-w-6xl">
+        <h1 className="sr-only">{pageContent[activePage].title}</h1>
+        <p className="sr-only">{pageContent[activePage].description}</p>
+
         {activePage === 'home' && (
           <>
             <div>
               {/* Creator profile */}
               <div className="text-center mb-8">
                 <Avatar className="h-24 w-24 mx-auto mb-4 ring-2 ring-red-200 rounded-full">
-                  <AvatarImage src="/avatar.png" alt="John Doe" />
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarImage src={creatorInfo.avatar} alt={creatorInfo.name} />
+                  <AvatarFallback>{creatorInfo.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
-                <h2 className="text-2xl font-bold tracking-[-1.5px]">John Doe</h2>
-                <p className="text-gray-500 dark:text-gray-400 mb-4 tracking-[-0.5px]">@johndoe</p>
+                <h2 className="text-2xl font-bold tracking-[-1.5px]">{creatorInfo.name}</h2>
+                <p className="text-gray-500 dark:text-gray-400 mb-4 tracking-[-0.5px]">{creatorInfo.username}</p>
                 <div className="flex justify-center space-x-4 mb-4">
                   <Twitter className="h-5 w-5 text-gray-400" />
                   <Instagram className="h-5 w-5 text-gray-400" />
                   <Globe className="h-5 w-5 text-gray-400" />
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto tracking-[-0.5px]">
-                  Help support the development of this amazing project that aims to revolutionize the way we interact with technology.
+                  {creatorInfo.bio}
                 </p>
               </div>
 
@@ -451,27 +488,25 @@ export default function SupportThisCreator() {
               {/* CTA Section */}
               <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
                 <CardContent className="p-6 text-center">
-                  <h3 className="text-xl font-bold mb-2 tracking-[-1px]">Make money doing what you love</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 tracking-[-0.5px]">No fees on donations!</p>
+                  <h3 className="text-xl font-bold mb-2 tracking-[-1px]">{ctaSection.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 tracking-[-0.5px]">{ctaSection.description}</p>
                   <Button className="bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 text-base py-2 px-6 rounded-xl">
-                    Get Started
+                    {ctaSection.buttonText}
                   </Button>
                 </CardContent>
               </Card>
 
               {/* Site Rating */}
               <div className="flex justify-center items-center space-x-1 mb-4">
-                <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                <Star className="h-5 w-5 text-gray-300 dark:text-gray-600" />
-                <span className="ml-2 text-gray-600 dark:text-gray-300 tracking-[-0.5px]">4.0 out of 5</span>
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className={`h-5 w-5 ${i < Math.floor(siteRating.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300 dark:text-gray-600'}`} />
+                ))}
+                <span className="ml-2 text-gray-600 dark:text-gray-300 tracking-[-0.5px]">{siteRating.rating} out of 5</span>
               </div>
 
               {/* Creators love us */}
               <div className="text-center mb-16">
-                <p className="text-lg font-semibold tracking-[-0.5px]">Creators love us.</p>
+                <p className="text-lg font-semibold tracking-[-0.5px]">{siteRating.text}</p>
               </div>
             </div>
           </>
@@ -479,8 +514,8 @@ export default function SupportThisCreator() {
 
         {activePage === 'club' && (
           <div className="col-span-2">
-            <h2 className="text-3xl font-bold mb-4 tracking-[-1.5px]">Join Our Club</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-8">Become a member and get exclusive benefits to support your favorite creator.</p>
+            <h2 className="text-3xl font-bold mb-4 tracking-[-1.5px]">{pageContent.club.title}</h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-8">{pageContent.club.description}</p>
             {/* Recurring Membership Plans */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {membershipPlans.map((plan, index) => (
@@ -511,8 +546,8 @@ export default function SupportThisCreator() {
 
         {activePage === 'shop' && (
           <div className="col-span-2">
-            <h2 className="text-3xl font-bold mb-4 tracking-[-1.5px]">Shop</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-8">Support your favorite creator by purchasing exclusive merchandise.</p>
+            <h2 className="text-3xl font-bold mb-4 tracking-[-1.5px]">{pageContent.shop.title}</h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-8">{pageContent.shop.description}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {shopItems.map((item, index) => (
                 <Link href="/support/product" key={index} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl p-3 shadow-sm">
@@ -583,12 +618,9 @@ export default function SupportThisCreator() {
       {/* Footer */}
       <footer ref={footerRef} className="bg-black dark:bg-gray-800 text-white dark:text-gray-200 py-8">
         <div className="container mx-auto px-4 text-center">
-          <p >Powered by <a href="https://supportthis.org/" target="_blank" rel="noopener noreferrer">SupportThis.org</a></p>
+          <p>Powered by <a href="https://supportthis.org/" target="_blank" rel="noopener noreferrer">SupportThis.org</a></p>
         </div>
       </footer>
     </div>
   )
-}  
-
-
-   
+}
