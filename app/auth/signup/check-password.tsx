@@ -106,7 +106,7 @@ export default function CheckPassword() {
   )
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
       {children}
