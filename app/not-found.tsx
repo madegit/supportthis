@@ -32,13 +32,13 @@ export default function NotFound() {
       <main className="container mx-auto pt-8 px-4 pb-32 flex items-center justify-center">
         <Card className="max-w-md w-full bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
           <CardHeader>
-            <CardTitle className="text-4xl font-bold tracking-tight text-center">404</CardTitle>
+            <CardTitle className="text-5xl font-bold tracking-tight text-center">404</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
-            <p className="text-xl mb-6">Oops! The page you're looking for doesn't exist.</p>
+            <p className="text-xl mb-6 tracking-tight">Oops! The page you're looking for doesn't exist.</p>
             <Button asChild className="bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl">
               <Link href="/">
-                <Home className="mr-2 h-4 w-4" /> Go to Homepage
+                <Home className="mr-2 h-4 w-4 tracking-tight" /> Go to Homepage
               </Link>
             </Button>
           </CardContent>

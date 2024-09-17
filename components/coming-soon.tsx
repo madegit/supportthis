@@ -28,7 +28,7 @@ export default function ComingSoonComponent() {
       className="min-h-screen bg-[url('bg.jpg')] text-gray-800 dark:text-gray-200 flex flex-col font-['Inter',sans-serif]"
       style={{ letterSpacing: "-0.05em" }}
     >
-      <main className="flex-grow container mx-auto px-20 py-15 flex flex-col items-center justify-center relative z-10">
+      <main className="flex-grow container mx-auto px-7 py-15 flex flex-col items-center justify-center relative z-10">
         <Card className="w-full max-w-md bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
           <CardHeader className="text-center">
             <CardTitle className="text-4xl font-bold mb-4 flex items-center tracking-tight justify-center mr-8">
