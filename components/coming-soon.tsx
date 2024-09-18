@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
 export default function ComingSoonComponent() {
   const [email, setEmail] = useState("");
@@ -62,22 +63,7 @@ export default function ComingSoonComponent() {
         </Card>
       </main>
 
-      <footer className="bg-black dark:bg-gray-800 text-white dark:text-gray-200 py-8 relative z-10">
-        <div className="container mx-auto px-4 text-center">
-          <p>
-            {" "}
-            &copy; Copyright 2024{" "}
-            <a
-              href="https://supportthis.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="no-underline"
-            >
-              SupportThis.org
-            </a>
-          </p>
-        </div>
-      </footer>
+       <Footer />
     </div>
   );
 }

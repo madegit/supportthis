@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { ChevronLeft, ChevronRight, Star, Minus, Plus, ShoppingCart, Truck, RotateCw, CreditCard } from 'lucide-react'
 import { motion, useAnimation } from 'framer-motion'
-
+import { SupportFooter } from "@/components/SupportFooter"
 export function ComponentsProductDetails() {
   const [quantity, setQuantity] = useState(1)
   const [selectedLicense, setSelectedLicense] = useState('regular')
@@ -288,12 +288,7 @@ export function ComponentsProductDetails() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-black dark:bg-gray-800 text-white dark:text-gray-200 py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p>{pageTexts.footerText}</p>
-        </div>
-      </footer>
+      <SupportFooter />
     </div>
   )
 }

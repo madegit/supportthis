@@ -5,6 +5,7 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "typeRoots": ["./node_modules/@types", "./types"],
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -15,6 +16,12 @@
     "plugins": [
       {
         "name": "next"
+      },
+      {
+        "compilerOptions": {
+          // ... other options
+          "typeRoots": ["./node_modules/@types", "./types"]
+        }
       }
     ],
     "paths": {

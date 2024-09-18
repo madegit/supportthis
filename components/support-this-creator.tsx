@@ -8,10 +8,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet" 
 import Image from 'next/image'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, LogIn, UserPlus, ChevronLeft, ChevronRight, LinkIcon, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb } from 'lucide-react' 
+import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, UserPlus, ChevronLeft, ChevronRight, LinkIcon, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, useAnimation } from 'framer-motion'
+import { SupportFooter } from "@/components/SupportFooter"
 
 export default function SupportThisCreator() {
   const [heartCount, setHeartCount] = useState(1)
@@ -25,11 +26,26 @@ export default function SupportThisCreator() {
   const footerRef = useRef(null)
   const heartJarRef = useRef(null)
 
+  const creatorInfo = JSON.stringify({
+    name: "John Doe",
+    username: "@johndoe",
+    avatar: "/avatar.png",
+    bio: "Help support the development of this amazing project that aims to revolutionize the way we interact with technology.",
+    supporters: 5848
+  })
+
+  const creatorData = JSON.parse(creatorInfo)
+
   const heartProgress = 75 // Percentage of heart goal reached
   const contributors = [
-    { name: 'Alice', comment: 'Great project!', hearts: 2 },
-    { name: 'Bob', comment: 'Keep up the good work!', hearts: 4 },
-    { name: 'Charlie', comment: 'Excited to see what\'s next!', hearts: 3 },
+    { name: 'Alice',
+     comment: 'Great project!',
+     hearts: 2 },
+    { name: 'Bob',
+     comment: 'Keep up the good work!',
+     hearts: 4 },
+    { name: 'Charlie',
+     comment: 'Excited to see what\'s next!', hearts: 3 },
   ]
 
   const calculateHeartValue = (count: number) => count * 3
@@ -171,6 +187,11 @@ export default function SupportThisCreator() {
     }
   }, [])
 
+  const getSupporterShieldColor = (supporters: number) => {
+    if (supporters < 1000) return 'text-gray-400'
+    if (supporters < 5000) return 'text-indigo-400'
+    return 'text-blue-400'
+  }
 
   return (
     <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -195,8 +216,8 @@ export default function SupportThisCreator() {
           </nav>
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" className="p-1">
-                <Menu className="h-6 w-6" />
+              <Button variant="ghost" className="p-2">
+                <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
             <SheetContent className="w-[300px]">
@@ -221,18 +242,21 @@ export default function SupportThisCreator() {
               {/* Creator profile */}
               <div className="text-center mb-8">
                 <Avatar className="h-24 w-24 mx-auto mb-4 ring-2 ring-red-200 rounded-full">
-                  <AvatarImage src="/avatar.png" alt="John Doe" />
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarImage src={creatorData.avatar} alt={creatorData.name} />
+                  <AvatarFallback>{creatorData.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                 </Avatar>
-                <h2 className="text-2xl font-bold tracking-[-1.5px]">John Doe</h2>
-                <p className="text-gray-500 dark:text-gray-400 mb-4 tracking-[-0.5px]">@johndoe</p>
+                <h2 className="text-2xl font-bold tracking-[-1.5px]">{creatorData.name}</h2>
+                <p className="text-gray-500 dark:text-gray-400 mb-4 tracking-[-0.5px] text-sm flex items-center justify-center">
+                  <Shield className={`h-4 w-4 mr-1 ${getSupporterShieldColor(creatorData.supporters)}`} />
+                  {creatorData.supporters.toLocaleString()} Supporters
+                </p>
                 <div className="flex justify-center space-x-4 mb-4">
                   <Twitter className="h-5 w-5 text-gray-400" />
                   <Instagram className="h-5 w-5 text-gray-400" />
                   <Globe className="h-5 w-5 text-gray-400" />
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto tracking-[-0.5px]">
-                  Help support the development of this amazing project that aims to revolutionize the way we interact with technology.
+                  {creatorData.bio}
                 </p>
               </div>
 
@@ -505,9 +529,9 @@ export default function SupportThisCreator() {
                   </CardContent>
                 </Card>
               ))}
-              </div>
-                </div>
-            )}
+            </div>
+          </div>
+        )}
 
         {activePage === 'shop' && (
           <div className="col-span-2">
@@ -580,14 +604,8 @@ export default function SupportThisCreator() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer ref={footerRef} className="bg-black dark:bg-gray-800 text-white dark:text-gray-200 py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p >Powered by <a href="https://supportthis.org/" target="_blank" rel="noopener noreferrer">SupportThis.org</a></p>
-        </div>
-      </footer>
+      <SupportFooter />
+
     </div>
   )
-}  
-
-
+}
