@@ -11,7 +11,8 @@ import { ArrowRight, RefreshCw, Share2, Settings, Twitter, Instagram, Linkedin, 
 interface Profile {
   name: string
   email: string
-  image: string
+  avatarImage: string
+  coverImage: string
   bio: string
   socialLinks: {
     twitter: string
@@ -42,7 +43,8 @@ export default function Profile() {
         setProfile({
           name: data.name || '',
           email: data.email || '',
-          image: data.image || '',
+          avatarImage: data.image || '',
+          coverImage: data.coverImage || '',
           bio: data.bio || '',
           socialLinks: {
             twitter: data.socialLinks?.twitter || '',
@@ -68,11 +70,13 @@ export default function Profile() {
       <div className="container mx-auto px-4 py-8">
         <Card className="w-full mx-auto overflow-hidden rounded-xl">
           <div className="h-32 bg-gray-200">
-            <img src="../../cover.jpg?height=128&width=896" alt="Cover" className="w-full h-full object-cover" />
+            <img src={profile.coverImage}
+              alt="Cover"
+              className="w-full h-full object-cover"/>
           </div>
           <CardContent className="relative pt-16 pb-8 px-6">
             <Avatar className="absolute -top-16 left-6 h-32 w-32 border-4 border-red-50 mb-8 rounded-full">
-              <AvatarImage src={profile.image || '/placeholder.svg?height=128&width=128'} alt={profile.name} />
+              <AvatarImage src={profile.avatarImage || '/placeholder.svg?height=128&width=128'} alt={profile.name} />
               <AvatarFallback>{profile.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="flex justify-between items-start mb-6">

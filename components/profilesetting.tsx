@@ -11,7 +11,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,6 +23,7 @@ import {
   Instagram,
   Globe,
   Linkedin,
+  Camera,
 } from "lucide-react";
 
 const MAX_BIO_LENGTH = 160;
@@ -34,7 +34,8 @@ export default function ProfileManagement() {
   const [profile, setProfile] = useState({
     name: "",
     email: "",
-    image: "",
+    avatarImage: "", // Changed from 'image' to 'avatarImage'
+    coverImage: "",
     bio: "",
     socialLinks: {
       twitter: "",
@@ -48,7 +49,8 @@ export default function ProfileManagement() {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [alert, setAlert] = useState({ type: "", message: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -65,7 +67,9 @@ export default function ProfileManagement() {
         const data = await response.json();
         setProfile({
           ...data,
+          avatarImage: data.avatarImage || "", // Changed from 'image' to 'avatarImage'
           bio: data.bio || "",
+          coverImage: data.coverImage || "",
           socialLinks: {
             twitter: data.socialLinks?.twitter || "",
             instagram: data.socialLinks?.instagram || "",
@@ -149,12 +153,12 @@ export default function ProfileManagement() {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("avatar_image", file);
 
     try {
       setIsLoading(true);
@@ -166,22 +170,22 @@ export default function ProfileManagement() {
       const data = await response.json();
 
       if (response.ok) {
-        setProfile((prev) => ({ ...prev, image: data.imageUrl }));
-        setAlert({ type: "success", message: "Image uploaded successfully" });
+        setProfile((prev) => ({ ...prev, avatarImage: data.imageUrl })); // Changed from 'image' to 'avatarImage'
+        setAlert({ type: "success", message: "Avatar uploaded successfully" });
 
         await update({
           ...session,
           user: {
             ...session?.user,
-            image: data.imageUrl,
+            avatarImage: data.imageUrl, // Changed from 'image' to 'avatarImage'
           },
         });
       } else {
         setAlert({
           type: "error",
-          message: `Failed to upload image: ${data.message}`,
+          message: `Failed to upload avatar: ${data.message}`,
         });
-        console.error("Image upload error:", data);
+        console.error("Avatar upload error:", data);
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
@@ -189,7 +193,53 @@ export default function ProfileManagement() {
         type: "error",
         message: `An unexpected error occurred: ${errorMessage}`,
       });
-      console.error("Image upload error:", error);
+      console.error("Avatar upload error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCoverImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("cover_image", file);
+
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setProfile((prev) => ({ ...prev, coverImage: data.imageUrl }));
+        setAlert({ type: "success", message: "Cover image uploaded successfully" });
+
+        await update({
+          ...session,
+          user: {
+            ...session?.user,
+            coverImage: data.imageUrl,
+          },
+        });
+      } else {
+        setAlert({
+          type: "error",
+          message: `Failed to upload cover image: ${data.message}`,
+        });
+        console.error("Cover image upload error:", data);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      setAlert({
+        type: "error",
+        message: `An unexpected error occurred: ${errorMessage}`,
+      });
+      console.error("Cover image upload error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -231,21 +281,52 @@ export default function ProfileManagement() {
               </Alert>
             )}
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="relative mb-8">
+                <div className="h-32 w-full bg-gray-200 dark:bg-gray-700 rounded-xl overflow-hidden">
+                  {profile.coverImage ? (
+                    <img
+                      src={profile.coverImage}
+                      alt="Cover"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <Camera className="h-12 w-12" />
+                      <span className="ml-2">No cover image</span>
+                    </div>
+                  )}
+                </div>
+                <Button
+                  type="button"
+                  onClick={() => coverInputRef.current?.click()}
+                  className="absolute bottom-2 right-2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
+                >
+                  <Camera className="h-5 w-5" />
+                  <span className="sr-only">Change Cover Image</span>
+                </Button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCoverImageUpload}
+                  ref={coverInputRef}
+                  className="hidden"
+                />
+              </div>
               <div className="flex items-center space-x-4">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage src={profile.image} alt={profile.name} />
+                  <AvatarImage src={profile.avatarImage} alt={profile.name} /> {/* Changed from 'image' to 'avatarImage' */}
                   <AvatarFallback>{profile.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleImageUpload}
-                  ref={fileInputRef}
+                  onChange={handleAvatarUpload}
+                  ref={avatarInputRef}
                   className="hidden"
                 />
                 <Button
                   type="button"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => avatarInputRef.current?.click()}
                   className="bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 rounded-xl"
                 >
                   Change Avatar

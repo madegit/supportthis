@@ -1,10 +1,14 @@
 import mongoose from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: String,
-  email: String,
-  password: String,
-  image: String,
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  avatarImage: String, 
+  coverImage: String,
   bio: String,
   socialLinks: {
     twitter: String,
@@ -12,6 +16,9 @@ const UserSchema = new mongoose.Schema({
     linkedin: String,
     website: String,
   },
-}, { timestamps: true });
+  // ... other fields
+});
 
-export default mongoose.models.User || mongoose.model('User', UserSchema);
+const User = mongoose.models.User || mongoose.model('User', userSchema);
+
+export default User;
