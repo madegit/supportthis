@@ -340,7 +340,7 @@ export default function ProfileManagement() {
                   value={profile.name}
                   onChange={handleInputChange}
                   required
-                  className="rounded-xl"
+                  className="rounded-xl dark:bg-gray-900"
                 />
               </div>
               <div className="space-y-2">
@@ -352,7 +352,7 @@ export default function ProfileManagement() {
                   onChange={handleInputChange}
                   required
                   disabled
-                  className="rounded-xl"
+                  className="rounded-xl dark:bg-gray-900"
                 />
               </div>
               <div className="space-y-2">
@@ -364,7 +364,7 @@ export default function ProfileManagement() {
                   onChange={handleInputChange}
                   maxLength={MAX_BIO_LENGTH}
                   rows={3}
-                  className="rounded-xl"
+                  className="rounded-xl dark:bg-gray-900"
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {profile.bio.length}/{MAX_BIO_LENGTH} characters
@@ -380,7 +380,7 @@ export default function ProfileManagement() {
                       placeholder="Twitter"
                       value={profile.socialLinks.twitter}
                       onChange={handleInputChange}
-                      className="rounded-xl"
+                      className="rounded-xl dark:bg-gray-900"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -390,7 +390,7 @@ export default function ProfileManagement() {
                       placeholder="Instagram"
                       value={profile.socialLinks.instagram}
                       onChange={handleInputChange}
-                      className="rounded-xl"
+                      className="rounded-xl dark:bg-gray-900"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -400,7 +400,7 @@ export default function ProfileManagement() {
                       placeholder="LinkedIn"
                       value={profile.socialLinks.linkedin}
                       onChange={handleInputChange}
-                      className="rounded-xl"
+                      className="rounded-xl dark:bg-gray-900"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -410,7 +410,7 @@ export default function ProfileManagement() {
                       placeholder="Website"
                       value={profile.socialLinks.website}
                       onChange={handleInputChange}
-                      className="rounded-xl"
+                      className="rounded-xl dark:bg-gray-900"
                     />
                   </div>
                 </div>
@@ -423,7 +423,7 @@ export default function ProfileManagement() {
                   type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="rounded-xl"
+                  className="rounded-xl dark:bg-gray-900"
                 />
               </div>
               <div className="space-y-2">
@@ -434,7 +434,7 @@ export default function ProfileManagement() {
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="rounded-xl"
+                  className="rounded-xl dark:bg-gray-900"
                 />
               </div>
               <div className="space-y-2">
@@ -445,12 +445,12 @@ export default function ProfileManagement() {
                   type="password"
                   value={confirmNewPassword}
                   onChange={(e) => setConfirmNewPassword(e.target.value)}
-                  className="rounded-xl"
+                  className="rounded-xl dark:bg-gray-900"
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl"
+                className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white h-12 text-base rounded-xl"
                 disabled={isLoading}
               >
                 {isLoading ? "Updating..." : "Update Profile"}

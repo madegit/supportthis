@@ -1,10 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-  import {
+import {
   ArrowUpRight,
   Coffee,
   Music,
@@ -30,7 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
   TrendingUp,
   Target,
 } from "lucide-react";
-import { Footer } from '@/components/Footer'
+import { ProfileFooter } from '@/components/ProfileFooter'
 
 import {
   BarChart,
@@ -83,79 +80,29 @@ const menuItems = [
   { icon: Settings, label: "Settings" },
 ];
 
-    export function DashboardComponent() {
-      const { data: session, status } = useSession();
-      const router = useRouter();
-      const [profile, setProfile] = useState({
-        name: "",
-        email: "",
-        avatarImage: "",
-        coverImage: "",
-        bio: "",
-        socialLinks: {
-          twitter: "",
-          instagram: "",
-          linkedin: "",
-          website: "",
-        },
-      });
-      const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-      const [scrollY, setScrollY] = useState(0);
+export function DashboardComponent() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
 
-      useEffect(() => {
-        if (status === 'authenticated') {
-          fetchProfile();
-        }
-      }, [status]);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
 
-      useEffect(() => {
-        const handleScroll = () => {
-          setScrollY(window.scrollY);
-        };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-          window.removeEventListener("scroll", handleScroll);
-        };
-      }, []);
-
-      const fetchProfile = async () => {
-        try {
-          const response = await fetch('/api/profile');
-          if (response.ok) {
-            const data = await response.json();
-            setProfile(data);
-          } else {
-            console.error('Failed to fetch profile');
-          }
-        } catch (error) {
-          console.error('An unexpected error occurred', error);
-        }
-      };
-
-      const getInitials = (name: string) => {
-        const names = name.split(' ');
-        if (names.length >= 2) {
-          return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
-        }
-        return name.slice(0, 2).toUpperCase();
-      };
-
-
-      if (status === 'unauthenticated') {
-        router.push('/auth/signin');
-        return null;
-      }
-
-      const totalThisWeek = statisticsData.reduce(
-        (sum, day) => sum + day.thisWeek,
-        0
-      );
-      const totalLastWeek = statisticsData.reduce(
-        (sum, day) => sum + day.lastWeek,
-        0
-      );
-
+  const totalThisWeek = statisticsData.reduce(
+    (sum, day) => sum + day.thisWeek,
+    0
+  );
+  const totalLastWeek = statisticsData.reduce(
+    (sum, day) => sum + day.lastWeek,
+    0
+  );
 
   return (
     <div className="bg-red-50 dark:bg-gray-900 min-h-screen flex text-base">
@@ -238,31 +185,26 @@ const menuItems = [
       <div className="flex-1">
         {/* Top Bar */}
         <div className="flex flex-col md:flex-row items-start md:items-center p-6 mb-4 md:mt-8">
-          <Avatar className="w-10 h-10 md:w-16 md:h-16 mr-4 mb-8 md:mb-0">
-            <AvatarImage 
-              src={profile.avatarImage || '/placeholder.svg?height=128&width=128'} 
-              alt={profile.name} 
-            />
-            <AvatarFallback>{profile.name ? getInitials(profile.name) : 'U'}</AvatarFallback>
-          </Avatar>
+          <div className="w-10 h-10 md:w-16 md:h-16 bg-red-100 dark:bg-red-900 rounded-full mr-4 flex items-center justify-center text-xl md:text-2xl font-bold tracking-tight mb-8 md:mb-0 text-red-500 dark:text-red-300">
+            JD
+          </div>
           <div>
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-              Welcome back, {profile.name || '👋'}!
+              Welcome back, John!
             </h2>
             <p className="text-gray-600 dark:text-gray-400 tracking-tight text-base md:text-lg">
               Here's your supports summary
             </p>
           </div>
           <div className="fixed top-4 right-4 z-40 md:hidden">
-              <button
-                onClick={() => setIsMobileMenuOpen(true)}
-                className="w-10 h-10 flex items-center justify-center bg-white dark:bg-gray-800 rounded-full m-2 backdrop-blur-md bg-opacity-80 dark:bg-opacity-80"
-              >
-                <Menu size={24} className="text-gray-700 dark:text-gray-300" />
-              </button>
-            </div>
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="w-10 h-10 flex items-center justify-center bg-white dark:bg-gray-800 rounded-full m-2 backdrop-blur-md bg-opacity-80 dark:bg-opacity-80"
+            >
+              <Menu size={24} className="text-gray-700 dark:text-gray-300" />
+            </button>
           </div>
-       
+        </div>
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
@@ -518,7 +460,7 @@ const menuItems = [
           </div>
         </div>
         {/* Footer */}
-        <Footer />
+        <ProfileFooter />
       </div>
     </div>
   );
