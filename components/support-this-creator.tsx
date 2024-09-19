@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet" 
 import Image from 'next/image'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, UserPlus, ChevronLeft, ChevronRight, LinkIcon, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb } from 'lucide-react' 
+import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, UserPlus, ChevronLeft, ChevronRight, LinkIcon, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb, BarChart2, PieChart, TrendingUp } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, useAnimation } from 'framer-motion'
@@ -30,6 +30,7 @@ export default function SupportThisCreator() {
     name: "John Doe",
     username: "@johndoe",
     avatar: "/avatar.png",
+    coverImage: "/cover.jpg",
     bio: "Help support the development of this amazing project that aims to revolutionize the way we interact with technology.",
     supporters: 5848
   })
@@ -38,14 +39,9 @@ export default function SupportThisCreator() {
 
   const heartProgress = 75 // Percentage of heart goal reached
   const contributors = [
-    { name: 'Alice',
-     comment: 'Great project!',
-     hearts: 2 },
-    { name: 'Bob',
-     comment: 'Keep up the good work!',
-     hearts: 4 },
-    { name: 'Charlie',
-     comment: 'Excited to see what\'s next!', hearts: 3 },
+    { name: 'Alice', comment: 'Great project!', hearts: 2 },
+    { name: 'Bob', comment: 'Keep up the good work!', hearts: 4 },
+    { name: 'Charlie', comment: 'Excited to see what\'s next!', hearts: 3 },
   ]
 
   const calculateHeartValue = (count: number) => count * 3
@@ -235,278 +231,301 @@ export default function SupportThisCreator() {
       </header>
 
       {/* Main content */}
-      <main className="container mx-auto pt-8 px-4 pb-32 lg:grid lg:grid-cols-2 lg:gap-8 lg:max-w-6xl">
+      <main className="container mx-auto pt-8 px-4 pb-32">
         {activePage === 'home' && (
           <>
-            <div>
-              {/* Creator profile */}
-              <div className="text-center mb-8">
-                <Avatar className="h-24 w-24 mx-auto mb-4 ring-2 ring-red-200 rounded-full">
-                  <AvatarImage src={creatorData.avatar} alt={creatorData.name} />
-                  <AvatarFallback>{creatorData.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
-                </Avatar>
-                <h2 className="text-2xl font-bold tracking-[-1.5px]">{creatorData.name}</h2>
-                <p className="text-gray-500 dark:text-gray-400 mb-4 tracking-[-0.5px] text-sm flex items-center justify-center">
-                  <Shield className={`h-4 w-4 mr-1 ${getSupporterShieldColor(creatorData.supporters)}`} />
-                  {creatorData.supporters.toLocaleString()} Supporters
-                </p>
-                <div className="flex justify-center space-x-4 mb-4">
-                  <Twitter className="h-5 w-5 text-gray-400" />
-                  <Instagram className="h-5 w-5 text-gray-400" />
-                  <Globe className="h-5 w-5 text-gray-400" />
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto tracking-[-0.5px]">
-                  {creatorData.bio}
-                </p>
-              </div>
-
-              {/* Project Images Slider */}
-              <div className="relative mb-8 rounded-xl overflow-hidden w-full" style={{ paddingTop: '56.25%' }}>
-                <motion.div 
-                  ref={sliderRef}
-                  className="absolute top-0 left-0 w-full h-full cursor-grab active:cursor-grabbing"
-                  drag="x"
-                  dragConstraints={{ right: 0, left: -sliderWidth }}
-                  animate={controls}
-                  transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                >
-                  <motion.div className="flex w-full h-full">
-                    {projectImages.map((image, index) => (
-                      <motion.div
-                        key={index}
-                        className="min-w-full h-full"
-                        style={{ 
-                          backgroundImage: `url(${image})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center'
-                        }}
-                      />
-                    ))}
-                  </motion.div>
-                </motion.div>
-                <Button 
-                  variant="ghost" 
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 hover:bg-gray-200/20 p-2 z-5"
-                  onClick={prevImage}
-                >
-                  <ChevronLeft className="h-6 w-6" />
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 p-2 z-5 hover:bg-gray-200/20"
-                  onClick={nextImage}
-                >
-                  <ChevronRight className="h-6 w-6" />
-                </Button>
-                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                  {projectImages.map((_, index) => (
-                    <div
-                      key={index}
-                      className={`w-3 h-1 rounded-full ${
-                        index === currentImageIndex ? ' w-5 bg-white' : 'bg-gray-400 ease-in-out duration-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Project Progress */}
-              <Card ref={heartJarRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-semibold tracking-[-0.5px] flex items-center">
-                      Project Goals <Target className="ml-2 h-5 w-5 text-red-500" />
-                    </span>
-                    <span className="tracking-[-0.5px]">{heartProgress}% Completed</span>
-                  </div>
-                  <div className="h-3 bg-red-100 dark:bg-red-900 rounded-full mb-1 overflow-hidden">
-                    <motion.div 
-                      className="h-full bg-red-500 flex items-center rounded-full justify-end pr-2"
-                      initial={{ width: 0 }}
-                      animate={{ width: isHeartJarVisible ? `${heartProgress}%` : 0 }}
-                      transition={{ duration: 1, ease: "easeOut" }}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Send Hearts */}
-              <Card ref={incrementalSectionRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="tracking-[-1px] flex items-center">
-                    Send Hearts
-                  </CardTitle>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="sm" className="p-1">
-                          <Info className="h-4 w-4 text-gray-400" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="top" align="end" className="max-w-xs">
-                        <p>Send support to help this project reach its goal. Each heart represents a small donation that goes directly to the creator.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between bg-red-50 dark:bg-red-900 rounded-xl p-4 mb-4">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-red-500 dark:text-red-400 flex items-center"><Heart className="h-5 w-5 mr-1" /> x</span>
-                      {[1, 2, 3].map((amount) => (
-                        <Button
-                          key={amount}
-                          variant={heartCount === amount ? "default" : "outline"}
-                          onClick={() => setHeartCount(amount)}
-                          className={`h-12 w-12 rounded-full ${
-                            heartCount === amount ? 'bg-red-500 text-white' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-200'
-                          } hover:bg-red-600 hover:text-white`}
-                        >
-                          {amount}
-                        </Button>
-                      ))}
-                      <Button
-                        variant="outline"
-                        onClick={() => setHeartCount(heartCount + 1)}
-                        className="h-12 w-12 rounded-full bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-200 hover:bg-red-600 hover:text-white"
-                      >
-                        +1
-                      </Button>
-                    </div>
-                  </div>
-                  <Input
-                    placeholder="Name or @yoursocial"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="mb-4 rounded-xl"
-                  />
-                  <Textarea
-                    placeholder="Say something nice..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    className="mb-4 rounded-xl"
-                  />
-                  <Button 
-                    className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl"
-                  >
-                    Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Contributors */}
-              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
-                <CardHeader>
-                  <CardTitle className="tracking-[-1px]">Recent Supporters</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {contributors.map((contributor, index) => (
-                    <div key={index} className="flex items-center space-x-4">
-                      <Avatar className="h-10 w-10 rounded-full">
-                        <AvatarFallback>{contributor.name[0]}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <p className="font-semibold tracking-[-0.5px]">{contributor.name}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 tracking-[-0.5px]">{contributor.comment}</p>
-                      </div>
-                      <div className="flex items-center text-black dark:text-white">
-                        <span className="tracking-[-0.5px] font-semibold">{contributor.hearts} <Heart className="h-4 w-4 inline fill-current" /> ${calculateHeartValue(contributor.hearts)}</span>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+            {/* Cover Image */}
+            <div className="w-screen relative left-1/2 right-1/2 -mx-[52vw] h-64 mt-[-32px] mb-[-50px]">
+              <Image
+                src={creatorData.coverImage}
+                alt="Cover"
+                layout="fill"
+                objectFit="cover"
+                className="absolute inset-0"
+              />
             </div>
 
-            <div className="lg:pt-[300px]">
-              {/* Project Details Accordion */}
-              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
-                <CardHeader>
-                  <CardTitle className="tracking-[-1px]">Project Details</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Accordion type="single" collapsible>
-                    {projectDetails.map((detail, index) => (
-                      <AccordionItem key={index} value={`item-${index}`}>
-                        <AccordionTrigger>
-                          <div className="flex items-center">
-                            {detail.icon}
-                            <span className="ml-2 hover:no-underline">{detail.title}</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent>{detail.content}</AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </CardContent>
-              </Card>
+            {/* Creator profile */}
+            <div className="text-center mb-16">
+              <Avatar className="h-24 w-24 mx-auto mb-4 ring-2 ring-red-200 rounded-full">
+                <AvatarImage src={creatorData.avatar} alt={creatorData.name} />
+                <AvatarFallback>{creatorData.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
+              </Avatar>
+              <h2 className="text-3xl font-bold mb-2 tracking-tight">{creatorData.name}</h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-4 tracking-tight text-sm flex items-center justify-center">
+                <Shield className={`h-4 w-4 mr-1 ${getSupporterShieldColor(creatorData.supporters)}`} />
+                {creatorData.supporters.toLocaleString()} Supporters
+              </p>
+              <div className="flex justify-center space-x-4 mb-4">
+                <Twitter className="h-5 w-5 text-gray-400" />
+                <Instagram className="h-5 w-5 text-gray-400" />
+                <Globe className="h-5 w-5 text-gray-400" />
+              </div>
+              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto tracking-tight">
+                {creatorData.bio}
+              </p>
+            </div>
 
-              {/* Leaderboard */}
-              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
-                <CardHeader>
-                  <CardTitle className="tracking-[-1px]">Top Supporters</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {leaderboard.map((supporter, index) => (
-                    <div key={index} className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
-                      <div className="flex items-center">
-                        <span className={`font-semibold mr-2 ${
-                          index === 0 ? 'text-3xl' :
-                          index === 1 ? 'text-2xl' :
-                          index === 2 ? 'text-xl' : ''
-                        }`}>{index + 1}.</span>
-                        <Avatar className="h-8 w-8 rounded-full mr-2">
-                          <AvatarFallback>{supporter.name[0]}</AvatarFallback>
-                        </Avatar>
-                        <span className={
-                          index === 0 ? 'text-xl font-bold tracking-tight' :
-                          index === 1 ? 'text-lg font-semibold tracking-tight' :
-                          index === 2 ? 'text-base font-semibold tracking-tight' : ''
-                        }>{supporter.name}</span>
-                      </div>
-                      <div className="flex items-center text-black dark:text-white">
-                        <span className="font-semibold">{supporter.hearts} <Heart className="h-4 w-4 inline fill-current" /> ${calculateHeartValue(supporter.hearts)}</span>
+            <div className="lg:grid lg:grid-cols-2 lg:gap-8">
+              <div>
+                {/* Project Images Slider */}
+                <div className="relative mb-8 rounded-xl overflow-hidden w-full" style={{ paddingTop: '56.25%' }}>
+                  <motion.div 
+                    ref={sliderRef}
+                    className="absolute top-0 left-0 w-full h-full cursor-grab active:cursor-grabbing"
+                    drag="x"
+                    dragConstraints={{ right: 0, left: -sliderWidth }}
+                    animate={controls}
+                    transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                  >
+                    <motion.div className="flex w-full h-full">
+                      {projectImages.map((image, index) => (
+                        <motion.div
+                          key={index}
+                          className="min-w-full h-full"
+                          style={{ 
+                            backgroundImage: `url(${image})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                        />
+                      ))}
+                    </motion.div>
+                  </motion.div>
+                  <Button 
+                    variant="ghost" 
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover: text-gray-400 hover:bg-gray-200/20 p-2 z-5"
+                    onClick={prevImage}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 p-2 z-5 hover:bg-gray-200/20"
+                    onClick={nextImage}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </Button>
+                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    {projectImages.map((_, index) => (
+                      <div
+                        key={index}
+                        className={`w-3 h-1 rounded-full ${
+                          index === currentImageIndex ? ' w-5 bg-white' : 'bg-gray-400 ease-in-out duration-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Project Progress */}
+                <Card ref={heartJarRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-semibold tracking-tight flex items-center text-xl">
+                        Project Goals <Target className="ml-2 h-5 w-5 text-red-500" />
+                      </span>
+                      <span className="tracking-tight text-lg">{heartProgress}% Completed</span>
+                    </div>
+                    <div className="h-3 bg-red-100 dark:bg-red-900 rounded-full mb-1 overflow-hidden">
+                      <motion.div 
+                        className="h-full bg-red-500 flex items-center rounded-full justify-end pr-2"
+                        initial={{ width: 0 }}
+                        animate={{ width: isHeartJarVisible ? `${heartProgress}%` : 0 }}
+                        transition={{ duration: 1, ease: "easeOut" }}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Send Hearts */}
+                <Card ref={incrementalSectionRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="tracking-tight flex items-center text-2xl">
+                      <Heart className="mr-2 h-6 w-6 text-red-500" />
+                      Send Hearts
+                    </CardTitle>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="sm" className="p-1">
+                            <Info className="h-5 w-5 text-gray-400" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" align="end" className="max-w-xs dark:text-gray-800">
+
+                          <p>Send support to help this project reach its goal. Each heart represents a small donation that goes directly to the creator.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between bg-red-50 dark:bg-gray-700 rounded-xl p-4 mb-4">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-red-500 dark:text-gray-200 flex items-center"><Heart className="h-5 w-5 mr-1" /> x</span>
+                        {[1, 2, 3].map((amount) => (
+                          <Button
+                            key={amount}
+                            variant={heartCount === amount ? "default" : "outline"}
+                            onClick={() => setHeartCount(amount)}
+                            className={`h-12 w-12 rounded-full ${
+                              heartCount === amount ? 'bg-red-500 text-white' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-200'
+                            } hover:bg-red-600 hover:text-white`}
+                          >
+                            {amount}
+                          </Button>
+                        ))}
+                        <Button
+                          variant='outline'
+                          onClick={() => setHeartCount(heartCount + 1)}
+                          className="h-12 w-12 rounded-full bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-200 hover:bg-red-600 dark:hover:bg-red-500 hover:text-white" >
+                          +1
+                        </Button>
                       </div>
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
+                    <Input
+                      placeholder="Name or @yoursocial"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="mb-4 rounded-xl dark:bg-gray-900"
+                    />
+                    <Textarea
+                      placeholder="Say something nice..."
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      className="mb-4 rounded-xl dark:bg-gray-900"
+                    />
+                    <Button 
+                      className="w-full bg-black dark:bg-red-500 text-white dark:text-white hover:bg-red-600 dark:hover:bg-gray-900 h-12 text-base rounded-xl"
+                    >
+                      Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
+                    </Button>
+                  </CardContent>
+                </Card>
 
-              {/* CTA Section */}
-              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-xl font-bold mb-2 tracking-[-1px]">Make money doing what you love</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 tracking-[-0.5px]">Join 9k+ creators getting hearts!</p>
-                  <Button className="bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 text-base py-2 px-6 rounded-xl">
-                    Get Started
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Site Rating */}
-              <div className="flex justify-center items-center space-x-1 mb-4">
-                <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                <Star className="h-5 w-5 text-gray-300 dark:text-gray-600" />
-                <span className="ml-2 text-gray-600 dark:text-gray-300 tracking-[-0.5px]">4.0 out of 5</span>
+                {/* Contributors */}
+                <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="tracking-tight flex items-center text-2xl">
+                      <Users className="mr-2 h-6 w-6 text-red-500" />
+                      Recent Supporters
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {contributors.map((contributor, index) => (
+                      <div key={index} className="flex items-center space-x-4">
+                        <Avatar className="h-10 w-10 rounded-full">
+                          <AvatarFallback>{contributor.name[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <p className="font-semibold tracking-tight">{contributor.name}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 tracking-tight">{contributor.comment}</p>
+                        </div>
+                        <div className="flex items-center text-black dark:text-white">
+                          <span className="tracking-tight font-semibold">{contributor.hearts} <Heart className="h-4 w-4 inline fill-current" /> ${calculateHeartValue(contributor.hearts)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
               </div>
 
-              {/* Creators love us */}
-              <div className="text-center mb-16">
-                <p className="text-lg font-semibold tracking-[-0.5px]">Creators love us.</p>
+              <div>
+                {/* Project Details Accordion */}
+                <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="tracking-tight flex items-center text-2xl">
+                      <Info className="mr-2 h-6 w-6 text-red-500" />
+                      Project Details
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Accordion type="single" collapsible>
+                      {projectDetails.map((detail, index) => (
+                        <AccordionItem key={index} value={`item-${index}`}>
+                          <AccordionTrigger>
+                            <div className="flex items-center">
+                              {detail.icon}
+                              <span className="ml-2 hover:no-underline">{detail.title}</span>
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent>{detail.content}</AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </CardContent>
+                </Card>
+
+                {/* Leaderboard */}
+                <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="tracking-tight flex items-center text-2xl">
+                      <TrendingUp className="mr-2 h-6 w-6 text-red-500" />
+                      Top Supporters
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {leaderboard.map((supporter, index) => (
+                      <div key={index} className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                        <div className="flex items-center">
+                          <span className={`font-semibold mr-2 ${
+                            index === 0 ? 'text-3xl' :
+                            index === 1 ? 'text-2xl' :
+                            index === 2 ? 'text-xl' : ''
+                          }`}>{index + 1}.</span>
+                          <Avatar className="h-8 w-8 rounded-full mr-2">
+                            <AvatarFallback>{supporter.name[0]}</AvatarFallback>
+                          </Avatar>
+                          <span className={
+                            index === 0 ? 'text-xl font-bold tracking-tight' :
+                            index === 1 ? 'text-lg font-semibold tracking-tight' :
+                            index === 2 ? 'text-base font-semibold tracking-tight' : ''
+                          }>{supporter.name}</span>
+                        </div>
+                        <div className="flex items-center text-black dark:text-white">
+                          <span className="font-semibold">{supporter.hearts} <Heart className="h-4 w-4 inline fill-current" /> ${calculateHeartValue(supporter.hearts)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* CTA Section */}
+                <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
+                  <CardContent className="p-6 text-center">
+                    <h3 className="text-2xl font-bold mb-2 tracking-tight">Make money doing what you love</h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4 tracking-tight">Join 9k+ creators getting hearts!</p>
+                    <Button className="bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 text-base py-2 px-6 rounded-xl">
+                      Get Started
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Site Rating */}
+                <div className="flex justify-center items-center space-x-1 mb-4">
+                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star className="h-5 w-5 text-gray-300 dark:text-gray-600" />
+                  <span className="ml-2 text-gray-600 dark:text-gray-300 tracking-tight">4.0 out of 5</span>
+                </div>
+
+                {/* Creators love us */}
+                <div className="text-center mb-16">
+                  <p className="text-xl font-semibold tracking-tight">Creators love us.</p>
+                </div>
               </div>
             </div>
           </>
         )}
 
         {activePage === 'club' && (
-          <div className="col-span-2">
-            <h2 className="text-3xl font-bold mb-4 tracking-[-1.5px]">Join Our Club</h2>
+          <div>
+            <h2 className="text-3xl font-bold mb-4 tracking-tight">Join Our Club</h2>
             <p className="text-gray-600 dark:text-gray-300 mb-8">Become a member and get exclusive benefits to support your favorite creator.</p>
             {/* Recurring Membership Plans */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {membershipPlans.map((plan, index) => (
                 <Card key={index} className="bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                   <CardHeader className="bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900 dark:to-red-800 p-6 text-center">
@@ -534,8 +553,8 @@ export default function SupportThisCreator() {
         )}
 
         {activePage === 'shop' && (
-          <div className="col-span-2">
-            <h2 className="text-3xl font-bold mb-4 tracking-[-1.5px]">Shop</h2>
+          <div>
+            <h2 className="text-3xl font-bold mb-4 tracking-tight">Shop</h2>
             <p className="text-gray-600 dark:text-gray-300 mb-8">Support your favorite creator by purchasing exclusive merchandise.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {shopItems.map((item, index) => (
@@ -577,7 +596,7 @@ export default function SupportThisCreator() {
           </Button>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" className="bg-white dark:bg-gray-800 hover:bg-red-600 dark:hover:bg-red-400 hover:text-white h-12 px-3 rounded-xl w-[17%]">
+              <Button variant="outline" className="bg-white dark:bg-gray-700 hover:bg-red-600 dark:hover:bg-red-400 hover:text-white h-12 px-3 rounded-xl w-[17%]">
                 <Share2 className="h-5 w-5" />
               </Button>
             </DialogTrigger>

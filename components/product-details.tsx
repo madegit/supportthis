@@ -233,8 +233,8 @@ export function ComponentsProductDetails() {
 
           {/* Quantity Input and Purchase Button */}
           <div className="flex items-center space-x-4 mb-6">
-            <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-md">
-              <Button variant="ghost" size="sm" onClick={decrementQuantity} className="px-2">
+            <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-xl">
+              <Button variant="ghost" size="sm" onClick={decrementQuantity} className="px-2 rounded-xl">
                 <Minus className="h-4 w-4" />
               </Button>
               <Input
@@ -244,7 +244,7 @@ export function ComponentsProductDetails() {
                 onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
                 className="w-16 text-center border-none"
               />
-              <Button variant="ghost" size="sm" onClick={incrementQuantity} className="px-2">
+              <Button variant="ghost" size="sm" onClick={incrementQuantity} className="px-2 rounded-xl">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
