@@ -1,11 +1,37 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const ProjectSchema = new mongoose.Schema({
-  creatorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  name: String,
-  description: String,
-  progress: Number,
-  createdAt: { type: Date, default: Date.now },
-})
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  images: [{
+    type: String,
+    validate: [arrayLimit, '{PATH} exceeds the limit of 4']
+  }],
+  description: {
+    type: String,
+    required: true
+  },
+  goal: {
+    type: Number,
+    required: true
+  },
+  currentProgress: String,
+  futurePlans: String,
+  comments: [{
+    name: String,
+    comment: String,
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+  }]
+}, { timestamps: true });
 
-export default mongoose.models.Project || mongoose.model('Project', ProjectSchema)
+function arrayLimit(val: any[]) {
+  return val.length <= 4;
+}
+
+export default mongoose.models.Project || mongoose.model('Project', ProjectSchema);

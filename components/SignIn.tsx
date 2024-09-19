@@ -56,10 +56,6 @@ function SignInForm({ callbackUrl }: { callbackUrl: string }) {
     signIn(provider, { callbackUrl })
   }
 
-  if (status === 'loading') {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>
-  }
-
   if (status === 'authenticated') {
     return null
   }

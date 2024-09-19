@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
+import Image from 'next/image'
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -245,14 +246,7 @@ export default function ProfileManagement() {
     }
   };
 
-  if (status === "loading") {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
-    );
-  }
-
+ 
   return (
     <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 py-8 px-4">
       <div className="container pt-812 mx-auto max-w-lg">
@@ -284,7 +278,7 @@ export default function ProfileManagement() {
               <div className="relative mb-8">
                 <div className="h-32 w-full bg-gray-200 dark:bg-gray-700 rounded-xl overflow-hidden">
                   {profile.coverImage ? (
-                    <img
+                    <Image
                       src={profile.coverImage}
                       alt="Cover"
                       className="w-full h-full object-cover"
