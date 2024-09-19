@@ -1,5 +1,5 @@
-import ProfileManagement from '@/components/profile'
+import { DashboardComponent } from '@/components/dashboard'
 
 export default function Profile() {
-  return <ProfileManagement />
+  return <DashboardComponent />
 }

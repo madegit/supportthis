@@ -310,18 +310,18 @@ export default function SupportThisCreator() {
                 </div>
               </div>
 
-              {/* Hearts Jar */}
-              <Card ref={heartJarRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
+              {/* Project Progress */}
+              <Card ref={heartJarRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
                 <CardContent className="p-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-semibold tracking-[-0.5px] flex items-center">
-                      Hearts Jar <Coffee className="ml-2 h-5 w-5 text-red-500" />
+                      Project Goals <Target className="ml-2 h-5 w-5 text-red-500" />
                     </span>
-                    <span className="tracking-[-0.5px]">{heartProgress}%</span>
+                    <span className="tracking-[-0.5px]">{heartProgress}% Completed</span>
                   </div>
-                  <div className="h-3 bg-red-100 dark:bg-red-900 rounded-xl overflow-hidden">
+                  <div className="h-3 bg-red-100 dark:bg-red-900 rounded-full mb-1 overflow-hidden">
                     <motion.div 
-                      className="h-full bg-red-500 flex items-center justify-end pr-2"
+                      className="h-full bg-red-500 flex items-center rounded-full justify-end pr-2"
                       initial={{ width: 0 }}
                       animate={{ width: isHeartJarVisible ? `${heartProgress}%` : 0 }}
                       transition={{ duration: 1, ease: "easeOut" }}
@@ -331,7 +331,7 @@ export default function SupportThisCreator() {
               </Card>
 
               {/* Send Hearts */}
-              <Card ref={incrementalSectionRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
+              <Card ref={incrementalSectionRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="tracking-[-1px] flex items-center">
                     Send Hearts
@@ -339,7 +339,7 @@ export default function SupportThisCreator() {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button variant="ghost" size="sm" className="p-0">
+                        <Button variant="ghost" size="sm" className="p-1">
                           <Info className="h-4 w-4 text-gray-400" />
                         </Button>
                       </TooltipTrigger>
@@ -395,7 +395,7 @@ export default function SupportThisCreator() {
               </Card>
 
               {/* Contributors */}
-              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
+              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
                 <CardHeader>
                   <CardTitle className="tracking-[-1px]">Recent Supporters</CardTitle>
                 </CardHeader>
@@ -420,7 +420,7 @@ export default function SupportThisCreator() {
 
             <div className="lg:pt-[300px]">
               {/* Project Details Accordion */}
-              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
+              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
                 <CardHeader>
                   <CardTitle className="tracking-[-1px]">Project Details</CardTitle>
                 </CardHeader>
@@ -442,7 +442,7 @@ export default function SupportThisCreator() {
               </Card>
 
               {/* Leaderboard */}
-              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
+              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
                 <CardHeader>
                   <CardTitle className="tracking-[-1px]">Top Supporters</CardTitle>
                 </CardHeader>
@@ -473,10 +473,10 @@ export default function SupportThisCreator() {
               </Card>
 
               {/* CTA Section */}
-              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
+              <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
                 <CardContent className="p-6 text-center">
                   <h3 className="text-xl font-bold mb-2 tracking-[-1px]">Make money doing what you love</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 tracking-[-0.5px]">No fees on donations!</p>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 tracking-[-0.5px]">Join 9k+ creators getting hearts!</p>
                   <Button className="bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 text-base py-2 px-6 rounded-xl">
                     Get Started
                   </Button>
@@ -508,7 +508,7 @@ export default function SupportThisCreator() {
             {/* Recurring Membership Plans */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {membershipPlans.map((plan, index) => (
-                <Card key={index} className="bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                <Card key={index} className="bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                   <CardHeader className="bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900 dark:to-red-800 p-6 text-center">
                     <div className="flex justify-center">{plan.icon}</div>
                     <CardTitle className="text-2xl font-bold mb-2">{plan.name}</CardTitle>
@@ -539,7 +539,7 @@ export default function SupportThisCreator() {
             <p className="text-gray-600 dark:text-gray-300 mb-8">Support your favorite creator by purchasing exclusive merchandise.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {shopItems.map((item, index) => (
-                <Link href="/support/product" key={index} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl p-3 shadow-sm">
+                <Link href="/support/product" key={index} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl p-3 shadow-sm">
                   <div className="mb-4">
                     <Image 
                       src={item.image} 
