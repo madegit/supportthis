@@ -1,5 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  swcMinify: true,
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'files.edgestore.dev',
+          port: '',
+          pathname: '/**', // This will match any path on the domain
+        },
+      ],
+    },
   reactStrictMode: true,
   trailingSlash: true,
   async headers() {
