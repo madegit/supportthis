@@ -1,16 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   swcMinify: true,
-    images: {
-      remotePatterns: [
-        {
-          protocol: 'https',
-          hostname: 'files.edgestore.dev',
-          port: '',
-          pathname: '/**', // This will match any path on the domain
-        },
-      ],
-    },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'files.edgestore.dev',
+        port: '',
+        pathname: '/**', // Matches any path on the domain
+      },
+    ],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    formats: ['image/avif', 'image/webp'],
+  },
   reactStrictMode: true,
   trailingSlash: true,
   async headers() {

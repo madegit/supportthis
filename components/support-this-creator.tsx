@@ -235,13 +235,13 @@ export default function SupportThisCreator() {
         {activePage === 'home' && (
           <>
             {/* Cover Image */}
-            <div className="w-screen relative left-1/2 right-1/2 -mx-[52vw] h-64 mt-[-32px] mb-[-50px]">
+            <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] h-64 mt-[-32px] mb-[-50px]">
               <Image
                 src={creatorData.coverImage}
                 alt="Cover"
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-0"
+                 width={500}
+                      height={128}
+                className="absolute w-full h-full object-cover inset-0"
               />
             </div>
 
