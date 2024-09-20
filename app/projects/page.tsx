@@ -25,13 +25,15 @@ export default function ProjectManagement() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
-    if (session) {
+    if (status === 'authenticated') {
       fetchProjects()
+    } else if (status === 'unauthenticated') {
+      router.push('/auth/signin')
     }
-  }, [session])
+  }, [status])
 
   const fetchProjects = async () => {
     try {
@@ -40,7 +42,8 @@ export default function ProjectManagement() {
         const data = await response.json()
         setProjects(data)
       } else {
-        setError('Failed to fetch projects')
+        const errorData = await response.json()
+        setError(errorData.error || 'Failed to fetch projects')
       }
     } catch (error) {
       setError('An unexpected error occurred')
@@ -58,7 +61,8 @@ export default function ProjectManagement() {
         if (response.ok) {
           setProjects(projects.filter(project => project._id !== id))
         } else {
-          setError('Failed to delete project')
+          const errorData = await response.json()
+          setError(errorData.error || 'Failed to delete project')
         }
       } catch (error) {
         setError('An unexpected error occurred')
@@ -66,9 +70,12 @@ export default function ProjectManagement() {
     }
   }
 
- 
-  if (isLoading) {
+  if (status === 'loading' || isLoading) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>
+  }
+
+  if (status === 'unauthenticated') {
+    return null // The useEffect will redirect to signin page
   }
 
   return (

@@ -2,6 +2,8 @@ import '@/app/globals.css'
 import { Inter } from 'next/font/google'
 import { Providers } from './providers'
 import { ThemeProvider } from 'next-themes'
+import { EdgeStoreProvider } from '../lib/edgestore';
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,10 +21,10 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <head />
           <body className={inter.className}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem> <EdgeStoreProvider>
               <Providers>
                 {children}
-              </Providers>
+              </Providers> </EdgeStoreProvider>
           </ThemeProvider></body>
     </html>
   )

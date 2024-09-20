@@ -6,10 +6,15 @@ const ProjectSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  images: [{
-    type: String,
-    validate: [arrayLimit, '{PATH} exceeds the limit of 4']
-  }],
+  images: {
+    type: [String],
+    validate: {
+      validator: function(v: string[]) {
+        return v.length <= 4;
+      },
+      message: props => `${props.path} exceeds the limit of 4 images`
+    }
+  },
   description: {
     type: String,
     required: true
@@ -30,8 +35,6 @@ const ProjectSchema = new mongoose.Schema({
   }]
 }, { timestamps: true });
 
-function arrayLimit(val: any[]) {
-  return val.length <= 4;
-}
+const Project = mongoose.models.Project || mongoose.model('Project', ProjectSchema);
 
-export default mongoose.models.Project || mongoose.model('Project', ProjectSchema);
+export default Project;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useEdgeStore } from '@/lib/edgestore'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -29,14 +29,18 @@ export default function EditProject({ params }: { params: { id: string } }) {
   const [futurePlans, setFuturePlans] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [uploadProgress, setUploadProgress] = useState(0)
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  const { edgestore } = useEdgeStore()
 
   useEffect(() => {
-    if (session) {
+    if (status === 'authenticated') {
       fetchProject()
+    } else if (status === 'unauthenticated') {
+      router.push('/auth/signin')
     }
-  }, [session])
+  }, [status])
 
   const fetchProject = async () => {
     try {
@@ -50,7 +54,8 @@ export default function EditProject({ params }: { params: { id: string } }) {
         setCurrentProgress(data.currentProgress)
         setFuturePlans(data.futurePlans)
       } else {
-        setError('Failed to fetch project')
+        const errorData = await response.json()
+        setError(errorData.error || 'Failed to fetch project')
       }
     } catch (error) {
       setError('An unexpected error occurred')
@@ -60,21 +65,21 @@ export default function EditProject({ params }: { params: { id: string } }) {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file && images.length < 4) {
-      const formData = new FormData()
-      formData.append('file', file)
       try {
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
+        setIsLoading(true)
+        const res = await edgestore.publicFiles.upload({
+          file,
+          onProgressChange: (progress) => {
+            setUploadProgress(progress)
+          },
         })
-        if (response.ok) {
-          const data = await response.json()
-          setImages([...images, data.url])
-        } else {
-          setError('Failed to upload image')
-        }
+        setImages([...images, res.url])
+        setError('')
       } catch (error) {
         setError('An error occurred while uploading the image')
+      } finally {
+        setIsLoading(false)
+        setUploadProgress(0)
       }
     }
   }
@@ -107,7 +112,7 @@ export default function EditProject({ params }: { params: { id: string } }) {
         router.push('/projects')
       } else {
         const data = await response.json()
-        setError(data.message || 'Failed to update project')
+        setError(data.error || 'Failed to update project')
       }
     } catch (error) {
       setError('An unexpected error occurred')
@@ -116,8 +121,12 @@ export default function EditProject({ params }: { params: { id: string } }) {
     }
   }
 
-  if (!project) {
+  if (status === 'loading' || !project) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>
+  }
+
+  if (status === 'unauthenticated') {
+    return null // The useEffect will redirect to signin page
   }
 
   return (
@@ -141,12 +150,24 @@ export default function EditProject({ params }: { params: { id: string } }) {
                 </div>
               ))}
               {images.length < 4 && (
-                <label className="w-24 h-24 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer">
-                  <PlusCircle className="text-gray-400" />
+                <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer">
+                  <PlusCircle className="text-gray-400 mb-2" />
+                  <span className="text-sm text-gray-500"></span>
                   <input type="file" className="hidden" onChange={handleImageUpload} accept="image/*" />
                 </label>
               )}
             </div>
+            {uploadProgress > 0 && uploadProgress < 100 && (
+              <div className="mt-2">
+                <div className="bg-blue-100 h-2 rounded-full">
+                  <div
+                    className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  ></div>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">Uploading: {uploadProgress}%</p>
+              </div>
+            )}
           </div>
           <div>
             <Label htmlFor="description">Project Description</Label>
