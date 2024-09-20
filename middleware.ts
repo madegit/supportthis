@@ -11,4 +11,12 @@ export default withAuth(
   }
 )
 
-export const config = { matcher: ["/dashboard", "/profile", "/settings"] }
+export const config = { 
+  matcher: [
+    "/dashboard", 
+    "/profile", 
+    "/settings", 
+    "/projects/create",
+    "/projects/:path*"  // This will cover all routes under /projects
+  ] 
+}

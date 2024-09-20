@@ -1,18 +1,27 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { PlusCircle, Loader2 } from "lucide-react"
+import { PlusCircle, Loader2, X } from "lucide-react"
 import { Footer } from '@/components/Footer'
 
-export default function CreateProject() {
+interface Project {
+  _id: string
+  images: string[]
+  description: string
+  goal: number
+  currentProgress: string
+  futurePlans: string
+}
+
+export default function EditProject({ params }: { params: { id: string } }) {
+  const [project, setProject] = useState<Project | null>(null)
   const [images, setImages] = useState<string[]>([])
   const [description, setDescription] = useState('')
   const [goal, setGoal] = useState('')
@@ -22,6 +31,31 @@ export default function CreateProject() {
   const [error, setError] = useState('')
   const router = useRouter()
   const { data: session } = useSession()
+
+  useEffect(() => {
+    if (session) {
+      fetchProject()
+    }
+  }, [session])
+
+  const fetchProject = async () => {
+    try {
+      const response = await fetch(`/api/projects/${params.id}`)
+      if (response.ok) {
+        const data = await response.json()
+        setProject(data)
+        setImages(data.images)
+        setDescription(data.description)
+        setGoal(data.goal.toString())
+        setCurrentProgress(data.currentProgress)
+        setFuturePlans(data.futurePlans)
+      } else {
+        setError('Failed to fetch project')
+      }
+    } catch (error) {
+      setError('An unexpected error occurred')
+    }
+  }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -45,14 +79,18 @@ export default function CreateProject() {
     }
   }
 
+  const handleRemoveImage = (index: number) => {
+    setImages(images.filter((_, i) => i !== index))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
 
     try {
-      const response = await fetch('/api/projects', {
-        method: 'POST',
+      const response = await fetch(`/api/projects/${params.id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -69,7 +107,7 @@ export default function CreateProject() {
         router.push('/projects')
       } else {
         const data = await response.json()
-        setError(data.message || 'Failed to create project')
+        setError(data.message || 'Failed to update project')
       }
     } catch (error) {
       setError('An unexpected error occurred')
@@ -78,18 +116,29 @@ export default function CreateProject() {
     }
   }
 
-  
-  
+  if (!project) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>
+  }
+
   return (
     <div className="bg-red-50 dark:bg-gray-900 min-h-screen flex flex-col">
       <div className="flex-1 p-6">
-        <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">Create New Project</h1>
+        <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">Edit Project</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <Label htmlFor="images">Project Images (Max 4)</Label>
             <div className="flex flex-wrap gap-4 mt-2">
               {images.map((image, index) => (
-                <img key={index} src={image} alt={`Project image ${index + 1}`} className="w-24 h-24 object-cover rounded-lg" />
+                <div key={index} className="relative">
+                  <img src={image} alt={`Project image ${index + 1}`} className="w-24 h-24 object-cover rounded-lg" />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
               ))}
               {images.length < 4 && (
                 <label className="w-24 h-24 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer">
@@ -145,10 +194,10 @@ export default function CreateProject() {
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating Project...
+                Updating Project...
               </>
             ) : (
-              'Create Project'
+              'Update Project'
             )}
           </Button>
         </form>
