@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { EdgeStoreProvider } from '@/lib/edgestore';
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 export function EdgeStoreProviderWrapper({
   children,
