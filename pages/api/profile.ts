@@ -60,20 +60,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // Update basic info
       user.name = name || user.name
-      user.bio = bio || user.bio
+      user.bio = bio || null // Allow empty bio
+
+      // Update social links
       user.socialLinks = {
-        twitter: socialLinks?.twitter || user.socialLinks?.twitter || '',
-        instagram: socialLinks?.instagram || user.socialLinks?.instagram || '',
-        linkedin: socialLinks?.linkedin || user.socialLinks?.linkedin || '',
-        website: socialLinks?.website || user.socialLinks?.website || '',
+        twitter: socialLinks?.twitter || null,
+        instagram: socialLinks?.instagram || null,
+        linkedin: socialLinks?.linkedin || null,
+        website: socialLinks?.website || null,
       }
 
       // Update avatar and cover images
-      if (avatarImage) {
-        user.avatarImage = avatarImage
+      if (avatarImage !== undefined) {
+        user.avatarImage = avatarImage || null
       }
-      if (coverImage) {
-        user.coverImage = coverImage
+      if (coverImage !== undefined) {
+        user.coverImage = coverImage || null
       }
 
       // Handle password update

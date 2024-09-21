@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Footer } from '@/components/Footer'
-import { PlusCircle, Edit, Trash2 } from "lucide-react"
+import { PlusCircle, Edit, Trash2, Star, Menu, ArrowUpRight } from "lucide-react"
 
 interface Project {
   _id: string
@@ -18,12 +19,14 @@ interface Project {
   goal: number
   currentProgress: string
   futurePlans: string
+  isMainProject: boolean
 }
 
 export default function ProjectManagement() {
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const router = useRouter()
   const { data: session, status } = useSession()
 
@@ -70,6 +73,29 @@ export default function ProjectManagement() {
     }
   }
 
+  const handleSetMainProject = async (id: string) => {
+    try {
+      const response = await fetch('/api/projects', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ projectId: id }),
+      })
+      if (response.ok) {
+        setProjects(projects.map(project => ({
+          ...project,
+          isMainProject: project._id === id
+        })))
+      } else {
+        const errorData = await response.json()
+        setError(errorData.error || 'Failed to set main project')
+      }
+    } catch (error) {
+      setError('An unexpected error occurred')
+    }
+  }
+
   if (status === 'loading' || isLoading) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>
   }
@@ -79,36 +105,99 @@ export default function ProjectManagement() {
   }
 
   return (
-    <div className="bg-red-50 dark:bg-gray-900 min-h-screen flex flex-col">
-      <div className="flex-1 p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Your Projects</h1>
-          <Link href="/projects/create">
-            <Button>
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Create New Project
-            </Button>
-          </Link>
+    <div className="bg-red-50 dark:bg-gray-900 min-h-screen flex text-base">
+      {/* Mobile Menu Button */}
+      <div className="fixed top-4 right-4 z-40 md:hidden">
+        <button
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="w-10 h-10 flex items-center justify-center bg-white dark:bg-gray-800 rounded-full m-2 backdrop-blur-md bg-opacity-80 dark:bg-opacity-80"
+        >
+          <Menu size={24} className="text-gray-700 dark:text-gray-300" />
+        </button>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1">
+        {/* Top Bar */}
+        <div className="flex flex-col md:flex-row items-start md:items-center p-6 mb-4 md:mt-8">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+              Your Projects
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 tracking-tight text-base md:text-lg">
+              Manage and track your ongoing projects
+            </p>
+          </div>
         </div>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+          {/* Create New Project Card */}
+          <Card className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow">
+            <CardContent className="p-6 flex flex-col items-center justify-center h-full">
+              <PlusCircle className="w-12 h-12 text-red-500 dark:text-red-400 mb-4" />
+              <h3 className="text-xl font-semibold mb-2 tracking-tight text-gray-900 dark:text-gray-100">
+                Create New Project
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-4 text-center tracking-tight">
+                Start a new project and share your vision with supporters.
+              </p>
+              <Link href="/projects/create">
+                <Button className="bg-red-500 dark:bg-red-600 text-white hover:bg-red-600 dark:hover:bg-red-700">
+                  Create Project
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
           {projects.map((project) => (
-            <Card key={project._id} className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg">
-              <CardHeader>
-                <CardTitle>{project.description.substring(0, 50)}...</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="aspect-w-16 aspect-h-9 mb-4">
-                  <img src={project.images[0] || '/placeholder.svg'} alt="Project" className="object-cover rounded-lg" />
+            <Card key={project._id} className={`bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow ${project.isMainProject ? 'border-2 border-red-500 dark:border-red-400' : ''}`}>
+              <CardHeader className="p-0">
+                <div className="relative h-48 w-full">
+                  <Image
+                    src={project.images[0] || '/placeholder.svg'}
+                    alt="Project"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-t-xl"
+                  />
+                  {project.isMainProject && (
+                    <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                      Main Project
+                    </div>
+                  )}
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Goal: ${project.goal}</p>
+              </CardHeader>
+              <CardContent className="p-6">
+                <CardTitle className="text-xl mb-2 tracking-tight text-gray-900 dark:text-gray-100">
+                  {project.description.substring(0, 50)}...
+                </CardTitle>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 tracking-tight">
+                  Goal: ${project.goal.toLocaleString()}
+                </p>
                 <Progress value={33} className="mb-4" />
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" size="sm" onClick={() => router.push(`/projects/${project._id}/edit`)}>
+                <div className="flex items-center text-red-500 dark:text-red-400 mb-4">
+                  <ArrowUpRight size={20} />
+                  <span className="ml-1 font-semibold tracking-tight">
+                    33% Completed
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button 
+                    variant={project.isMainProject ? "default" : "outline"} 
+                    size="sm" 
+                    onClick={() => handleSetMainProject(project._id)}
+                    disabled={project.isMainProject}
+                    className="flex-1 dark:text-gray-400"
+                  >
+                    <Star className="mr-2 h-4 w-4" />
+                    {project.isMainProject ? 'Main Project' : 'Set as Main'}
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => router.push(`/projects/${project._id}/edit`)} className="flex-1">
                     <Edit className="mr-2 h-4 w-4" />
                     Edit
                   </Button>
-                  <Button variant="destructive" size="sm" onClick={() => handleDelete(project._id)}>
+                  <Button variant="destructive" size="sm" onClick={() => handleDelete(project._id)} className="flex-1">
                     <Trash2 className="mr-2 h-4 w-4" />
                     Delete
                   </Button>
@@ -117,8 +206,10 @@ export default function ProjectManagement() {
             </Card>
           ))}
         </div>
+
+        {/* Footer */}
+        <Footer />
       </div>
-      <Footer />
     </div>
   )
 }

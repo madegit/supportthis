@@ -23,13 +23,17 @@ export default async function handler(
         return res.status(400).json({ error: 'Invalid number of images' })
       }
 
+      const existingProjects = await Project.find({ creator: session.user.id })
+      const isMainProject = existingProjects.length === 0 // Set as main if it's the first project
+
       const newProject = new Project({
         creator: session.user.id,
         images,
         description,
         goal,
         currentProgress,
-        futurePlans
+        futurePlans,
+        isMainProject
       })
 
       await newProject.save()
@@ -45,14 +49,33 @@ export default async function handler(
     }
   } else if (req.method === 'GET') {
     try {
-      const projects = await Project.find({ creator: session.user.id })
+      const projects = await Project.find({ creator: session.user.id }).sort({ isMainProject: -1, createdAt: -1 })
       res.status(200).json(projects)
     } catch (error) {
       console.error('Error fetching projects:', error)
       res.status(500).json({ error: 'An unexpected error occurred' })
     }
+  } else if (req.method === 'PUT') {
+    try {
+      const { projectId } = req.body
+
+      // Unset all projects as main
+      await Project.updateMany({ creator: session.user.id }, { isMainProject: false })
+
+      // Set the selected project as main
+      await Project.findOneAndUpdate(
+        { _id: projectId, creator: session.user.id },
+        { isMainProject: true },
+        { new: true }
+      )
+
+      res.status(200).json({ message: 'Main project updated successfully' })
+    } catch (error) {
+      console.error('Error updating main project:', error)
+      res.status(500).json({ error: 'An unexpected error occurred' })
+    }
   } else {
-    res.setHeader('Allow', ['GET', 'POST'])
+    res.setHeader('Allow', ['GET', 'POST', 'PUT'])
     res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }

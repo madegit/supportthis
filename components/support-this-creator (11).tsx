@@ -1,6 +1,4 @@
-'use client'
-
-import { useState, useEffect, useRef, lazy, Suspense } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,34 +14,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, useAnimation } from 'framer-motion'
 import { SupportFooter } from "@/components/SupportFooter"
 
-const ClubComponent = lazy(() => import('@/components/ClubComponent'))
-const ShopComponent = lazy(() => import('@/components/ShopComponent'))
-
-interface SupportThisCreatorProps {
-  user: {
-    name: string
-    username: string
-    bio: string
-    avatarImage: string
-    coverImage: string
-    socialLinks: {
-      twitter: string
-      instagram: string
-      linkedin: string
-      website: string
-    }
-    featuredProject?: {
-      _id: string
-      images: string[]
-      description: string
-      goal: number
-      currentProgress: string
-      futurePlans: string
-    }
-  }
-}
-
-export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
+export default function SupportThisCreator() {
   const [heartCount, setHeartCount] = useState(1)
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
@@ -54,8 +25,18 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
   const headerRef = useRef(null)
   const footerRef = useRef(null)
   const heartJarRef = useRef(null)
-  const [openAccordionItem, setOpenAccordionItem] = useState('item-0')
-  
+
+  const creatorInfo = JSON.stringify({
+    name: "John Doe",
+    username: "@johndoe",
+    avatar: "/avatar.png",
+    coverImage: "/cover.jpg",
+    bio: "Help support the development of this amazing project that aims to revolutionize the way we interact with technology.",
+    supporters: 5848
+  })
+
+  const creatorData = JSON.parse(creatorInfo)
+
   const heartProgress = 75 // Percentage of heart goal reached
   const contributors = [
     { name: 'Alice', comment: 'Great project!', hearts: 2 },
@@ -72,25 +53,55 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
     { name: 'David', hearts: 35 },
     { name: 'Olivia', hearts: 30 },
   ]
-  const [contributorsPage, setContributorsPage] = useState(1)
-  const [leaderboardPage, setLeaderboardPage] = useState(1)
-  const itemsPerPage = 5
 
-  const paginatedContributors = contributors.slice((contributorsPage - 1) * itemsPerPage, contributorsPage * itemsPerPage)
-  const paginatedLeaderboard = leaderboard.slice((leaderboardPage - 1) * itemsPerPage, leaderboardPage * itemsPerPage)
-  
-  const projectDetails = user.featuredProject ? [
-    { title: 'Project Goals', content: user.featuredProject.description, icon: <Target className="h-5 w-5" /> },
-    { title: 'Current Progress', content: user.featuredProject.currentProgress, icon: <Rocket className="h-5 w-5" /> },
-    { title: 'Future Plans', content: user.featuredProject.futurePlans, icon: <Calendar className="h-5 w-5" /> },
-  ] : []
+  const membershipPlans = [
+    { 
+      name: 'Bronze', 
+      price: 5, 
+      icon: <Shield className="h-8 w-8 mb-2 text-orange-400" />,
+      benefits: [
+        { text: 'Early access to content', icon: <Clock className="h-4 w-4 mr-2" /> },
+        { text: 'Monthly newsletter', icon: <Mail className="h-4 w-4 mr-2" /> }
+      ]
+    },
+    { 
+      name: 'Silver', 
+      price: 10, 
+      icon: <Zap className="h-8 w-8 mb-2 text-gray-400" />,
+      benefits: [
+        { text: 'Bronze benefits', icon: <Check className="h-4 w-4 mr-2" /> },
+        { text: 'Exclusive Discord access', icon: <MessageCircle className="h-4 w-4 mr-2" /> },
+        { text: 'Quarterly Q&A session', icon: <Users className="h-4 w-4 mr-2" /> }
+      ]
+    },
+    { 
+      name: 'Gold', 
+      price: 20, 
+      icon: <Crown className="h-8 w-8 mb-2 text-yellow-500" />,
+      benefits: [
+        { text: 'Silver benefits', icon: <Check className="h-4 w-4 mr-2" /> },
+        { text: 'Personal thank you video', icon: <Video className="h-4 w-4 mr-2" /> },
+        { text: 'Input on future projects', icon: <Lightbulb className="h-4 w-4 mr-2" /> }
+      ]
+    },
+  ]
+
+  const projectDetails = [
+    { title: 'Project Goals', content: 'Our main goal is to create an innovative platform that revolutionizes online learning.', icon: <Target className="h-5 w-5" /> },
+    { title: 'Current Progress', content: 'We\'ve completed the initial prototype and are now working on user testing and feedback implementation.', icon: <Rocket className="h-5 w-5" /> },
+    { title: 'Future Plans', content: 'We aim to launch a beta version within the next 3 months, followed by a full release by the end of the year.', icon: <Calendar className="h-5 w-5" /> },
+  ]  
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [sliderWidth, setSliderWidth] = useState(0)
   const sliderRef = useRef<HTMLDivElement>(null)
   const controls = useAnimation()
 
-  const projectImages = user.featuredProject?.images || []
+  const projectImages = [
+    "/bike.jpg?height=360&width=640",
+    "/project.jpg?height=360&width=640",
+    "/project4.jpg?height=360&width=640"
+  ]
 
   useEffect(() => {
     if (sliderRef.current) {
@@ -121,6 +132,12 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
 
     return () => clearInterval(timer)
   }, [])
+
+  const shopItems = [
+    { name: 'T-Shirt', price: 25, image: '/t-shirt.jpg?height=360&width=640', rating: 4.3 },
+    { name: 'Mug', price: 15, image: '/mug.jpg?height=360&width=640', rating: null },
+    { name: 'Sticker Pack', price: 10, image: '/stickerpack.webp?height=360&width=640', rating: 4.7 },
+  ]
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -218,133 +235,108 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
         {activePage === 'home' && (
           <>
             {/* Cover Image */}
-            <div className="w-full w-screen relative left-1/2 right-1/2 -mx-[50vw] h-64 mt-[-32px] mb-[-50px]">
+            <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] h-64 mt-[-32px] mb-[-50px]">
               <Image
-                src={user.coverImage}
+                src={creatorData.coverImage}
                 alt="Cover"
-                fill
-                sizes="100vw"
-                style={{ objectFit: 'cover' }}
-                priority
+                 width={500}
+                      height={128}
+                className="absolute w-full h-full object-cover inset-0"
               />
             </div>
 
             {/* Creator profile */}
-            <div className="text-center mb-20">
-              <div className="relative w-24 h-24 mx-auto mb-4">
-                <Image
-                  src={user.avatarImage}
-                  alt={user.name}
-                  fill
-                  sizes="96px"
-                  className="rounded-full w-full h-full object-cover  ring-2 ring-red-200"
-                />
-              </div>
-              <h2 className="text-3xl font-bold mb-2 tracking-tight">{user.name}</h2>
+            <div className="text-center mb-16">
+              <Avatar className="h-24 w-24 mx-auto mb-4 ring-2 ring-red-200 rounded-full">
+                <AvatarImage src={creatorData.avatar} alt={creatorData.name} />
+                <AvatarFallback>{creatorData.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
+              </Avatar>
+              <h2 className="text-3xl font-bold mb-2 tracking-tight">{creatorData.name}</h2>
               <p className="text-gray-500 dark:text-gray-400 mb-4 tracking-tight text-sm flex items-center justify-center">
-                <Shield className={`h-4 w-4 mr-1 ${getSupporterShieldColor(5848)}`} />
-                5,848 Supporters
+                <Shield className={`h-4 w-4 mr-1 ${getSupporterShieldColor(creatorData.supporters)}`} />
+                {creatorData.supporters.toLocaleString()} Supporters
               </p>
               <div className="flex justify-center space-x-4 mb-4">
-                {user.socialLinks.twitter && (
-                  <a href={user.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
-                    <Twitter className="h-5 w-5 text-gray-400 hover:text-blue-400" />
-                  </a>
-                )}
-                {user.socialLinks.instagram && (
-                  <a href={user.socialLinks.instagram} target="_blank" rel="noopener noreferrer">
-                    <Instagram className="h-5 w-5 text-gray-400 hover:text-pink-400" />
-                  </a>
-                )}
-                {user.socialLinks.website && (
-                  <a href={user.socialLinks.website} target="_blank" rel="noopener noreferrer">
-                    <Globe className="h-5 w-5 text-gray-400 hover:text-green-400" />
-                  </a>
-                )}
+                <Twitter className="h-5 w-5 text-gray-400" />
+                <Instagram className="h-5 w-5 text-gray-400" />
+                <Globe className="h-5 w-5 text-gray-400" />
               </div>
               <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto tracking-tight">
-                {user.bio}
+                {creatorData.bio}
               </p>
             </div>
 
             <div className="lg:grid lg:grid-cols-2 lg:gap-8">
               <div>
                 {/* Project Images Slider */}
-                {user.featuredProject && (
-                  <div className="relative mb-8 rounded-xl overflow-hidden w-full" style={{ paddingTop: '56.25%' }}>
-                    <motion.div 
-                      ref={sliderRef}
-                      className="absolute top-0 left-0 w-full h-full cursor-grab active:cursor-grabbing"
-                      drag="x"
-                      dragConstraints={{ right: 0, left: -sliderWidth }}
-                      animate={controls}
-                      transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                    >
-                      <motion.div className="flex w-full h-full">
-                        {projectImages.map((image, index) => (
-                          <motion.div
-                            key={index}
-                            className="min-w-full h-full"
-                            style={{ 
-                              backgroundImage: `url(${image})`,
-                              backgroundSize: 'cover',
-                              backgroundPosition: 'center'
-                            }}
-                          />
-                        ))}
-                      </motion.div>
-                    </motion.div>
-                    <Button 
-                      variant="ghost" 
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover: text-gray-400 hover:bg-gray-200/20 p-2 z-5"
-                      onClick={prevImage}
-                    >
-                      <ChevronLeft className="h-6 w-6" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 p-2 z-5 hover:bg-gray-200/20"
-                      onClick={nextImage}
-                    >
-                      <ChevronRight className="h-6 w-6" />
-                    </Button>
-                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                      {projectImages.map((_, index) => (
-                        <div
+                <div className="relative mb-8 rounded-xl overflow-hidden w-full" style={{ paddingTop: '56.25%' }}>
+                  <motion.div 
+                    ref={sliderRef}
+                    className="absolute top-0 left-0 w-full h-full cursor-grab active:cursor-grabbing"
+                    drag="x"
+                    dragConstraints={{ right: 0, left: -sliderWidth }}
+                    animate={controls}
+                    transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                  >
+                    <motion.div className="flex w-full h-full">
+                      {projectImages.map((image, index) => (
+                        <motion.div
                           key={index}
-                          className={`w-3 h-1 rounded-full ${
-                            index === currentImageIndex ? ' w-5 bg-white' : 'bg-gray-400 ease-in-out duration-300'
-                          }`}
+                          className="min-w-full h-full"
+                          style={{ 
+                            backgroundImage: `url(${image})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
                         />
                       ))}
-                    </div>
+                    </motion.div>
+                  </motion.div>
+                  <Button 
+                    variant="ghost" 
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover: text-gray-400 hover:bg-gray-200/20 p-2 z-5"
+                    onClick={prevImage}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 p-2 z-5 hover:bg-gray-200/20"
+                    onClick={nextImage}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </Button>
+                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    {projectImages.map((_, index) => (
+                      <div
+                        key={index}
+                        className={`w-3 h-1 rounded-full ${
+                          index === currentImageIndex ? ' w-5 bg-white' : 'bg-gray-400 ease-in-out duration-300'
+                        }`}
+                      />
+                    ))}
                   </div>
-                )}
+                </div>
 
                 {/* Project Progress */}
-                {user.featuredProject && (
-                  <Card ref={heartJarRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-semibold tracking-tight flex items-center text-xl">
-                          Project Goals <Target className="ml-2 h-5 w-5 text-red-500" />
-                        </span>
-                        <span className="tracking-tight text-lg">{heartProgress}% Completed</span>
-                      </div>
-                      <div className="h-3 bg-red-100 dark:bg-red-900 rounded-full mb-1 overflow-hidden">
-                        <motion.div 
-                          className="h-full bg-red-500 flex items-center rounded-full justify-end pr-2"
-                          initial={{ width: 0 }}
-                          animate={{ width: isHeartJarVisible ? `${heartProgress}%` : 0 }}
-                          transition={{ duration: 1, ease: "easeOut" }}
-                        />
-                      </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                        Goal: ${user.featuredProject.goal.toLocaleString()}
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
+                <Card ref={heartJarRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-semibold tracking-tight flex items-center text-xl">
+                        Project Goals <Target className="ml-2 h-5 w-5 text-red-500" />
+                      </span>
+                      <span className="tracking-tight text-lg">{heartProgress}% Completed</span>
+                    </div>
+                    <div className="h-3 bg-red-100 dark:bg-red-900 rounded-full mb-1 overflow-hidden">
+                      <motion.div 
+                        className="h-full bg-red-500 flex items-center rounded-full justify-end pr-2"
+                        initial={{ width: 0 }}
+                        animate={{ width: isHeartJarVisible ? `${heartProgress}%` : 0 }}
+                        transition={{ duration: 1, ease: "easeOut" }}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
 
                 {/* Send Hearts */}
                 <Card ref={incrementalSectionRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
@@ -361,6 +353,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent side="top" align="end" className="max-w-xs dark:text-gray-800">
+
                           <p>Send support to help this project reach its goal. Each heart represents a small donation that goes directly to the creator.</p>
                         </TooltipContent>
                       </Tooltip>
@@ -439,36 +432,29 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
 
               <div>
                 {/* Project Details Accordion */}
-                {user.featuredProject && (
-                  <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="tracking-tight flex items-center text-2xl">
-                        <Info className="mr-2 h-6 w-6 text-red-500" />
-                        Project Details
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <Accordion
-                        type="single"
-                        collapsible
-                        value={openAccordionItem}
-                        onValueChange={setOpenAccordionItem}
-                      >
-                        {projectDetails.map((detail, index) => (
-                          <AccordionItem key={index} value={`item-${index}`}>
-                            <AccordionTrigger>
-                              <div className="flex items-center">
-                                {detail.icon}
-                                <span className="ml-2 hover:no-underline">{detail.title}</span>
-                              </div>
-                            </AccordionTrigger>
-                            <AccordionContent>{detail.content}</AccordionContent>
-                          </AccordionItem>
-                        ))}
-                      </Accordion>
-                    </CardContent>
-                  </Card>
-                )}
+                <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="tracking-tight flex items-center text-2xl">
+                      <Info className="mr-2 h-6 w-6 text-red-500" />
+                      Project Details
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Accordion type="single" collapsible>
+                      {projectDetails.map((detail, index) => (
+                        <AccordionItem key={index} value={`item-${index}`}>
+                          <AccordionTrigger>
+                            <div className="flex items-center">
+                              {detail.icon}
+                              <span className="ml-2 hover:no-underline">{detail.title}</span>
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent>{detail.content}</AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </CardContent>
+                </Card>
 
                 {/* Leaderboard */}
                 <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
@@ -535,15 +521,70 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
         )}
 
         {activePage === 'club' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <ClubComponent />
-          </Suspense>
+          <div>
+            <h2 className="text-3xl font-bold mb-4 tracking-tight">Join Our Club</h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-8">Become a member and get exclusive benefits to support your favorite creator.</p>
+            {/* Recurring Membership Plans */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {membershipPlans.map((plan, index) => (
+                <Card key={index} className="bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                  <CardHeader className="bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900 dark:to-red-800 p-6 text-center">
+                    <div className="flex justify-center">{plan.icon}</div>
+                    <CardTitle className="text-2xl font-bold mb-2">{plan.name}</CardTitle>
+                    <p className="text-3xl font-semibold">${plan.price}<span className="text-base font-normal">/month</span></p>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <ul className="space-y-4">
+                      {plan.benefits.map((benefit, benefitIndex) => (
+                        <li key={benefitIndex} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                          {benefit.icon}
+                          {benefit.text}
+                        </li>
+                      ))}
+                    </ul>
+                    <Button className="w-full mt-6 bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 rounded-xl">
+                      Subscribe to {plan.name}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
         )}
 
         {activePage === 'shop' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <ShopComponent />
-          </Suspense>
+          <div>
+            <h2 className="text-3xl font-bold mb-4 tracking-tight">Shop</h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-8">Support your favorite creator by purchasing exclusive merchandise.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {shopItems.map((item, index) => (
+                <Link href="/support/product" key={index} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl p-3 shadow-sm">
+                  <div className="mb-4">
+                    <Image 
+                      src={item.image} 
+                      alt={item.name} 
+                      width={400} 
+                      height={440} 
+                      className="w-full h-60 object-cover rounded-lg transition-transform group-hover:scale-105"  />
+                  </div>
+                  <div className="flex justify-between items-start px-3">
+                    <div className="w-[60%]">
+                      <h3 className="font-semibold text-lg mb-1 tracking-tight">{item.name}</h3>
+                      <div className="flex items-center text-sm">
+                        <Star className="h-4 w-4 fill-black text-black dark:fill-white dark:text-white mr-1" />
+                        {item.rating ? (
+                          <span>{item.rating.toFixed(1)}</span>
+                        ) : (
+                          <span>No ratings</span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="w-[35%] text-right font-semibold tracking-tight text-lg">${item.price}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         )}
       </main>
 

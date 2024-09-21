@@ -6,14 +6,14 @@ const ProjectSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-    images: {
-      type: [String],
-      validate: {
-        validator: function(v: string[]) {
-          return v.length <= 4;
-        },
-        message: (props: { path: string }) => `${props.path} exceeds the limit of 4 images`
-      }
+  images: {
+    type: [String],
+    validate: {
+      validator: function(v: string[]) {
+        return v.length <= 4;
+      },
+      message: (props: { path: string }) => `${props.path} exceeds the limit of 4 images`
+    }
   },
   description: {
     type: String,
@@ -32,7 +32,11 @@ const ProjectSchema = new mongoose.Schema({
       type: Date,
       default: Date.now
     }
-  }]
+  }],
+  isMainProject: {
+    type: Boolean,
+    default: false
+  }
 }, { timestamps: true });
 
 const Project = mongoose.models.Project || mongoose.model('Project', ProjectSchema);

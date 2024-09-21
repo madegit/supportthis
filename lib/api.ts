@@ -1,5 +1,6 @@
 import { connectToDatabase } from './mongodb'
 import User from '../models/User'
+import Project from '../models/Project'
 
 export async function getUserByUsername(username: string) {
   await connectToDatabase()
@@ -9,6 +10,8 @@ export async function getUserByUsername(username: string) {
   if (!user) {
     return null
   }
+
+  const featuredProject = await Project.findOne({ creator: user._id, isMainProject: true })
 
   return {
     name: user.name || '',
@@ -22,5 +25,13 @@ export async function getUserByUsername(username: string) {
       linkedin: user.socialLinks?.linkedin || '',
       website: user.socialLinks?.website || '',
     },
+    featuredProject: featuredProject ? {
+      _id: featuredProject._id,
+      images: featuredProject.images,
+      description: featuredProject.description,
+      goal: featuredProject.goal,
+      currentProgress: featuredProject.currentProgress,
+      futurePlans: featuredProject.futurePlans,
+    } : undefined,
   }
 }
