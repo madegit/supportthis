@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { hash } from 'bcrypt'
 import { connectToDatabase } from '../../../lib/mongodb'
 import User from '../../../models/User'
+import { generateUsername } from '../../../utils/usernameUtils'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -23,10 +24,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const hashedPassword = await hash(password, 10)
-    const newUser = new User({ name, email, password: hashedPassword })
+
+    // Generate a default username
+    const [firstName, ...lastNameParts] = name.split(' ')
+    const lastName = lastNameParts.join(' ')
+    const username = await generateUsername(firstName, lastName)
+
+    const newUser = new User({ name, email, password: hashedPassword, username })
     await newUser.save()
 
-    res.status(201).json({ message: 'User created successfully' })
+    res.status(201).json({ message: 'User created successfully', username })
   } catch (error) {
     console.error('Error creating user:', error)
     res.status(500).json({ message: 'Error creating user' })

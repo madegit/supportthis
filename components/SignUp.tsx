@@ -19,6 +19,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('')
   const [alert, setAlert] = useState({ type: '', message: '' })
   const [isLoading, setIsLoading] = useState(false)
+  const [generatedUsername, setGeneratedUsername] = useState('')
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,7 +35,9 @@ export default function SignUp() {
       })
 
       if (response.ok) {
-        setAlert({ type: 'success', message: 'Account created successfully! Signing you in...' })
+        const data = await response.json()
+        setGeneratedUsername(data.username)
+        setAlert({ type: 'success', message: `Account created successfully! Your username is ${data.username}. Signing you in...` })
         const result = await signIn('credentials', {
           redirect: false,
           email,
@@ -56,13 +59,23 @@ export default function SignUp() {
     }
   }
 
-  const handleOAuthSignUp = (provider: string) => {
-    signIn(provider, { callbackUrl: '/dashboard' })
+  const handleOAuthSignUp = async (provider: string) => {
+    setIsLoading(true)
+    try {
+      const result = await signIn(provider, { callbackUrl: '/dashboard' })
+      if (result?.error) {
+        setAlert({ type: 'error', message: result.error })
+      }
+    } catch (error) {
+      setAlert({ type: 'error', message: 'An error occurred during OAuth sign up' })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-       <Header />
+      <Header />
 
       {/* Main content */}
       <main className="container mx-auto pt-12 px-4 pb-32">
@@ -105,11 +118,11 @@ export default function SignUp() {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="password">                          Password</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
-                   placeholder="********"
+                  placeholder="********"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -133,6 +146,7 @@ export default function SignUp() {
                 onClick={() => handleOAuthSignUp('google')}
                 variant="outline"
                 className="rounded-xl"
+                disabled={isLoading}
               >
                 <Mail className="mr-2 h-4 w-4" /> Google
               </Button>
@@ -140,6 +154,7 @@ export default function SignUp() {
                 onClick={() => handleOAuthSignUp('github')}
                 variant="outline"
                 className="rounded-xl"
+                disabled={isLoading}
               >
                 <Github className="mr-2 h-4 w-4" /> GitHub
               </Button>
@@ -153,7 +168,7 @@ export default function SignUp() {
           </CardFooter>
         </Card>
       </main>
-       <Footer />
+      <Footer />
     </div>
   )
 }

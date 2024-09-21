@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, User as NextAuthUser } from "next-auth";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "../../../lib/mongodb";
 import GoogleProvider from "next-auth/providers/google";
@@ -8,6 +8,13 @@ import { compare } from "bcrypt";
 import { connectToDatabase } from "../../../lib/mongodb";
 import User from "../../../models/User";
 import { Adapter } from "next-auth/adapters";
+import { generateUsername } from "../../../utils/usernameUtils";
+
+interface ExtendedUser extends NextAuthUser {
+  username?: string;
+  avatarImage?: string;
+  coverImage?: string;
+}
 
 export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise) as Adapter,
@@ -57,6 +64,7 @@ export const authOptions: NextAuthOptions = {
           id: user._id.toString(),
           email: user.email,
           name: user.name,
+          username: user.username,
         };
       },
     }),
@@ -66,15 +74,39 @@ export const authOptions: NextAuthOptions = {
     error: '/auth/error',
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google" || account?.provider === "github") {
+        await connectToDatabase();
+        const existingUser = await User.findOne({ email: user.email });
+        if (!existingUser) {
+          const [firstName, ...lastNameParts] = (user.name || "").split(" ");
+          const lastName = lastNameParts.join(" ");
+          const username = await generateUsername(firstName, lastName);
+          const newUser = new User({
+            name: user.name,
+            email: user.email,
+            username: username,
+            avatarImage: user.image,
+          });
+          await newUser.save();
+          (user as ExtendedUser).username = username;
+        } else {
+          (user as ExtendedUser).username = existingUser.username;
+        }
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.username = (user as ExtendedUser).username;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.username = token.username as string;
       }
       return session;
     },

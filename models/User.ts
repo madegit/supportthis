@@ -4,7 +4,13 @@ const UserSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
-  image: String,
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  avatarImage: String,
+  coverImage: String,
   bio: String,
   socialLinks: {
     twitter: String,

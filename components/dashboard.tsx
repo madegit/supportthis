@@ -237,7 +237,7 @@ export function DashboardComponent() {
         {/* Top Bar */}
         <div className="flex flex-col md:flex-row items-start md:items-center p-6 mb-4 md:mt-8">
           <Avatar className="w-10 h-10 md:w-16 md:h-16 mr-4 mb-8 md:mb-0">
-            <AvatarImage
+            <AvatarImage className="w-full h-full object-cover"
               src={
                 profile.avatarImage || "/placeholder.svg?height=128&width=128"
               }

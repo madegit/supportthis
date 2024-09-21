@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import Image from 'next/image'
 import { useRouter } from "next/navigation";
 import { useEdgeStore } from '@/lib/edgestore';
+import useSWR from 'swr'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,23 +32,13 @@ import {
 
 const MAX_BIO_LENGTH = 160;
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 export default function Component() {
   const { data: session, status, update } = useSession();
   const router = useRouter();
   const { edgestore } = useEdgeStore();
-  const [profile, setProfile] = useState({
-    name: "",
-    email: "",
-    avatarImage: "",
-    coverImage: "",
-    bio: "",
-    socialLinks: {
-      twitter: "",
-      instagram: "",
-      linkedin: "",
-      website: "",
-    },
-  });
+  const { data: profile, error, mutate } = useSWR('/api/profile', fetcher);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -55,61 +46,47 @@ export default function Component() {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
-  const [imageUpdateTimestamp, setImageUpdateTimestamp] = useState(Date.now());
 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/auth/signin");
-    } else if (status === "authenticated" && session?.user?.email) {
-      fetchProfile();
     }
-  }, [status, session, router]);
+  }, [status, router]);
 
-  const fetchProfile = async () => {
-    try {
-      const response = await fetch("/api/profile");
-      if (response.ok) {
-        const data = await response.json();
-        setProfile({
-          ...data,
-          avatarImage: data.avatarImage || "",
-          bio: data.bio || "",
-          coverImage: data.coverImage || "",
-          socialLinks: {
-            twitter: data.socialLinks?.twitter || "",
-            instagram: data.socialLinks?.instagram || "",
-            linkedin: data.socialLinks?.linkedin || "",
-            website: data.socialLinks?.website || "",
-          },
-        });
-      } else {
-        setAlert({ type: "error", message: "Failed to fetch profile" });
-      }
-    } catch (error) {
-      setAlert({ type: "error", message: "An unexpected error occurred" });
-    }
-  };
-
-  const handleInputChange = (
+  const handleInputChange = async (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
-      setProfile((prev) => ({
-        ...prev,
+      mutate({
+        ...profile,
         [parent]: {
-          ...((prev[parent as keyof typeof prev] || {}) as Record<
-            string,
-            unknown
-          >),
+          ...profile[parent],
           [child]: value,
         },
-      }));
+      }, false);
     } else {
-      setProfile((prev) => ({ ...prev, [name]: value }));
+      mutate({ ...profile, [name]: value }, false);
+    }
+
+    if (name === 'username') {
+      setIsCheckingUsername(true);
+      try {
+        const response = await fetch(`/api/check-username?username=${value}`);
+        const data = await response.json();
+        if (!data.available) {
+          setAlert({ type: "error", message: "Username is already taken" });
+        } else {
+          setAlert({ type: "", message: "" });
+        }
+      } catch (error) {
+        console.error('Error checking username:', error);
+      }
+      setIsCheckingUsername(false);
     }
   };
 
@@ -145,7 +122,7 @@ export default function Component() {
           },
         });
 
-        fetchProfile();
+        mutate(data.user);
       } else {
         const data = await response.json();
         setAlert({
@@ -177,30 +154,36 @@ export default function Component() {
       });
 
       if (res.url) {
-        setProfile((prev) => ({ ...prev, [type === 'avatar' ? 'avatarImage' : 'coverImage']: res.url }));
-        setAlert({ type: "success", message: `${type === 'avatar' ? 'Avatar' : 'Cover image'} uploaded successfully` });
+        const updatedProfile = { ...profile, [type === 'avatar' ? 'avatarImage' : 'coverImage']: res.url };
 
-        // Update session to prevent image flickering
-        await update({
-          ...session,
-          user: {
-            ...session?.user,
-            [type === 'avatar' ? 'avatarImage' : 'coverImage']: res.url,
-          },
-        });
+        // Optimistic update
+        mutate(updatedProfile, false);
 
         // Update profile on the server
-        await fetch("/api/profile", {
+        const response = await fetch("/api/profile", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...profile,
-            [type === 'avatar' ? 'avatarImage' : 'coverImage']: res.url,
-          }),
+          body: JSON.stringify(updatedProfile),
         });
 
-        // Update the timestamp to force a re-render of the image
-        setImageUpdateTimestamp(Date.now());
+        if (response.ok) {
+          const data = await response.json();
+          setAlert({ type: "success", message: `${type === 'avatar' ? 'Avatar' : 'Cover image'} updated successfully` });
+
+          // Update session
+          await update({
+            ...session,
+            user: {
+              ...session?.user,
+              ...data.user,
+            },
+          });
+
+          // Revalidate the data
+          mutate();
+        } else {
+          throw new Error('Failed to update profile');
+        }
       } else {
         throw new Error('Failed to upload image');
       }
@@ -211,6 +194,9 @@ export default function Component() {
         message: `An unexpected error occurred: ${errorMessage}`,
       });
       console.error(`${type === 'avatar' ? 'Avatar' : 'Cover image'} upload error:`, error);
+
+      // Revert optimistic update
+      mutate();
     } finally {
       setIsUploading(false);
       setUploadProgress(0);
@@ -231,9 +217,9 @@ export default function Component() {
     }
   };
 
-  const getImageUrl = (url: string) => {
-    return `${url}?t=${imageUpdateTimestamp}`;
-  };
+  if (error) return <div>Failed to load profile</div>;
+  if (!profile) return <div className="flex items-center justify-center h-screen">Loading...</div>
+;
 
   return (
     <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 py-8 px-4">
@@ -267,7 +253,7 @@ export default function Component() {
                 <div className="h-32 w-full bg-gray-200 dark:bg-gray-700 rounded-xl overflow-hidden">
                   {profile.coverImage ? (
                     <Image
-                      src={getImageUrl(profile.coverImage)}
+                      src={profile.coverImage}
                       alt="Cover"
                       className="w-full h-full object-cover"
                       width={500}
@@ -300,7 +286,7 @@ export default function Component() {
               </div>
               <div className="flex items-center space-x-4">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage src={getImageUrl(profile.avatarImage)} alt={profile.name} />
+                  <AvatarImage src={profile.avatarImage} alt={profile.name} />
                   <AvatarFallback>{profile.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <input
@@ -335,6 +321,18 @@ export default function Component() {
                   required
                   className="rounded-xl dark:bg-gray-900"
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  name="username"
+                  value={profile.username}
+                  onChange={handleInputChange}
+                  required
+                  className="rounded-xl dark:bg-gray-900"
+                />
+                {isCheckingUsername && <p className="text-sm text-gray-500">Checking username availability...</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -444,7 +442,7 @@ export default function Component() {
               <Button
                 type="submit"
                 className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white h-12 text-base rounded-xl"
-                disabled={isLoading || isUploading}
+                disabled={isLoading || isUploading || isCheckingUsername}
               >
                 {isLoading ? "Updating..." : "Update Profile"}
               </Button>
