@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet" 
 import Image from 'next/image'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, UserPlus, ChevronLeft, ChevronRight, LinkIcon, Facebook, ShoppingCart, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb, BarChart2, PieChart, TrendingUp } from 'lucide-react' 
+import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, UserPlus, ChevronLeft, ChevronRight, LinkIcon, Facebook, ShoppingCart, Text, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb, BarChart2, PieChart, TrendingUp } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, useAnimation } from 'framer-motion'
@@ -55,7 +55,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
   const footerRef = useRef(null)
   const heartJarRef = useRef(null)
   const [openAccordionItem, setOpenAccordionItem] = useState('item-0')
-  
+
   const heartProgress = 75 // Percentage of heart goal reached
   const contributors = [
     { name: 'Alice', comment: 'Great project!', hearts: 2 },
@@ -78,7 +78,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
 
   const paginatedContributors = contributors.slice((contributorsPage - 1) * itemsPerPage, contributorsPage * itemsPerPage)
   const paginatedLeaderboard = leaderboard.slice((leaderboardPage - 1) * itemsPerPage, leaderboardPage * itemsPerPage)
-  
+
   const projectDetails = user.featuredProject ? [
     { title: 'Project Goals', content: user.featuredProject.description, icon: <Target className="h-5 w-5" /> },
     { title: 'Current Progress', content: user.featuredProject.currentProgress, icon: <Rocket className="h-5 w-5" /> },
@@ -220,7 +220,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
             {/* Cover Image */}
             <div className="w-full w-screen relative left-1/2 right-1/2 -mx-[50vw] h-64 mt-[-32px] mb-[-50px]">
               <Image
-                src={user.coverImage}
+                src={user.coverImage || '/cover.jpg?height=256&width=1024'}
                 alt="Cover"
                 fill
                 sizes="100vw"
@@ -232,13 +232,10 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
             {/* Creator profile */}
             <div className="text-center mb-20">
               <div className="relative w-24 h-24 mx-auto mb-4">
-                <Image
-                  src={user.avatarImage}
-                  alt={user.name}
-                  fill
-                  sizes="96px"
-                  className="rounded-full w-full h-full object-cover  ring-2 ring-red-200"
-                />
+                <Avatar className="w-24 h-24">
+                  <AvatarImage src={user.avatarImage} alt={user.name} className="w-full h-full object-cover"/>
+                  <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                </Avatar>
               </div>
               <h2 className="text-3xl font-bold mb-2 tracking-tight">{user.name}</h2>
               <p className="text-gray-500 dark:text-gray-400 mb-4 tracking-tight text-sm flex items-center justify-center">
@@ -299,14 +296,14 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                       className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover: text-gray-400 hover:bg-gray-200/20 p-2 z-5"
                       onClick={prevImage}
                     >
-                      <ChevronLeft className="h-6 w-6" />
+                      <ChevronLeft className="h-7 w-7" />
                     </Button>
                     <Button 
                       variant="ghost" 
                       className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 p-2 z-5 hover:bg-gray-200/20"
                       onClick={nextImage}
                     >
-                      <ChevronRight className="h-6 w-6" />
+                      <ChevronRight className="h-7 w-7" />
                     </Button>
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
                       {projectImages.map((_, index) => (
@@ -443,8 +440,8 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                   <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="tracking-tight flex items-center text-2xl">
-                        <Info className="mr-2 h-6 w-6 text-red-500" />
-                        Project Details
+                        <Text className="mr-2 h-6 w-6 text-red-500" />
+                        The Project
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -535,13 +532,13 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
         )}
 
         {activePage === 'club' && (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
             <ClubComponent />
           </Suspense>
         )}
 
         {activePage === 'shop' && (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
             <ShopComponent />
           </Suspense>
         )}

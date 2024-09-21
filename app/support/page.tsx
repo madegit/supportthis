@@ -1,7 +1,7 @@
 'use client'
 
-import SupportThisCreator from '@/components/support-this-creator'
+import ComingSoonComponent from '@/components/coming-soon'
 
 export default function Home() {
-  return <SupportThisCreator />
+  return <ComingSoonComponent/>
 }
