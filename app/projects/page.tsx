@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Footer } from '@/components/Footer'
-import { PlusCircle, Edit, Trash2, Star, Menu, ArrowUpRight } from "lucide-react"
+import { PlusCircle, Edit, Trash2, Star, ArrowUpRight } from "lucide-react"
+import { ProfileMenu } from "@/components/Menu"
 
 interface Project {
   _id: string
@@ -26,7 +27,6 @@ export default function ProjectManagement() {
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const router = useRouter()
   const { data: session, status } = useSession()
 
@@ -106,17 +106,7 @@ export default function ProjectManagement() {
 
   return (
     <div className="bg-red-50 dark:bg-gray-900 min-h-screen flex text-base">
-      {/* Mobile Menu Button */}
-      <div className="fixed top-4 right-4 z-40 md:hidden">
-        <button
-          onClick={() => setIsMobileMenuOpen(true)}
-          className="w-10 h-10 flex items-center justify-center bg-white dark:bg-gray-800 rounded-full m-2 backdrop-blur-md bg-opacity-80 dark:bg-opacity-80"
-        >
-          <Menu size={24} className="text-gray-700 dark:text-gray-300" />
-        </button>
-      </div>
-
-      {/* Main Content */}
+      <ProfileMenu />
       <div className="flex-1">
         {/* Top Bar */}
         <div className="flex flex-col md:flex-row items-start md:items-center p-6 mb-4 md:mt-8">
@@ -131,7 +121,7 @@ export default function ProjectManagement() {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+        <div className="grid grid-cols-1 pb-20 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
           {/* Create New Project Card */}
           <Card className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow">
             <CardContent className="p-6 flex flex-col items-center justify-center h-full">
@@ -151,7 +141,7 @@ export default function ProjectManagement() {
           </Card>
 
           {projects.map((project) => (
-            <Card key={project._id} className={`bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow ${project.isMainProject ? 'border-2 border-red-500 dark:border-red-400' : ''}`}>
+            <Card key={project._id} className={`bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow ${project.isMainProject ? 'border-2 border-red-500 rounded-xl dark:border-red-400' : ''}`}>
               <CardHeader className="p-0">
                 <div className="relative h-48 w-full">
                   <Image

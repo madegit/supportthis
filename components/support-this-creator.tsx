@@ -168,7 +168,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
   }
 
   return (
-    <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 overflow-x-hidden">
       {/* Header */}
       <header ref={headerRef} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md sticky top-0 z-10">
         <div className="container mx-auto h-16 flex items-center justify-between px-4">
@@ -213,7 +213,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
         {activePage === 'home' && (
           <>
             {/* Cover Image */}
-            <div className="w-full w-screen relative left-1/2 right-1/2 -mx-[50vw] h-64 mt-[-32px] mb-[-50px] sm:h-48">
+            <div className="w-full w-screen relative left-1/2 right-1/2 -mx-[50vw] h-48 lg:h-64 mt-[-32px] mb-[-50px]">
               <Image
                 src={user.coverImage || '/cover.jpg?height=256&width=1024'}
                 alt="Cover"
@@ -274,7 +274,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
               <div>
                 {/* Project Images Slider */}
                 {user.featuredProject && (
-                  <div className="relative mb-8 rounded-xl overflow-hidden w-full" style={{ paddingTop: '56.25%' }}>
+                    <div className="relative mb-8 rounded-xl overflow-hidden w-full lg:pt-[56.25%] pt-[70.25%]">
                     <motion.div 
                       ref={sliderRef}
                       className="absolute top-0 left-0 w-full h-full cursor-grab active:cursor-grabbing"
@@ -315,8 +315,8 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                       {projectImages.map((_, index) => (
                         <div
                           key={index}
-                          className={`w-3 h-1 rounded-full ${
-                            index === currentImageIndex ? ' w-5 bg-white' : 'bg-gray-400 ease-in-out duration-300'
+                          className={`w-3 h-1 rounded-full opacity-50 shadow-sm ${
+                            index === currentImageIndex ? ' w-5 bg-white' : 'bg-gray-400 ease-in-out opacity-90 duration-300 shadow-sm'
                           }`}
                         />
                       ))}
@@ -407,7 +407,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                       maxLength={250}
                     />
                     <Button 
-                      className="w-full bg-black dark:bg-red-500 text-white dark:text-white dark:hover:text-red-500 hover:bg-red-600 font-semibold dark:hover:bg-gray-700 h-12 text-base rounded-xl"
+                      className="w-full bg-black dark:bg-red-500 text-white dark:text-white dark:hover:text-white hover:bg-red-600 transition-all duration-300 ease-in-out font-semibold tracking-tight dark:hover:bg-red-400 h-12 text-base rounded-xl"
                     >
                       Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
                     </Button>
@@ -425,7 +425,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                   <CardContent className="space-y-4">
                     {contributors.map((contributor, index) => (
                       <div key={index} className="flex items-center space-x-4 ">
-                        <Avatar className="h-10 w-10 rounded-full">
+                        <Avatar className="h-10 w-10 rounded-full dark:bg-gray-400">
                           <AvatarFallback>{contributor.name[0]}</AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
@@ -552,9 +552,9 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
       </main>
 
       {/* Sticky send hearts and share buttons */}
-      <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20 z-15'}`}>
+      <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20 z-50'}`}>
         <div className="flex space-x-2 px-4 max-w-xl mx-auto">
-          <Button className="flex-grow bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl w-[73%]">
+          <Button className="flex-grow bg-black dark:bg-red-500 text-white dark:text-white z-20 hover:bg-red-500 dark:hover:bg-red-400 h-12 text-base tracking-tight font-semibold rounded-xl w-[73%]">
             Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
           </Button>
           <Dialog>
@@ -564,7 +564,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:w-[425px] w-5/6 rounded-xl">
-              <div className="flex flex-col space-y-4 items-center">
+              <div className="flex flex-col space-y-4 items-center pb-5">
                 <h3 className="text-lg font-semibold">Share</h3>
                 <div className="flex space-x-4">
                   <Button variant="outline" className="rounded-full p-2">
