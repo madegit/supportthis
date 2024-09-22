@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema({
   coverImage: String,
   bio: String,
   socialLinks: {
+    github: String,
     twitter: String,
     instagram: String,
     linkedin: String,

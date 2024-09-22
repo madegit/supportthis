@@ -23,6 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   AlertCircle,
   CheckCircle2,
+  Github,
   Twitter,
   Instagram,
   Globe,
@@ -365,10 +366,20 @@ export default function Component() {
                 <Label>Social Media Links</Label>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
+                    <Github className="h-5 w-5 text-gray-400" />
+                    <Input
+                      name="socialLinks.github"
+                      placeholder="https://github.com/username"
+                      value={profile.socialLinks.github}
+                      onChange={handleInputChange}
+                      className="rounded-xl dark:bg-gray-900"
+                    />
+                  </div>
+                  <div className="flex items-center space-x-2">
                     <Twitter className="h-5 w-5 text-gray-400" />
                     <Input
                       name="socialLinks.twitter"
-                      placeholder="Twitter"
+                    placeholder="https://twitter.com/username"
                       value={profile.socialLinks.twitter}
                       onChange={handleInputChange}
                       className="rounded-xl dark:bg-gray-900"
@@ -378,7 +389,7 @@ export default function Component() {
                     <Instagram className="h-5 w-5 text-gray-400" />
                     <Input
                       name="socialLinks.instagram"
-                      placeholder="Instagram"
+                  placeholder="https://instagram.com/username"
                       value={profile.socialLinks.instagram}
                       onChange={handleInputChange}
                       className="rounded-xl dark:bg-gray-900"
@@ -388,7 +399,7 @@ export default function Component() {
                     <Linkedin className="h-5 w-5 text-gray-400" />
                     <Input
                       name="socialLinks.linkedin"
-                      placeholder="LinkedIn"
+                    placeholder="https://linkedin.com/username"
                       value={profile.socialLinks.linkedin}
                       onChange={handleInputChange}
                       className="rounded-xl dark:bg-gray-900"
@@ -398,7 +409,7 @@ export default function Component() {
                     <Globe className="h-5 w-5 text-gray-400" />
                     <Input
                       name="socialLinks.website"
-                      placeholder="Website"
+                      placeholder="https://mywebsite.com/"
                       value={profile.socialLinks.website}
                       onChange={handleInputChange}
                       className="rounded-xl dark:bg-gray-900"

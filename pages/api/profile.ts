@@ -27,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         username: user.username || '',
         bio: user.bio || '',
         socialLinks: {
+          github: user.socialLinks?.github || '',
           twitter: user.socialLinks?.twitter || '',
           instagram: user.socialLinks?.instagram || '',
           linkedin: user.socialLinks?.linkedin || '',
@@ -64,6 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // Update social links
       user.socialLinks = {
+        github: socialLinks?.github || null,
         twitter: socialLinks?.twitter || null,
         instagram: socialLinks?.instagram || null,
         linkedin: socialLinks?.linkedin || null,
@@ -113,6 +115,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           username: user.username || '',
           bio: user.bio || '',
           socialLinks: {
+            github: user.socialLinks?.github || '',
             twitter: user.socialLinks?.twitter || '',
             instagram: user.socialLinks?.instagram || '',
             linkedin: user.socialLinks?.linkedin || '',

@@ -20,6 +20,7 @@ export async function getUserByUsername(username: string) {
     avatarImage: user.avatarImage || '',
     coverImage: user.coverImage || '',
     socialLinks: {
+      github: user.socialLinks?.github || '',
       twitter: user.socialLinks?.twitter || '',
       instagram: user.socialLinks?.instagram || '',
       linkedin: user.socialLinks?.linkedin || '',

@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet" 
 import Image from 'next/image'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Compass, Heart, Share2, MessageCircleHeart, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, UserPlus, ChevronLeft, Anvil, ChevronRight, Linkedin, LinkIcon, Facebook, ShoppingCart, Text, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb, BarChart2, PieChart, TrendingUp } from 'lucide-react' 
+import { Compass, Heart, Share2, MessageCircleHeart, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Github, Mail, Clock, Shield, UserPlus, ChevronLeft, Anvil, ChevronRight, Linkedin, LinkIcon, Facebook, ShoppingCart, Text, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb, BarChart2, PieChart, TrendingUp } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, useAnimation } from 'framer-motion'
@@ -27,6 +27,7 @@ interface SupportThisCreatorProps {
     avatarImage: string
     coverImage: string
     socialLinks: {
+      github: string
       twitter: string
       instagram: string
       linkedin: string
@@ -237,6 +238,12 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                 5,848 Supporters
               </p>
               <div className="flex justify-center space-x-4 mb-4">
+                {user.socialLinks.github && (
+                  <a href={user.socialLinks.github} target="_blank" rel="noopener noreferrer">
+                    <Github className="h-5 w-5 text-gray-400 hover:text-blue-500" />
+                  </a>
+                )}
+                
                 {user.socialLinks.twitter && (
                   <a href={user.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
                     <Twitter className="h-5 w-5 text-gray-400 hover:text-blue-400" />
@@ -254,7 +261,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                 )}
                 {user.socialLinks.website && (
                   <a href={user.socialLinks.website} target="_blank" rel="noopener noreferrer">
-                    <Globe className="h-5 w-5 text-gray-400 hover:text-green-400" />
+                    <Globe className="h-5 w-5 text-gray-400 hover:text-red-500" />
                   </a>
                 )}
               </div>
