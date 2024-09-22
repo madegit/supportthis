@@ -137,7 +137,7 @@ export function ComponentsProductDetails() {
             drag="x"
             dragConstraints={{ right: 0, left: -sliderWidth }}
             animate={controls}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            transition={{ type: 'spring', damping: 30, stiffness: 500 }}
           >
             <motion.div className="flex w-full h-full">
               {productImages.map((image, index) => (
@@ -158,14 +158,14 @@ export function ComponentsProductDetails() {
             className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 hover:bg-gray-200/20 p-2 z-10"
             onClick={prevImage}
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-7 w-7" />
           </Button>
           <Button 
             variant="ghost" 
             className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 p-2 z-10 hover:bg-gray-200/20"
             onClick={nextImage}
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-7 w-7" />
           </Button>
           <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
             {productImages.map((_, index) => (

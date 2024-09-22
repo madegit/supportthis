@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet" 
 import Image from 'next/image'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, UserPlus, ChevronLeft, ChevronRight, LinkIcon, Facebook, ShoppingCart, Text, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb, BarChart2, PieChart, TrendingUp } from 'lucide-react' 
+import { Compass, Heart, Share2, MessageCircleHeart, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Mail, Clock, Shield, UserPlus, ChevronLeft, Anvil, ChevronRight, Linkedin, LinkIcon, Facebook, ShoppingCart, Text, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb, BarChart2, PieChart, TrendingUp } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, useAnimation } from 'framer-motion'
@@ -72,15 +72,9 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
     { name: 'David', hearts: 35 },
     { name: 'Olivia', hearts: 30 },
   ]
-  const [contributorsPage, setContributorsPage] = useState(1)
-  const [leaderboardPage, setLeaderboardPage] = useState(1)
-  const itemsPerPage = 5
-
-  const paginatedContributors = contributors.slice((contributorsPage - 1) * itemsPerPage, contributorsPage * itemsPerPage)
-  const paginatedLeaderboard = leaderboard.slice((leaderboardPage - 1) * itemsPerPage, leaderboardPage * itemsPerPage)
 
   const projectDetails = user.featuredProject ? [
-    { title: 'Project Goals', content: user.featuredProject.description, icon: <Target className="h-5 w-5" /> },
+    { title: 'Description', content: user.featuredProject.description, icon: <Text className="h-5 w-5" /> },
     { title: 'Current Progress', content: user.featuredProject.currentProgress, icon: <Rocket className="h-5 w-5" /> },
     { title: 'Future Plans', content: user.featuredProject.futurePlans, icon: <Calendar className="h-5 w-5" /> },
   ] : []
@@ -218,7 +212,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
         {activePage === 'home' && (
           <>
             {/* Cover Image */}
-            <div className="w-full w-screen relative left-1/2 right-1/2 -mx-[50vw] h-64 mt-[-32px] mb-[-50px]">
+            <div className="w-full w-screen relative left-1/2 right-1/2 -mx-[50vw] h-64 mt-[-32px] mb-[-50px] sm:h-48">
               <Image
                 src={user.coverImage || '/cover.jpg?height=256&width=1024'}
                 alt="Cover"
@@ -232,12 +226,12 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
             {/* Creator profile */}
             <div className="text-center mb-20">
               <div className="relative w-24 h-24 mx-auto mb-4">
-                <Avatar className="w-24 h-24">
+                <Avatar className="w-24 h-24 ring-2 ring-red-50 dark:ring-red-50">
                   <AvatarImage src={user.avatarImage} alt={user.name} className="w-full h-full object-cover"/>
                   <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
               </div>
-              <h2 className="text-3xl font-bold mb-2 tracking-tight">{user.name}</h2>
+              <h2 className="text-3xl font-bold my-2 tracking-tight">{user.name}</h2>
               <p className="text-gray-500 dark:text-gray-400 mb-4 tracking-tight text-sm flex items-center justify-center">
                 <Shield className={`h-4 w-4 mr-1 ${getSupporterShieldColor(5848)}`} />
                 5,848 Supporters
@@ -251,6 +245,11 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                 {user.socialLinks.instagram && (
                   <a href={user.socialLinks.instagram} target="_blank" rel="noopener noreferrer">
                     <Instagram className="h-5 w-5 text-gray-400 hover:text-pink-400" />
+                  </a>
+                )}
+                {user.socialLinks.linkedin && (
+                  <a href={user.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
+                    <Linkedin className="h-5 w-5 text-gray-400 hover:text-blue-400" />
                   </a>
                 )}
                 {user.socialLinks.website && (
@@ -275,7 +274,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                       drag="x"
                       dragConstraints={{ right: 0, left: -sliderWidth }}
                       animate={controls}
-                      transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                      transition={{ type: 'spring', damping: 30, stiffness: 500 }}
                     >
                       <motion.div className="flex w-full h-full">
                         {projectImages.map((image, index) => (
@@ -324,9 +323,9 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                     <CardContent className="p-6">
                       <div className="flex justify-between items-center mb-2">
                         <span className="font-semibold tracking-tight flex items-center text-xl">
-                          Project Goals <Target className="ml-2 h-5 w-5 text-red-500" />
+                          Project Goal <Target className="ml-2 h-5 w-5 text-red-500" />
                         </span>
-                        <span className="tracking-tight text-lg">{heartProgress}% Completed</span>
+                        <span className="tracking-tight text-lg">{heartProgress}%</span>
                       </div>
                       <div className="h-3 bg-red-100 dark:bg-red-900 rounded-full mb-1 overflow-hidden">
                         <motion.div 
@@ -397,10 +396,11 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                       placeholder="Say something nice..."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      className="mb-4 rounded-xl dark:bg-gray-900"
+                      className="mb-4 rounded-xl dark:bg-gray-900 min-h-[100px] resize-none"
+                      maxLength={250}
                     />
                     <Button 
-                      className="w-full bg-black dark:bg-red-500 text-white dark:text-white hover:bg-red-600 dark:hover:bg-gray-900 h-12 text-base rounded-xl"
+                      className="w-full bg-black dark:bg-red-500 text-white dark:text-white dark:hover:text-red-500 hover:bg-red-600 font-semibold dark:hover:bg-gray-700 h-12 text-base rounded-xl"
                     >
                       Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
                     </Button>
@@ -411,13 +411,13 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                 <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="tracking-tight flex items-center text-2xl">
-                      <Users className="mr-2 h-6 w-6 text-red-500" />
+                      <MessageCircleHeart className="mr-2 h-6 w-6 text-red-500" />
                       Recent Supporters
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {contributors.map((contributor, index) => (
-                      <div key={index} className="flex items-center space-x-4">
+                      <div key={index} className="flex items-center space-x-4 ">
                         <Avatar className="h-10 w-10 rounded-full">
                           <AvatarFallback>{contributor.name[0]}</AvatarFallback>
                         </Avatar>
@@ -440,23 +440,23 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                   <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="tracking-tight flex items-center text-2xl">
-                        <Text className="mr-2 h-6 w-6 text-red-500" />
+                        <Anvil className="mr-2 h-6 w-6 text-red-500" />
                         The Project
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <Accordion
-                        type="single"
+                        type="single" 
                         collapsible
                         value={openAccordionItem}
                         onValueChange={setOpenAccordionItem}
                       >
                         {projectDetails.map((detail, index) => (
                           <AccordionItem key={index} value={`item-${index}`}>
-                            <AccordionTrigger>
+                            <AccordionTrigger className='hover:no-underline'>
                               <div className="flex items-center">
                                 {detail.icon}
-                                <span className="ml-2 hover:no-underline">{detail.title}</span>
+                                <span className="ml-2">{detail.title}</span>
                               </div>
                             </AccordionTrigger>
                             <AccordionContent>{detail.content}</AccordionContent>
@@ -471,7 +471,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                 <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="tracking-tight flex items-center text-2xl">
-                      <TrendingUp className="mr-2 h-6 w-6 text-red-500" />
+                      <Crown className="mr-2 h-6 w-6 text-red-500" />
                       Top Supporters
                     </CardTitle>
                   </CardHeader>
@@ -484,7 +484,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                             index === 1 ? 'text-2xl' :
                             index === 2 ? 'text-xl' : ''
                           }`}>{index + 1}.</span>
-                          <Avatar className="h-8 w-8 rounded-full mr-2">
+                          <Avatar className="h-8 w-8 rounded-full mr-2 dark:bg-gray-700">
                             <AvatarFallback>{supporter.name[0]}</AvatarFallback>
                           </Avatar>
                           <span className={
@@ -506,7 +506,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                   <CardContent className="p-6 text-center">
                     <h3 className="text-2xl font-bold mb-2 tracking-tight">Make money doing what you love</h3>
                     <p className="text-gray-600 dark:text-gray-300 mb-4 tracking-tight">Join 9k+ creators getting hearts!</p>
-                    <Button className="bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 text-base py-2 px-6 rounded-xl">
+                    <Button className="bg-black dark:bg-red-500 text-white hover:bg-red-600 dark:hover:bg-red-400 text-base py-2 px-6 rounded-xl">
                       Get Started
                     </Button>
                   </CardContent>
