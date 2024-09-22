@@ -499,7 +499,7 @@ export default function Component() {
               <Button
                 type="button"
                 className="w-full bg-transparent dark:bg-transparent text-gray-900 dark:text-gray-100 hover:bg-transparent shadow-none"
-                onClick={() => window.open(`https://supportthis.org/${profile.username}`, '_blank')}
+                onClick={() => window.open(`https://supportthis.org/${profile.username}/`, '_blank')}
               >
                 View Public Profile 
                 <ArrowUpRight className="h-4 w-4 ml-2" />

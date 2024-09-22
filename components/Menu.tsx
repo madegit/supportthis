@@ -15,19 +15,19 @@ import {
 } from "lucide-react";
 
 const menuItems = [
-  { icon: Home, label: "Home" },
-  { icon: ExternalLink, label: "View page" },
+  { icon: Home, label: "Home", link: "/dashboard/"},
+  { icon: ExternalLink, label: "View page", link: /{profile.username}/ },
   { icon: Grid, label: "Explore creators" },
   { label: "MONETIZE", isHeader: true },
-  { icon: Heart, label: "Supporters" },
-  { icon: Lock, label: "Memberships" },
-  { icon: ShoppingBag, label: "Shop" },
+  { icon: Heart, label: "Supporters", link: "/dashboard/"},
+  { icon: Lock, label: "Memberships", link: "/dashboard/" },
+  { icon: ShoppingBag, label: "My Shop", link: "/dashboard/" },
   { icon: Edit, label: "Publish", hasDropdown: true },
   { label: "SETTINGS", isHeader: true },
-  { icon: Sliders, label: "Widgets & Graphics" },
-  { icon: Zap, label: "Integrations" },
-  { icon: DollarSign, label: "Payouts" },
-  { icon: Settings, label: "Settings" },
+  { icon: Sliders, label: "Widgets & Graphics", link: "/dashboard/" },
+  { icon: Zap, label: "Integrations", link: "/dashboard/" },
+  { icon: DollarSign, label: "Payouts", link: "/dashboard/" },
+  { icon: Settings, label: "Settings", link: "/dashboard/" },
 ];
 
 export function ProfileMenu() {
@@ -52,7 +52,7 @@ export function ProfileMenu() {
             </h3>
           ) : (
             <button
-              key={index}
+              key={index} onClick={() => window.open(`https://supportthis.org/${item.link}/`)}
               className="flex items-center text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900 px-4 py-2 rounded-lg mb-1 tracking-tight"
             >
               {item.icon && <item.icon className="mr-2" size={20} />}
