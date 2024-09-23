@@ -81,7 +81,7 @@ export default function CreateProject() {
       })
 
       if (response.ok) {
-        router.push('/projects')
+        router.push('/dashboard/projects')
       } else {
         const data = await response.json()
         setError(data.error || 'Failed to create project')

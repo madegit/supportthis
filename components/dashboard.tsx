@@ -26,6 +26,7 @@ import {
   PieChart,
   TrendingUp,
   Target,
+  Crown,
 } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { ProfileMenu } from "./Menu";
@@ -253,7 +254,7 @@ export function DashboardComponent() {
           {/* Top Supporters Card */}
           <div className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow">
             <div className="flex items-center mb-4">
-              <Heart
+              <Crown
                 className="mr-2 text-red-500 dark:text-red-400"
                 size={24}
               />

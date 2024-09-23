@@ -1,3 +1,4 @@
+// VisitsChart.tsx
 'use client'
 
 import React from 'react';
@@ -51,7 +52,7 @@ export const VisitsChart: React.FC = () => {
   const { data: session } = useSession()
   const { data: analytics, error } = useSWR<AnalyticsItem[]>('/api/analytics', fetcher)
 
-  if (error) return <div>Failed to load analytics</div>
+  if (error) return <div className="flex items-center justify-center h-100 bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow">Failed to load analytics</div>
   if (!analytics) return <div className="flex items-center justify-center h-100 bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow">Loading your stats...</div>
 
   const formatData = (analytics: AnalyticsItem[]): VisitData[] => {
@@ -108,7 +109,7 @@ export const VisitsChart: React.FC = () => {
       </div>
       <div className="flex justify-between mb-4">
         <div className="flex items-center">
-          <div className="w-3 h-3 bg-red-500 dark:bg-red-400 rounded-full mr-2"></div>
+          <div className="w-3 h-3 bg-red-500 dark:bg-red-500 rounded-full mr-2"></div>
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               This Week

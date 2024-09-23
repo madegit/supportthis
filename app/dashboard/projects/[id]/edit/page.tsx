@@ -105,7 +105,7 @@ export default function EditProject({ params }: { params: { id: string } }) {
       })
 
       if (response.ok) {
-        router.push('/projects')
+        router.push('/dashboard/projects')
       } else {
         const data = await response.json()
         setError(data.error || 'Failed to update project')
@@ -137,7 +137,7 @@ export default function EditProject({ params }: { params: { id: string } }) {
             <h1 className="text-2xl tracking-tight font-bold text-gray-900 dark:text-gray-100">Edit Project</h1>
             <Button
               variant="ghost"
-              onClick={() => router.push('/projects')}
+              onClick={() => router.push('/dashboard/projects')}
               className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />

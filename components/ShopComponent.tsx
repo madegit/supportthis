@@ -15,7 +15,7 @@ export default function ShopComponent() {
       <p className="text-gray-600 dark:text-gray-300 mb-8">Support your favorite creator by purchasing exclusive merchandise.</p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {shopItems.map((item, index) => (
-          <Link href="/support/product" key={index} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl p-3 shadow-sm">
+          <Link href="/product" key={index} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl p-3 shadow-sm">
             <div className="mb-4">
               <Image 
                 src={item.image} 

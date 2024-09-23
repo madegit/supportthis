@@ -132,7 +132,7 @@ export default function ProjectManagement() {
               <p className="text-gray-600 dark:text-gray-400 mb-4 text-center tracking-tight">
                 Start a new project and share your vision with supporters.
               </p>
-              <Link href="/projects/create">
+              <Link href="/dashboard/projects/create">
                 <Button className="bg-red-500 dark:bg-red-600 text-white hover:bg-red-600 dark:hover:bg-red-700">
                   Create Project
                 </Button>
@@ -183,7 +183,7 @@ export default function ProjectManagement() {
                     <Star className="mr-2 h-4 w-4" />
                     {project.isMainProject ? 'Main Project' : 'Set as Main'}
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => router.push(`/projects/${project._id}/edit`)} className="flex-1">
+                  <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/projects/${project._id}/edit`)} className="flex-1">
                     <Edit className="mr-2 h-4 w-4" />
                     Edit
                   </Button>
