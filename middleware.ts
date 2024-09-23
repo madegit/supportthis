@@ -1,22 +1,24 @@
-import { withAuth } from "next-auth/middleware"
+// middleware.ts
+import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-export default withAuth(
-  function middleware(req) {
-    // Your custom middleware logic here
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => !!token,
-    },
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+  if (!token) {
+    return NextResponse.redirect(new URL('/auth/signin/', req.url));
   }
-)
+
+  return NextResponse.next();
+}
 
 export const config = { 
   matcher: [
-    "/dashboard", 
-    "/profile", 
-    "/settings", 
+    "/dashboard",
+    "/profile",
+    "/settings",
     "/projects/create",
-    "/projects/:path*"  // This will cover all routes under /projects
-  ] 
-}
+    "/projects/:path*",
+  ]
+};

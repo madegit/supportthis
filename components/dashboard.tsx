@@ -1,76 +1,61 @@
-          "use client";
+"use client";
 
-          import { useState, useEffect } from "react";
-          import { useSession } from "next-auth/react";
-          import { useRouter } from "next/navigation";
-          import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-          import {
-            ArrowUpRight,
-            Coffee,
-            Music,
-            Film,
-            CreditCard,
-            HelpCircle,
-            ExternalLink,
-            Heart,
-            Lock,
-            ShoppingBag,
-            Edit,
-            Sliders,
-            Zap,
-            DollarSign,
-            Settings,
-            ChevronDown,
-            ArrowRight,
-            BarChart2,
-            PieChart,
-            TrendingUp,
-            Target,
-          } from "lucide-react";
-          import { Footer } from "@/components/Footer";
-          import { ProfileMenu } from "./Menu";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  ArrowUpRight,
+  Coffee,
+  Music,
+  Film,
+  CreditCard,
+  HelpCircle,
+  ExternalLink,
+  Heart,
+  Lock,
+  ShoppingBag,
+  Edit,
+  Sliders,
+  Zap,
+  DollarSign,
+  Settings,
+  ChevronDown,
+  ArrowRight,
+  BarChart2,
+  PieChart,
+  TrendingUp,
+  Target,
+} from "lucide-react";
+import { Footer } from "@/components/Footer";
+import { ProfileMenu } from "./Menu";
+import { VisitsChart } from "@/components/VisitsChart";
 
-          import {
-            BarChart,
-            Bar,
-            XAxis,
-            YAxis,
-            Tooltip,
-            ResponsiveContainer,
-          } from "recharts";
-          import {
-            Table,
-            TableBody,
-            TableCell,
-            TableHead,
-            TableHeader,
-            TableRow,
-          } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-          const statisticsData = [
-            { name: "Mon", lastWeek: 200, thisWeek: 400 },
-            { name: "Tue", lastWeek: 300, thisWeek: 300 },
-            { name: "Wed", lastWeek: 250, thisWeek: 350 },
-            { name: "Thu", lastWeek: 100, thisWeek: 450 },
-            { name: "Fri", lastWeek: 350, thisWeek: 250 },
-            { name: "Sat", lastWeek: 150, thisWeek: 400 },
-            { name: "Sun", lastWeek: 280, thisWeek: 380 },
-          ];
 
-          const topSupporters = [
-            { name: "Alice Johnson", amount: 500 },
-            { name: "Bob Smith", amount: 450 },
-            { name: "Charlie Brown", amount: 400 },
-            { name: "Diana Ross", amount: 350 },
-            { name: "Ethan Hunt", amount: 300 },
-          ];
+const topSupporters = [
+  { name: "Alice Johnson", amount: 500 },
+  { name: "Bob Smith", amount: 450 },
+  { name: "Charlie Brown", amount: 400 },
+  { name: "Diana Ross", amount: 350 },
+  { name: "Ethan Hunt", amount: 300 },
+];
 
-          export function DashboardComponent() {
+export function DashboardComponent() {
             const { data: session, status } = useSession();
             const router = useRouter();
             const [profile, setProfile] = useState({
               name: "",
               email: "",
+              username: "",
               avatarImage: "",
               coverImage: "",
               bio: "",
@@ -127,15 +112,6 @@
               return null;
             }
 
-            const totalThisWeek = statisticsData.reduce(
-              (sum, day) => sum + day.thisWeek,
-              0
-            );
-            const totalLastWeek = statisticsData.reduce(
-              (sum, day) => sum + day.lastWeek,
-              0
-            );
-
             return (
               <div className="bg-red-50 dark:bg-gray-900 min-h-screen flex text-base">
                 <ProfileMenu />
@@ -161,72 +137,15 @@
                         Welcome back, {profile.name || "👋"}!
                       </h2>
                       <p className="text-gray-600 dark:text-gray-400 tracking-tight text-base md:text-lg">
-                        Here's your supports summary
+                        Here's your dashboard summary
                       </p>
                     </div>
                   </div>
 
-                  {/* Dashboard Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-                    {/* Statistics Card */}
-          <div className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow">
-            <div className="flex items-center mb-4">
-              <BarChart2
-                className="mr-2 text-red-500 dark:text-red-400"
-                size={24}
-              />
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                Statistics
-              </h2>
-            </div>
-            <div className="flex justify-between mb-4">
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-red-500 dark:bg-red-400 rounded-full mr-2"></div>
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    This Week
-                  </p>
-                  <p className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                    ${totalThisWeek}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-red-200 dark:bg-red-700 rounded-full mr-2"></div>
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Last Week
-                  </p>
-                  <p className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                    ${totalLastWeek}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart
-                data={statisticsData}
-                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
-              >
-                <XAxis
-                  dataKey="name"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 10, fill: "currentColor" }}
-                />
-                <YAxis hide={true} />
-                <Tooltip
-                  formatter={(value, name) => [
-                    `$${value}`,
-                    name === "lastWeek" ? "Last" : "This",
-                  ]}
-                  labelFormatter={(label) => `${label}`}
-                />
-                <Bar dataKey="lastWeek" fill="#FEE2E2" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="thisWeek" fill="#EF4444" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+                    {/* Dashboard Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                      {/* Statistics Card */}
+                      <VisitsChart />
 
           {/* Financial Metrics Card */}
           <div className="bg-red-100 dark:bg-red-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow relative">

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { getUserByUsername } from '@/lib/api'
 import dynamic from 'next/dynamic'
 import { Skeleton } from '@/components/ui/skeleton'
+import { trackPageView } from '@/lib/analytics'
 
 const SupportThisCreator = dynamic(() => import('@/components/support-this-creator'), {
   loading: () => <UserProfileSkeleton />,
@@ -14,6 +15,9 @@ async function UserProfileWrapper({ username }: { username: string }) {
   if (!user) {
     notFound()
   }
+
+  // Track the page view
+  await trackPageView(username, `/[username]`)
 
   return <SupportThisCreator user={user} />
 }

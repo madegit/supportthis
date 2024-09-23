@@ -1,3 +1,4 @@
+// lib/mongodb.ts
 import { MongoClient } from 'mongodb'
 import mongoose from 'mongoose'
 
@@ -33,5 +34,7 @@ export const connectToDatabase = async () => {
     return
   }
 
-  return mongoose.connect(uri, options as mongoose.ConnectOptions)
+  return mongoose.connect(uri)
 }
+
+console.log('Connected to MongoDB')

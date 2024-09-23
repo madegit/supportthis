@@ -1,37 +1,109 @@
-import { useState } from "react";
-import { ChevronDown, Menu as MenuIcon } from "lucide-react";
+"use client"
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import { ChevronDown, Menu as MenuIcon, LogOut } from "lucide-react";
 import {
   Home,
-  ExternalLink,
+  ArrowUpRight,
   Grid,
+  Anvil,
   Heart,
   Lock,
   ShoppingBag,
-  Edit,
+  Pencil,
   Sliders,
+  LayoutDashboard,
   Zap,
   DollarSign,
   Settings,
+  User,
 } from "lucide-react";
 
+const baseUrl = "/dashboard";
+
 const menuItems = [
-  { icon: Home, label: "Home", link: "/dashboard/"},
-  { icon: ExternalLink, label: "View page", link: /{profile.username}/ },
-  { icon: Grid, label: "Explore creators" },
+  { icon: LayoutDashboard, label: "Home", href: `${baseUrl}` },
+  { icon: ArrowUpRight, label: "View page", href: "", isExternal: true, isDynamic: true },
+  { icon: Grid, label: "Explore creators", href: `/explore` },
   { label: "MONETIZE", isHeader: true },
-  { icon: Heart, label: "Supporters", link: "/dashboard/"},
-  { icon: Lock, label: "Memberships", link: "/dashboard/" },
-  { icon: ShoppingBag, label: "My Shop", link: "/dashboard/" },
-  { icon: Edit, label: "Publish", hasDropdown: true },
-  { label: "SETTINGS", isHeader: true },
-  { icon: Sliders, label: "Widgets & Graphics", link: "/dashboard/" },
-  { icon: Zap, label: "Integrations", link: "/dashboard/" },
-  { icon: DollarSign, label: "Payouts", link: "/dashboard/" },
-  { icon: Settings, label: "Settings", link: "/dashboard/" },
+  { icon: Anvil, label: "Projects", href: `${baseUrl}/projects` },
+  { icon: Heart, label: "Supporters", href: `${baseUrl}/supporters` },
+  { icon: Lock, label: "Memberships", href: `${baseUrl}/memberships` },
+  { icon: ShoppingBag, label: "Shop", href: `${baseUrl}/shop` },
+  { icon: Pencil, label: "Create", hasDropdown: true, href: `${baseUrl}/` },
+  { label: "INTEGRATION", isHeader: true },
+  { icon: Sliders, label: "Widgets & Graphics", href: `${baseUrl}/widgets` },
+  { icon: Zap, label: "Plugins", href: `${baseUrl}/plugins` },
+  { label: "ACCOUNT", isHeader: true },
+  { icon: DollarSign, label: "Payouts", href: `${baseUrl}/payouts` },
+  { icon: Settings, label: "Settings", href: `${baseUrl}/settings` },
+  { icon: LogOut, label: "Sign Out", href: "", isSignOut: true },
 ];
 
 export function ProfileMenu() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    if (status === "authenticated" && session?.user?.username) {
+      setUsername(session.user.username);
+    }
+  }, [session, status]);
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: '/auth/signin' });
+  };
+
+  const renderMenuItem = (item: any, index: number) => {
+    if (item.isHeader) {
+      return (
+        <h3
+          key={index}
+          className="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-4 mb-2 tracking-tight"
+        >
+          {item.label}
+        </h3>
+      );
+    }
+
+    let href = item.href;
+    if (item.isDynamic && username) {
+      href = `/${username}`;
+    }
+
+    if (item.isDynamic && !username) {
+      return null; // Don't render the "View page" link if there's no username
+    }
+
+    if (item.isSignOut) {
+      return (
+        <button
+          key={index}
+          onClick={handleSignOut}
+          className="flex items-center text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900 px-4 py-2 rounded-lg mb-1 tracking-tight w-full text-left"
+        >
+          {item.icon && <item.icon className="mr-2" size={20} />}
+          <span className="flex-grow">{item.label}</span>
+        </button>
+      );
+    }
+
+    return (
+      <Link
+        key={index}
+        href={href}
+        target={item.isExternal ? "_blank" : "_self"}
+        className="flex items-center text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900 px-4 py-2 rounded-lg mb-1 tracking-tight"
+      >
+        {item.icon && <item.icon className="mr-2" size={20} />}
+        <span className="flex-grow text-left">{item.label}</span>
+        {item.hasDropdown && <ChevronDown size={16} />}
+      </Link>
+    );
+  };
 
   return (
     <>
@@ -42,25 +114,7 @@ export function ProfileMenu() {
             SupportThis.org
           </div>
         </div>
-        {menuItems.map((item, index) =>
-          item.isHeader ? (
-            <h3
-              key={index}
-              className="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-4 mb-2 tracking-tight"
-            >
-              {item.label}
-            </h3>
-          ) : (
-            <button
-              key={index} onClick={() => window.open(`https://supportthis.org/${item.link}/`)}
-              className="flex items-center text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900 px-4 py-2 rounded-lg mb-1 tracking-tight"
-            >
-              {item.icon && <item.icon className="mr-2" size={20} />}
-              <span className="flex-grow text-left">{item.label}</span>
-              {item.hasDropdown && <ChevronDown size={16} />}
-            </button>
-          )
-        )}
+        {menuItems.map((item, index) => renderMenuItem(item, index))}
       </div>
 
       {/* Mobile Menu (Slide from right) */}
@@ -88,25 +142,7 @@ export function ProfileMenu() {
           </button>
         </div>
         <div className="overflow-y-auto flex-grow">
-          {menuItems.map((item, index) =>
-            item.isHeader ? (
-              <h3
-                key={index}
-                className="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-4 mb-2 tracking-tight"
-              >
-                {item.label}
-              </h3>
-            ) : (
-              <button
-                key={index}
-                className="flex items-center text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900 px-4 py-2 rounded-lg mb-1 w-full tracking-tight"
-              >
-                {item.icon && <item.icon className="mr-2" size={20} />}
-                <span className="flex-grow text-left">{item.label}</span>
-                {item.hasDropdown && <ChevronDown size={16} />}
-              </button>
-            )
-          )}
+          {menuItems.map((item, index) => renderMenuItem(item, index))}
         </div>
       </div>
 
