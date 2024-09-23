@@ -84,7 +84,7 @@ function SignInForm({ callbackUrl }: { callbackUrl: string }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="rounded-xl"
+              className="rounded-xl dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700"
             />
           </div>
           <div className="space-y-1">
@@ -96,7 +96,7 @@ function SignInForm({ callbackUrl }: { callbackUrl: string }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="rounded-xl"
+              className="rounded-xl dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700"
             />
           </div>
           <Button type="submit" className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl" disabled={isLoading}>
@@ -129,7 +129,7 @@ function SignInForm({ callbackUrl }: { callbackUrl: string }) {
         </div>
         <p className="text-sm text-center">
           New User?{' '}
-          <Link href="/auth/signup" className="text-blue-600 hover:underline">
+          <Link href="/auth/signup" className="text-red-500 hover:underline">
             Create an Account
           </Link>
         </p>

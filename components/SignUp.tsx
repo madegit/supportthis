@@ -102,7 +102,7 @@ export default function SignUp() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="rounded-xl"
+                  className="rounded-xl dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700"
                 />
               </div>
               <div className="space-y-1">
@@ -114,7 +114,7 @@ export default function SignUp() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="rounded-xl"
+                  className="rounded-xl dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700"
                 />
               </div>
               <div className="space-y-1">
@@ -126,7 +126,7 @@ export default function SignUp() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="rounded-xl"
+                  className="rounded-xl dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-gray-200 dark:border-gray-700"
                 />
               </div>
               <Button type="submit" className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-10 text-base rounded-xl" disabled={isLoading}>
@@ -161,7 +161,7 @@ export default function SignUp() {
             </div>
             <p className="text-sm text-center">
               Already have an account?{' '}
-              <Link href="/auth/signin" className="text-blue-600 hover:underline">
+              <Link href="/auth/signin" className="text-red-500 hover:underline">
                 Sign In
               </Link>
             </p>

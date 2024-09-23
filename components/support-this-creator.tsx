@@ -407,7 +407,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                       maxLength={250}
                     />
                     <Button 
-                      className="w-full bg-black dark:bg-red-500 text-white dark:text-white dark:hover:text-white hover:bg-red-600 transition-all duration-300 ease-in-out font-semibold tracking-tight dark:hover:bg-red-400 h-12 text-base rounded-xl"
+                      className="w-full bg-red-500 text-white dark:hover:text-white  transition-all duration-300 ease-in-out font-semibold tracking-tight hover:bg-red-400 h-12 text-base rounded-xl"
                     >
                       Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
                     </Button>
@@ -554,7 +554,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
       {/* Sticky send hearts and share buttons */}
       <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20 z-50'}`}>
         <div className="flex space-x-2 px-4 max-w-xl mx-auto">
-          <Button className="flex-grow bg-black dark:bg-red-500 text-white dark:text-white z-20 hover:bg-red-500 dark:hover:bg-red-400 h-12 text-base tracking-tight font-semibold rounded-xl w-[73%]">
+          <Button className="flex-grow bg-red-500 text-white  z-20 hover:bg-red-400 h-12 text-base tracking-tight font-semibold rounded-xl w-[73%]">
             Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
           </Button>
           <Dialog>
