@@ -5,6 +5,13 @@ import { authOptions } from './auth/[...nextauth]'
 import { connectToDatabase } from '../../lib/mongodb'
 import Analytics from '../../models/Analytics'
 
+interface GroupedAnalytics {
+  [pathname: string]: {
+    visits: number;
+    lastVisited: Date;
+  }
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
 
@@ -18,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const analytics = await Analytics.find({ username: session.user?.username })
 
       // Group analytics by pathname
-      const groupedAnalytics = analytics.reduce((acc, item) => {
+      const groupedAnalytics = analytics.reduce<GroupedAnalytics>((acc, item) => {
         const pathname = item.pathname === '/[username]' ? 'My Page' : `My Pages/${item.pathname.split('/').pop()}`
         if (!acc[pathname]) {
           acc[pathname] = { visits: 0, lastVisited: item.lastVisited }
@@ -28,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           ? item.lastVisited
           : acc[pathname].lastVisited
         return acc
-      }, {} as Record<string, { visits: number, lastVisited: Date }>)
+      }, {})
 
       // Convert grouped analytics to array
       const formattedAnalytics = Object.entries(groupedAnalytics).map(([pathname, data]) => ({
