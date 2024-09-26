@@ -9,12 +9,20 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet" 
 import Image from 'next/image'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Compass, Heart, Share2, MessageCircleHeart, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Github, Mail, Clock, Shield, UserPlus, ChevronLeft, Anvil, ChevronRight, Linkedin, LinkIcon, Facebook, ShoppingCart, Text, Zap, Crown, Check, MessageCircle, Users, Video, Lightbulb, BarChart2, PieChart, TrendingUp } from 'lucide-react' 
+import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, Info, Target, Rocket, Calendar, Github, Mail, Clock, Shield, UserPlus, ChevronLeft, ChevronRight, Linkedin, LinkIcon, Facebook, ShoppingCart, Text, Zap, Copy } from 'lucide-react' 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, useAnimation } from 'framer-motion'
 import { SupportFooter } from "@/components/SupportFooter"
+import Contributors from './Contributors'
+import ProjectDetails from './ProjectDetails'
+import Leaderboard from './Leaderboard'
+import CTASection from './CTASection'
+import SiteRating from './SiteRating'
+import ImageSlider from './ImageSlider'
+import ProjectProgress from './ProjectProgress'
+import { useToast } from "@/hooks/use-toast"
+import { usePathname } from 'next/navigation'
 
 const ClubComponent = lazy(() => import('@/components/ClubComponent'))
 const ShopComponent = lazy(() => import('@/components/ShopComponent'))
@@ -50,12 +58,15 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
   const [message, setMessage] = useState('')
   const [isSticky, setIsSticky] = useState(false)
   const [activePage, setActivePage] = useState('home')
-  const [isHeartJarVisible, setIsHeartJarVisible] = useState(false)
   const incrementalSectionRef = useRef(null)
   const headerRef = useRef(null)
   const footerRef = useRef(null)
-  const heartJarRef = useRef(null)
   const [openAccordionItem, setOpenAccordionItem] = useState('item-0')
+  const { toast } = useToast()
+  const pathname = usePathname()
+  const shareLink = `${typeof window !== 'undefined' ? window.location.origin : ''}${pathname}`
+  const shareTitle = `Support ${user.name} on Creator Platform`
+  const shareDescription = `Check out ${user.name}'s latest project and show your support!`
 
   const heartProgress = 75 // Percentage of heart goal reached
   const contributors = [
@@ -80,43 +91,6 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
     { title: 'Future Plans', content: user.featuredProject.futurePlans, icon: <Calendar className="h-5 w-5" /> },
   ] : []
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [sliderWidth, setSliderWidth] = useState(0)
-  const sliderRef = useRef<HTMLDivElement>(null)
-  const controls = useAnimation()
-
-  const projectImages = user.featuredProject?.images || []
-
-  useEffect(() => {
-    if (sliderRef.current) {
-      setSliderWidth(sliderRef.current.scrollWidth - sliderRef.current.offsetWidth)
-    }
-  }, [])
-
-  const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => {
-      const newIndex = (prevIndex + 1) % projectImages.length
-      controls.start({ x: -newIndex * 100 + '%' })
-      return newIndex
-    })
-  }
-
-  const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => {
-      const newIndex = (prevIndex - 1 + projectImages.length) % projectImages.length
-      controls.start({ x: -newIndex * 100 + '%' })
-      return newIndex
-    })
-  }
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      nextImage()
-    }, 5000) // Change image every 5 seconds
-
-    return () => clearInterval(timer)
-  }, [])
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -139,25 +113,14 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
       { threshold: 0 }
     )
 
-    const heartJarObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsHeartJarVisible(true)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
     if (incrementalSectionRef.current) observer.observe(incrementalSectionRef.current)
     if (headerRef.current) headerObserver.observe(headerRef.current)
     if (footerRef.current) footerObserver.observe(footerRef.current)
-    if (heartJarRef.current) heartJarObserver.observe(heartJarRef.current)
 
     return () => {
       if (incrementalSectionRef.current) observer.unobserve(incrementalSectionRef.current)
       if (headerRef.current) headerObserver.unobserve(headerRef.current)
       if (footerRef.current) footerObserver.unobserve(footerRef.current)
-      if (heartJarRef.current) heartJarObserver.unobserve(heartJarRef.current)
     }
   }, [])
 
@@ -165,6 +128,39 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
     if (supporters < 1000) return 'text-gray-400'
     if (supporters < 5000) return 'text-indigo-400'
     return 'text-blue-400'
+  }
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shareLink)
+      .then(() => {
+        toast({
+          title: "Link copied!",
+          description: "The share link has been copied to your clipboard.",
+        })
+      })
+      .catch(err => {
+        console.error('Failed to copy text: ', err)
+        toast({
+          variant: "destructive",
+          title: "Copy failed",
+          description: "There was an error copying the link. Please try again.",
+        })
+      })
+  }
+
+  const shareOnTwitter = () => {
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareTitle)}`
+    window.open(twitterUrl, '_blank')
+  }
+
+  const shareOnFacebook = () => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`
+    window.open(facebookUrl, '_blank')
+  }
+
+  const shareOnLinkedIn = () => {
+    const linkedInUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareLink)}&title=${encodeURIComponent(shareTitle)}&summary=${encodeURIComponent(shareDescription)}`
+    window.open(linkedInUrl, '_blank')
   }
 
   return (
@@ -243,7 +239,6 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                     <Github className="h-5 w-5 text-gray-400 hover:text-blue-500" />
                   </a>
                 )}
-                
                 {user.socialLinks.twitter && (
                   <a href={user.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
                     <Twitter className="h-5 w-5 text-gray-400 hover:text-blue-400" />
@@ -274,79 +269,12 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
               <div>
                 {/* Project Images Slider */}
                 {user.featuredProject && (
-                    <div className="relative mb-8 rounded-xl overflow-hidden w-full lg:pt-[56.25%] pt-[70.25%]">
-                    <motion.div 
-                      ref={sliderRef}
-                      className="absolute top-0 left-0 w-full h-full cursor-grab active:cursor-grabbing"
-                      drag="x"
-                      dragConstraints={{ right: 0, left: -sliderWidth }}
-                      animate={controls}
-                      transition={{ type: 'spring', damping: 30, stiffness: 500 }}
-                    >
-                      <motion.div className="flex w-full h-full">
-                        {projectImages.map((image, index) => (
-                          <motion.div
-                            key={index}
-                            className="min-w-full h-full"
-                            style={{ 
-                              backgroundImage: `url(${image})`,
-                              backgroundSize: 'cover',
-                              backgroundPosition: 'center'
-                            }}
-                          />
-                        ))}
-                      </motion.div>
-                    </motion.div>
-                    <Button 
-                      variant="ghost" 
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover: text-gray-400 hover:bg-gray-200/20 p-2 z-5"
-                      onClick={prevImage}
-                    >
-                      <ChevronLeft className="h-7 w-7" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 rounded-xl hover:text-gray-400 p-2 z-5 hover:bg-gray-200/20"
-                      onClick={nextImage}
-                    >
-                      <ChevronRight className="h-7 w-7" />
-                    </Button>
-                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                      {projectImages.map((_, index) => (
-                        <div
-                          key={index}
-                          className={`w-3 h-1 rounded-full opacity-50 shadow-sm ${
-                            index === currentImageIndex ? ' w-5 bg-white' : 'bg-gray-400 ease-in-out opacity-90 duration-300 shadow-sm'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                  <ImageSlider images={user.featuredProject.images} />
                 )}
 
                 {/* Project Progress */}
                 {user.featuredProject && (
-                  <Card ref={heartJarRef} className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-semibold tracking-tight flex items-center text-xl">
-                          Project Goal <Target className="ml-2 h-5 w-5 text-red-500" />
-                        </span>
-                        <span className="tracking-tight text-lg">{heartProgress}%</span>
-                      </div>
-                      <div className="h-3 bg-red-100 dark:bg-red-900 rounded-full mb-1 overflow-hidden">
-                        <motion.div 
-                          className="h-full bg-red-500 flex items-center rounded-full justify-end pr-2"
-                          initial={{ width: 0 }}
-                          animate={{ width: isHeartJarVisible ? `${heartProgress}%` : 0 }}
-                          transition={{ duration: 1, ease: "easeOut" }}
-                        />
-                      </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                        Goal: ${user.featuredProject.goal.toLocaleString()}
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <ProjectProgress goal={user.featuredProject.goal} progress={heartProgress} />
                 )}
 
                 {/* Send Hearts */}
@@ -415,124 +343,27 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                 </Card>
 
                 {/* Contributors */}
-                <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="tracking-tight flex items-center text-2xl">
-                      <MessageCircleHeart className="mr-2 h-6 w-6 text-red-500" />
-                      Recent Supporters
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {contributors.map((contributor, index) => (
-                      <div key={index} className="flex items-center space-x-4 ">
-                        <Avatar className="h-10 w-10 rounded-full dark:bg-gray-400">
-                          <AvatarFallback>{contributor.name[0]}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <p className="font-semibold tracking-tight">{contributor.name}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 tracking-tight">{contributor.comment}</p>
-                        </div>
-                        <div className="flex items-center text-black dark:text-white">
-                          <span className="tracking-tight font-semibold">{contributor.hearts} <Heart className="h-4 w-4 inline fill-current" /> ${calculateHeartValue(contributor.hearts)}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
+                <Contributors contributors={contributors} calculateHeartValue={calculateHeartValue} />
               </div>
 
               <div>
                 {/* Project Details Accordion */}
                 {user.featuredProject && (
-                  <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm border shadow rounded-xl">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="tracking-tight flex items-center text-2xl">
-                        <Anvil className="mr-2 h-6 w-6 text-red-500" />
-                        The Project
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <Accordion
-                        type="single" 
-                        collapsible
-                        value={openAccordionItem}
-                        onValueChange={setOpenAccordionItem}
-                      >
-                        {projectDetails.map((detail, index) => (
-                          <AccordionItem key={index} value={`item-${index}`}>
-                            <AccordionTrigger className='hover:no-underline'>
-                              <div className="flex items-center">
-                                {detail.icon}
-                                <span className="ml-2">{detail.title}</span>
-                              </div>
-                            </AccordionTrigger>
-                            <AccordionContent>{detail.content}</AccordionContent>
-                          </AccordionItem>
-                        ))}
-                      </Accordion>
-                    </CardContent>
-                  </Card>
+                  <ProjectDetails 
+                    projectDetails={projectDetails}
+                    openAccordionItem={openAccordionItem}
+                    setOpenAccordionItem={setOpenAccordionItem}
+                  />
                 )}
 
                 {/* Leaderboard */}
-                <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="tracking-tight flex items-center text-2xl">
-                      <Crown className="mr-2 h-6 w-6 text-red-500" />
-                      Top Supporters
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {leaderboard.map((supporter, index) => (
-                      <div key={index} className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
-                        <div className="flex items-center">
-                          <span className={`font-semibold mr-2 ${
-                            index === 0 ? 'text-3xl' :
-                            index === 1 ? 'text-2xl' :
-                            index === 2 ? 'text-xl' : ''
-                          }`}>{index + 1}.</span>
-                          <Avatar className="h-8 w-8 rounded-full mr-2 dark:bg-gray-700">
-                            <AvatarFallback>{supporter.name[0]}</AvatarFallback>
-                          </Avatar>
-                          <span className={
-                            index === 0 ? 'text-xl font-bold tracking-tight' :
-                            index === 1 ? 'text-lg font-semibold tracking-tight' :
-                            index === 2 ? 'text-base font-semibold tracking-tight' : ''
-                          }>{supporter.name}</span>
-                        </div>
-                        <div className="flex items-center text-black dark:text-white">
-                          <span className="font-semibold">{supporter.hearts} <Heart className="h-4 w-4 inline fill-current" /> ${calculateHeartValue(supporter.hearts)}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
+                <Leaderboard leaderboard={leaderboard} calculateHeartValue={calculateHeartValue} />
 
                 {/* CTA Section */}
-                <Card className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
-                  <CardContent className="p-6 text-center">
-                    <h3 className="text-2xl font-bold mb-2 tracking-tight">Make money doing what you love</h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4 tracking-tight">Join 9k+ creators getting hearts!</p>
-                    <Button className="bg-black dark:bg-red-500 text-white hover:bg-red-600 dark:hover:bg-red-400 text-base py-2 px-6 rounded-xl">
-                      Get Started
-                    </Button>
-                  </CardContent>
-                </Card>
+                <CTASection />
 
                 {/* Site Rating */}
-                <div className="flex justify-center items-center space-x-1 mb-4">
-                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <Star className="h-5 w-5 text-gray-300 dark:text-gray-600" />
-                  <span className="ml-2 text-gray-600 dark:text-gray-300 tracking-tight">4.0 out of 5</span>
-                </div>
-
-                {/* Creators love us */}
-                <div className="text-center mb-16">
-                  <p className="text-xl font-semibold tracking-tight">Creators love us.</p>
-                </div>
+                <SiteRating />
               </div>
             </div>
           </>
@@ -552,9 +383,9 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
       </main>
 
       {/* Sticky send hearts and share buttons */}
-      <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20 z-50'}`}>
+      <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20'} z-50`}>
         <div className="flex space-x-2 px-4 max-w-xl mx-auto">
-          <Button className="flex-grow bg-red-500 text-white  z-20 hover:bg-red-400 h-12 text-base tracking-tight font-semibold rounded-xl w-[73%]">
+          <Button className="flex-grow bg-red-500 text-white z-20 hover:bg-red-400 h-12 text-base tracking-tight font-semibold rounded-xl w-[73%]">
             Send {heartCount} Hearts <Heart className="mx-2 h-5 w-5" /> ${calculateHeartValue(heartCount)}
           </Button>
           <Dialog>
@@ -566,18 +397,25 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
             <DialogContent className="sm:w-[425px] w-5/6 rounded-xl">
               <div className="flex flex-col space-y-4 items-center pb-5">
                 <h3 className="text-lg font-semibold">Share</h3>
-                <div className="flex space-x-4">
-                  <Button variant="outline" className="rounded-full p-2">
+                <div className="flex space-x-4 mb-4">
+                  <Button variant="outline" className="rounded-full p-2" onClick={shareOnTwitter}>
                     <Twitter className="h-5 w-5" />
                   </Button>
-                  <Button variant="outline" className="rounded-full p-2">
+                  <Button variant="outline" className="rounded-full p-2" onClick={shareOnFacebook}>
                     <Facebook className="h-5 w-5" />
                   </Button>
-                  <Button variant="outline" className="rounded-full p-2">
-                    <Instagram className="h-5 w-5" />
+                  <Button variant="outline" className="rounded-full p-2" onClick={shareOnLinkedIn}>
+                    <Linkedin className="h-5 w-5" />
                   </Button>
-                  <Button variant="outline" className="rounded-full p-2">
-                    <LinkIcon className="h-5 w-5" />
+                </div>
+                <div className="w-full flex items-center space-x-2">
+                  <Input 
+                    value={shareLink}
+                    readOnly
+                    className="flex-grow"
+                  />
+                  <Button onClick={copyToClipboard} variant="outline" className="p-2">
+                    <Copy className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
@@ -586,8 +424,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
         </div>
       </div>
 
-      <SupportFooter />
-
+      <SupportFooter ref={footerRef} />
     </div>
   )
 }

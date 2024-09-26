@@ -1,6 +1,7 @@
 // app/[username]/layout.tsx
 import { ReactNode } from 'react';
 import { trackPageView } from '@/lib/analytics';
+import { Toaster } from "@/components/ui/toaster"
 
 export default async function UsernameLayout({
   children,
@@ -15,5 +16,5 @@ export default async function UsernameLayout({
   // Track the page view
   await trackPageView(username, pathname);
 
-  return <>{children}</>;
+  return <>{children}  <Toaster /></>;
 }
