@@ -57,7 +57,7 @@ export default function Component() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/auth/signin");
+      router.push("/signin");
     }
   }, [status, router]);
 

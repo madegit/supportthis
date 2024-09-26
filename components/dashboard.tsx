@@ -109,7 +109,7 @@ export function DashboardComponent() {
             };
 
             if (status === "unauthenticated") {
-              router.push("/auth/signin");
+              router.push("/signin");
               return null;
             }
 

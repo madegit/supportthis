@@ -129,7 +129,7 @@ function SignInForm({ callbackUrl }: { callbackUrl: string }) {
         </div>
         <p className="text-sm text-center">
           New User?{' '}
-          <Link href="/auth/signup" className="text-red-500 hover:underline">
+          <Link href="/signup" className="text-red-500 hover:underline">
             Create an Account
           </Link>
         </p>

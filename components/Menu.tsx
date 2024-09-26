@@ -54,7 +54,7 @@ export function ProfileMenu() {
   }, [session, status]);
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/auth/signin' });
+    await signOut({ callbackUrl: '/signin' });
   };
 
   const renderMenuItem = (item: any, index: number) => {
