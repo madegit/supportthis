@@ -13,7 +13,7 @@ import { Compass, Heart, Share2, Menu, Twitter, Instagram, Globe, Star, Coffee, 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { motion, useAnimation } from 'framer-motion'
-import { SupportFooter } from "@/components/SupportFooter"
+import { SupportFooter } from "@/components/frontSupportFooter"
 import Contributors from './Contributors'
 import ProjectDetails from './ProjectDetails'
 import Leaderboard from './Leaderboard'
