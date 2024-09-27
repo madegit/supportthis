@@ -40,8 +40,8 @@ export default function ComingSoonComponent() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="flex space-x-2">
-                <Input
+                 <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+               <Input
                   type="email"
                   placeholder="Enter your email"
                   value={email}

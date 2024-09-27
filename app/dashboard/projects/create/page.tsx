@@ -30,7 +30,7 @@ export default function CreateProject() {
   }
 
   if (status === 'unauthenticated') {
-    router.push('/auth/signin')
+    router.push('/signin')
     return null
   }
 
@@ -101,7 +101,7 @@ export default function CreateProject() {
             <h1 className="text-2xl tracking-tight font-bold text-gray-900 dark:text-gray-100">Create New Project</h1>
             <Button
               variant="ghost"
-              onClick={() => router.push('/projects')}
+              onClick={() => router.push('/dashboard/projects/')}
               className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />

@@ -34,7 +34,7 @@ export default function ProjectManagement() {
     if (status === 'authenticated') {
       fetchProjects()
     } else if (status === 'unauthenticated') {
-      router.push('/auth/signin')
+      router.push('/signin')
     }
   }, [status])
 
