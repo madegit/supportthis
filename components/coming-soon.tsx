@@ -33,7 +33,7 @@ export default function ComingSoonComponent() {
             <CardTitle className="text-4xl font-bold mb-4 flex items-center tracking-tight justify-center mr-8">
               Cooking the Perfect Digital Recipe.
             </CardTitle>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-6">
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
               We're building a revolutionary platform to support creators. Be
               the first to know when we launch!
             </p>
