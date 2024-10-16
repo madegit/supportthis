@@ -57,7 +57,7 @@ export default function ClubComponent() {
                   </li>
                 ))}
               </ul>
-              <Button className="w-full mt-6 bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 rounded-xl">
+              <Button className="w-full mt-6 bg-black dark:bg-red-500 text-white dark:text-white hover:bg-red-600 dark:hover:bg-red-400 rounded-xl">
                 Subscribe to {plan.name}
               </Button>
             </CardContent>

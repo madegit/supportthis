@@ -248,7 +248,7 @@ export function ComponentsProductDetails() {
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            <Button ref={addToCartRef} className="flex-grow bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl tracking-tight">
+            <Button ref={addToCartRef} className="flex-grow bg-red-500 text-white dark:text-white hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl tracking-tight">
               {pageTexts.addToCartText} <ShoppingCart className="ml-2 h-5 w-5" />
             </Button>
           </div>
@@ -279,7 +279,7 @@ export function ComponentsProductDetails() {
       {/* Floating sticky button */}
       <div className={`fixed left-0 right-0 transition-all duration-300 ease-in-out ${isSticky ? 'bottom-4' : '-bottom-20'}`}>
         <div className="container mx-auto max-w-lg px-4">
-          <Button className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl flex items-center justify-between">
+          <Button className="w-full bg-red-500 text-white hover:bg-red-600 dark:hover:bg-red-400 h-12 text-base rounded-xl flex items-center justify-between">
             <span>${calculateTotal()}</span>
             <span className="flex items-center">
               {pageTexts.addToCartText} <ShoppingCart className="ml-2 h-5 w-5" />
