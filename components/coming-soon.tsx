@@ -28,35 +28,18 @@ export default function ComingSoonComponent() {
     <div
       className="min-h-screen bg-[url('bg.jpg')] text-gray-800 dark:text-gray-200 flex flex-col font-['Inter',sans-serif]">
       <main className="flex-grow container mx-auto px-7 py-15 flex flex-col items-center justify-center relative z-10">
-        <Card className="w-full max-w-md bg-white/60 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl tracking-tight">
-          <CardHeader className="text-center">
-            <CardTitle className="text-4xl font-bold mb-4 flex items-center tracking-tight justify-center mr-8">
+        <Card className="w-full max-w-md bg-white/60 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl mb-4 tracking-tighter">
+          <CardHeader className="">
+            <CardTitle className="text-4xl font-bold mb-2 flex">
               Cooking the Perfect Digital Recipe.
             </CardTitle>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
+            
+          </CardHeader>
+          <CardContent>
+            <p className="text-lg text-gray-600 dark:text-gray-300  mb-6">
               We're building a revolutionary platform to support creators. Be
               the first to know when we launch!
             </p>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                 <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-               <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-grow bg-gray-50 rounded-xl"
-                  required
-                />
-                <Button
-                  type="submit"
-                  className="bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-400 rounded-xl"
-                >
-                  <Mail className="mr-2 h-4 w-4" /> Join Waitlist
-                </Button>
-              </div>
-            </form>
           </CardContent>
         </Card>
       </main>

@@ -7,7 +7,7 @@ import { EdgeStoreProvider } from "../lib/edgestore";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Support This Creator",
+  title: "SupportThis.org",
   description: "A platform for supporting your favorite creators",
 };
 
