@@ -34,22 +34,22 @@
   .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 5%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 5%;
+    --popover: 0 0% 8%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 10%;
+    --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 10%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 12%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
     --ring: 0 0% 83.1%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -66,5 +66,26 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar styles */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-default {
+    -ms-overflow-style: auto;
+    scrollbar-width: auto;
+  }
+
+  .scrollbar-default::-webkit-scrollbar {
+    display: block;
   }
 }

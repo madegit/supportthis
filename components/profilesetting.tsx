@@ -262,7 +262,7 @@ export default function ProfileManagement({
 
   const containerClass = isOnboarding
     ? "bg-gray-800 min-h-full text-white p-6 overflow-y-auto"
-    : "bg-red-50 dark:bg-gray-900 min-h-screen flex text-base";
+    : "bg-red-50 dark:bg-black min-h-screen flex text-base";
 
   const contentClass = isOnboarding ? "max-w-4xl mx-auto" : "flex-1";
 
@@ -274,7 +274,7 @@ export default function ProfileManagement({
           className={isOnboarding ? "" : "container mx-auto md:px-10 px-4 py-8"}
         >
           {!isOnboarding && (
-            <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
               Profile Settings
             </h1>
           )}
@@ -282,7 +282,7 @@ export default function ProfileManagement({
           {alert.type && (
             <Alert
               variant={alert.type === "error" ? "destructive" : "default"}
-              className={`mb-6 ${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-800"}`}
+              className={`mb-6 ${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-900 border dark:border-gray-800"}`}
             >
               {alert.type === "error" ? (
                 <AlertCircle className="h-5 w-5" />
@@ -302,21 +302,25 @@ export default function ProfileManagement({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Profile Images Card */}
               <Card
-                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg"} shadow`}
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
               >
                 <CardHeader>
-                  <CardTitle className={isOnboarding ? "text-white" : ""}>
+                  <CardTitle
+                    className={isOnboarding ? "text-white" : "dark:text-white"}
+                  >
                     Profile Images
                   </CardTitle>
                   <CardDescription
-                    className={isOnboarding ? "text-gray-300" : ""}
+                    className={
+                      isOnboarding ? "text-gray-300" : "dark:text-gray-300"
+                    }
                   >
                     Update your cover image and avatar
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="relative mb-4">
-                    <div className="h-32 w-full bg-gray-200 dark:bg-gray-700 rounded-xl overflow-hidden">
+                    <div className="h-32 w-full bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden">
                       {profile.coverImage ? (
                         <Image
                           src={profile.coverImage || "/placeholder.svg"}
@@ -357,7 +361,9 @@ export default function ProfileManagement({
                         alt={profile.name}
                         className="w-full h-full object-cover"
                       />
-                      <AvatarFallback>{profile.name?.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className="dark:bg-gray-800 dark:text-white">
+                        {profile.name?.charAt(0)}
+                      </AvatarFallback>
                     </Avatar>
                     <input
                       type="file"
@@ -379,7 +385,7 @@ export default function ProfileManagement({
                     <div className="mt-2">
                       <Progress value={uploadProgress} className="w-full" />
                       <p
-                        className={`text-sm mt-1 ${isOnboarding ? "text-gray-300" : "text-gray-500"}`}
+                        className={`text-sm mt-1 ${isOnboarding ? "text-gray-300" : "text-gray-500 dark:text-gray-400"}`}
                       >
                         Uploading: {uploadProgress}%
                       </p>
@@ -390,14 +396,18 @@ export default function ProfileManagement({
 
               {/* Basic Information Card */}
               <Card
-                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg"} shadow`}
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
               >
                 <CardHeader>
-                  <CardTitle className={isOnboarding ? "text-white" : ""}>
+                  <CardTitle
+                    className={isOnboarding ? "text-white" : "dark:text-white"}
+                  >
                     Basic Information
                   </CardTitle>
                   <CardDescription
-                    className={isOnboarding ? "text-gray-300" : ""}
+                    className={
+                      isOnboarding ? "text-gray-300" : "dark:text-gray-300"
+                    }
                   >
                     Update your personal details
                   </CardDescription>
@@ -406,7 +416,9 @@ export default function ProfileManagement({
                   <div className="space-y-2">
                     <Label
                       htmlFor="name"
-                      className={isOnboarding ? "text-gray-300" : ""}
+                      className={
+                        isOnboarding ? "text-gray-300" : "dark:text-gray-300"
+                      }
                     >
                       Name
                     </Label>
@@ -416,13 +428,15 @@ export default function ProfileManagement({
                       value={profile.name}
                       onChange={handleInputChange}
                       required
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label
                       htmlFor="username"
-                      className={isOnboarding ? "text-gray-300" : ""}
+                      className={
+                        isOnboarding ? "text-gray-300" : "dark:text-gray-300"
+                      }
                     >
                       Username
                     </Label>
@@ -432,11 +446,11 @@ export default function ProfileManagement({
                       value={profile.username}
                       onChange={handleInputChange}
                       required
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
                     />
                     {isCheckingUsername && (
                       <p
-                        className={`text-sm ${isOnboarding ? "text-gray-300" : "text-gray-500"}`}
+                        className={`text-sm ${isOnboarding ? "text-gray-300" : "text-gray-500 dark:text-gray-400"}`}
                       >
                         Checking username availability...
                       </p>
@@ -445,7 +459,9 @@ export default function ProfileManagement({
                   <div className="space-y-2">
                     <Label
                       htmlFor="email"
-                      className={isOnboarding ? "text-gray-300" : ""}
+                      className={
+                        isOnboarding ? "text-gray-300" : "dark:text-gray-300"
+                      }
                     >
                       Email
                     </Label>
@@ -456,13 +472,15 @@ export default function ProfileManagement({
                       onChange={handleInputChange}
                       required
                       disabled
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label
                       htmlFor="bio"
-                      className={isOnboarding ? "text-gray-300" : ""}
+                      className={
+                        isOnboarding ? "text-gray-300" : "dark:text-gray-300"
+                      }
                     >
                       Bio
                     </Label>
@@ -473,7 +491,7 @@ export default function ProfileManagement({
                       onChange={handleInputChange}
                       maxLength={MAX_BIO_LENGTH}
                       rows={3}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
                     />
                     <p
                       className={`text-sm ${isOnboarding ? "text-gray-400" : "text-gray-500 dark:text-gray-400"}`}
@@ -486,14 +504,18 @@ export default function ProfileManagement({
 
               {/* Social Media Links Card */}
               <Card
-                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg"} shadow`}
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
               >
                 <CardHeader>
-                  <CardTitle className={isOnboarding ? "text-white" : ""}>
+                  <CardTitle
+                    className={isOnboarding ? "text-white" : "dark:text-white"}
+                  >
                     Social Media Links
                   </CardTitle>
                   <CardDescription
-                    className={isOnboarding ? "text-gray-300" : ""}
+                    className={
+                      isOnboarding ? "text-gray-300" : "dark:text-gray-300"
+                    }
                   >
                     Connect your social media accounts
                   </CardDescription>
@@ -506,7 +528,7 @@ export default function ProfileManagement({
                       placeholder="https://github.com/username"
                       value={profile.socialLinks.github}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -516,7 +538,7 @@ export default function ProfileManagement({
                       placeholder="https://twitter.com/username"
                       value={profile.socialLinks.twitter}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -526,7 +548,7 @@ export default function ProfileManagement({
                       placeholder="https://instagram.com/username"
                       value={profile.socialLinks.instagram}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -536,7 +558,7 @@ export default function ProfileManagement({
                       placeholder="https://linkedin.com/username"
                       value={profile.socialLinks.linkedin}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -546,7 +568,7 @@ export default function ProfileManagement({
                       placeholder="https://mywebsite.com/"
                       value={profile.socialLinks.website}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                 </CardContent>
@@ -554,38 +576,53 @@ export default function ProfileManagement({
 
               {/* Password Change Card - Only show if not onboarding */}
               {!isOnboarding && (
-                <Card className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow">
+                <Card className="bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow border dark:border-gray-800">
                   <CardHeader>
-                    <CardTitle>Change Password</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="dark:text-white">
+                      Change Password
+                    </CardTitle>
+                    <CardDescription className="dark:text-gray-300">
                       Update your account password
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="currentPassword">Current Password</Label>
+                      <Label
+                        htmlFor="currentPassword"
+                        className="dark:text-gray-300"
+                      >
+                        Current Password
+                      </Label>
                       <Input
                         id="currentPassword"
                         name="currentPassword"
                         type="password"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="rounded-xl dark:bg-gray-900"
+                        className="rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="newPassword">New Password</Label>
+                      <Label
+                        htmlFor="newPassword"
+                        className="dark:text-gray-300"
+                      >
+                        New Password
+                      </Label>
                       <Input
                         id="newPassword"
                         name="newPassword"
                         type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="rounded-xl dark:bg-gray-900"
+                        className="rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="confirmNewPassword">
+                      <Label
+                        htmlFor="confirmNewPassword"
+                        className="dark:text-gray-300"
+                      >
                         Confirm New Password
                       </Label>
                       <Input
@@ -594,7 +631,7 @@ export default function ProfileManagement({
                         type="password"
                         value={confirmNewPassword}
                         onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        className="rounded-xl dark:bg-gray-900"
+                        className="rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                       />
                     </div>
                   </CardContent>
@@ -622,7 +659,7 @@ export default function ProfileManagement({
               {!isOnboarding && (
                 <Button
                   type="button"
-                  className="w-full bg-transparent dark:bg-transparent text-gray-900 dark:text-gray-100 hover:bg-transparent shadow-none"
+                  className="w-full bg-transparent dark:bg-transparent text-gray-900 dark:text-white hover:bg-transparent shadow-none"
                   onClick={() =>
                     window.open(
                       `https://supportthis.org/${profile.username}/`,
