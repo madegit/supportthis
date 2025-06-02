@@ -1,10 +1,11 @@
+import type React from "react";
 import "@/app/globals.css";
-import { Inter } from "next/font/google";
+import { Figtree } from "next/font/google";
 import { Providers } from "./providers";
 import { ThemeProvider } from "next-themes";
 import { EdgeStoreProvider } from "../lib/edgestore";
 
-const inter = Inter({ subsets: ["latin"] });
+const figtree = Figtree({ subsets: ["latin"] });
 
 export const metadata = {
   title: "SupportThis.org",
@@ -19,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={inter.className}>
+      <body className={figtree.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {" "}
           <EdgeStoreProvider>
