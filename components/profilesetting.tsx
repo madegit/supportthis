@@ -428,7 +428,7 @@ export default function ProfileManagement({
                       value={profile.name}
                       onChange={handleInputChange}
                       required
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-black border-gray-600 text-white" : "bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"}`}
                     />
                   </div>
                   <div className="space-y-2">
@@ -446,7 +446,7 @@ export default function ProfileManagement({
                       value={profile.username}
                       onChange={handleInputChange}
                       required
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-black border-gray-600 text-white" : "bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"}`}
                     />
                     {isCheckingUsername && (
                       <p
@@ -472,7 +472,7 @@ export default function ProfileManagement({
                       onChange={handleInputChange}
                       required
                       disabled
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-black border-gray-600 text-white" : "bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"}`}
                     />
                   </div>
                   <div className="space-y-2">
@@ -491,7 +491,7 @@ export default function ProfileManagement({
                       onChange={handleInputChange}
                       maxLength={MAX_BIO_LENGTH}
                       rows={3}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-black border-gray-600 text-white" : "bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"}`}
                     />
                     <p
                       className={`text-sm ${isOnboarding ? "text-gray-400" : "text-gray-500 dark:text-gray-400"}`}
@@ -528,7 +528,7 @@ export default function ProfileManagement({
                       placeholder="https://github.com/username"
                       value={profile.socialLinks.github}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-black border-gray-600 text-white" : "bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -538,7 +538,7 @@ export default function ProfileManagement({
                       placeholder="https://twitter.com/username"
                       value={profile.socialLinks.twitter}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-black border-gray-600 text-white" : "bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -548,7 +548,7 @@ export default function ProfileManagement({
                       placeholder="https://instagram.com/username"
                       value={profile.socialLinks.instagram}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-black border-gray-600 text-white" : "bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -558,7 +558,7 @@ export default function ProfileManagement({
                       placeholder="https://linkedin.com/username"
                       value={profile.socialLinks.linkedin}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-black border-gray-600 text-white" : "bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -568,7 +568,7 @@ export default function ProfileManagement({
                       placeholder="https://mywebsite.com/"
                       value={profile.socialLinks.website}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-black border-gray-600 text-white" : "bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"}`}
                     />
                   </div>
                 </CardContent>
@@ -599,7 +599,7 @@ export default function ProfileManagement({
                         type="password"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                        className="rounded-xl bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"
                       />
                     </div>
                     <div className="space-y-2">
@@ -615,7 +615,7 @@ export default function ProfileManagement({
                         type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                        className="rounded-xl bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"
                       />
                     </div>
                     <div className="space-y-2">
@@ -631,7 +631,7 @@ export default function ProfileManagement({
                         type="password"
                         value={confirmNewPassword}
                         onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        className="rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                        className="rounded-xl bg-black dark:bg-black border-gray-700 dark:border-gray-700 text-white dark:text-white"
                       />
                     </div>
                   </CardContent>
