@@ -1,11 +1,13 @@
 "use client";
 
+import type React from "react";
+
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
-import Image from 'next/image'
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEdgeStore } from '@/lib/edgestore';
-import useSWR from 'swr'
+import { useEdgeStore } from "@/lib/edgestore";
+import useSWR from "swr";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,11 +41,19 @@ const MAX_BIO_LENGTH = 160;
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function Component() {
+interface ProfileManagementProps {
+  isOnboarding?: boolean;
+  onComplete?: () => void;
+}
+
+export default function ProfileManagement({
+  isOnboarding = false,
+  onComplete,
+}: ProfileManagementProps) {
   const { data: session, status, update } = useSession();
   const router = useRouter();
   const { edgestore } = useEdgeStore();
-  const { data: profile, error, mutate } = useSWR('/api/profile', fetcher);
+  const { data: profile, error, mutate } = useSWR("/api/profile", fetcher);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -56,10 +66,10 @@ export default function Component() {
   const coverInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (status === "unauthenticated") {
+    if (status === "unauthenticated" && !isOnboarding) {
       router.push("/signin");
     }
-  }, [status, router]);
+  }, [status, router, isOnboarding]);
 
   const handleInputChange = async (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -67,18 +77,21 @@ export default function Component() {
     const { name, value } = e.target;
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
-      mutate({
-        ...profile,
-        [parent]: {
-          ...profile[parent],
-          [child]: value,
+      mutate(
+        {
+          ...profile,
+          [parent]: {
+            ...profile[parent],
+            [child]: value,
+          },
         },
-      }, false);
+        false,
+      );
     } else {
       mutate({ ...profile, [name]: value }, false);
     }
 
-    if (name === 'username') {
+    if (name === "username") {
       setIsCheckingUsername(true);
       try {
         const response = await fetch(`/api/check-username?username=${value}`);
@@ -89,7 +102,7 @@ export default function Component() {
           setAlert({ type: "", message: "" });
         }
       } catch (error) {
-        console.error('Error checking username:', error);
+        console.error("Error checking username:", error);
       }
       setIsCheckingUsername(false);
     }
@@ -128,6 +141,10 @@ export default function Component() {
         });
 
         mutate(data.user);
+
+        if (isOnboarding && onComplete) {
+          setTimeout(() => onComplete(), 1500);
+        }
       } else {
         const data = await response.json();
         setAlert({
@@ -142,7 +159,7 @@ export default function Component() {
     }
   };
 
-  const handleImageUpload = async (file: File, type: 'avatar' | 'cover') => {
+  const handleImageUpload = async (file: File, type: "avatar" | "cover") => {
     if (!file) return;
 
     try {
@@ -154,12 +171,16 @@ export default function Component() {
           setUploadProgress(progress);
         },
         options: {
-          replaceTargetUrl: type === 'avatar' ? profile.avatarImage : profile.coverImage,
+          replaceTargetUrl:
+            type === "avatar" ? profile.avatarImage : profile.coverImage,
         },
       });
 
       if (res.url) {
-        const updatedProfile = { ...profile, [type === 'avatar' ? 'avatarImage' : 'coverImage']: res.url };
+        const updatedProfile = {
+          ...profile,
+          [type === "avatar" ? "avatarImage" : "coverImage"]: res.url,
+        };
 
         // Optimistic update
         mutate(updatedProfile, false);
@@ -173,7 +194,10 @@ export default function Component() {
 
         if (response.ok) {
           const data = await response.json();
-          setAlert({ type: "success", message: `${type === 'avatar' ? 'Avatar' : 'Cover image'} updated successfully` });
+          setAlert({
+            type: "success",
+            message: `${type === "avatar" ? "Avatar" : "Cover image"} updated successfully`,
+          });
 
           // Update session
           await update({
@@ -187,18 +211,22 @@ export default function Component() {
           // Revalidate the data
           mutate();
         } else {
-          throw new Error('Failed to update profile');
+          throw new Error("Failed to update profile");
         }
       } else {
-        throw new Error('Failed to upload image');
+        throw new Error("Failed to upload image");
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
       setAlert({
         type: "error",
         message: `An unexpected error occurred: ${errorMessage}`,
       });
-      console.error(`${type === 'avatar' ? 'Avatar' : 'Cover image'} upload error:`, error);
+      console.error(
+        `${type === "avatar" ? "Avatar" : "Cover image"} upload error:`,
+        error,
+      );
 
       // Revert optimistic update
       mutate();
@@ -211,31 +239,50 @@ export default function Component() {
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      await handleImageUpload(file, 'avatar');
+      await handleImageUpload(file, "avatar");
     }
   };
 
-  const handleCoverImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
-      await handleImageUpload(file, 'cover');
+      await handleImageUpload(file, "cover");
     }
   };
 
   if (error) return <div>Failed to load profile</div>;
-  if (!profile) return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  if (!profile)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+
+  const containerClass = isOnboarding
+    ? "bg-gray-800 min-h-full text-white p-6 overflow-y-auto"
+    : "bg-red-50 dark:bg-gray-900 min-h-screen flex text-base";
+
+  const contentClass = isOnboarding ? "max-w-4xl mx-auto" : "flex-1";
 
   return (
-    <div className="bg-red-50 dark:bg-gray-900 min-h-screen flex text-base">
-      <ProfileMenu />
-      <div className="flex-1">
-        <div className="container mx-auto md:px-10 px-4  py-8">
-          <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Profile Settings</h1>
+    <div className={containerClass}>
+      {!isOnboarding && <ProfileMenu />}
+      <div className={contentClass}>
+        <div
+          className={isOnboarding ? "" : "container mx-auto md:px-10 px-4 py-8"}
+        >
+          {!isOnboarding && (
+            <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+              Profile Settings
+            </h1>
+          )}
 
           {alert.type && (
             <Alert
               variant={alert.type === "error" ? "destructive" : "default"}
-              className="mb-6"
+              className={`mb-6 ${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-800"}`}
             >
               {alert.type === "error" ? (
                 <AlertCircle className="h-5 w-5" />
@@ -245,24 +292,34 @@ export default function Component() {
               <AlertTitle>
                 {alert.type === "error" ? "Error" : "Success"}
               </AlertTitle>
-              <AlertDescription>{alert.message}</AlertDescription>
+              <AlertDescription className={isOnboarding ? "text-gray-300" : ""}>
+                {alert.message}
+              </AlertDescription>
             </Alert>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Profile Images Card */}
-              <Card className="bg-white  dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow">
+              <Card
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg"} shadow`}
+              >
                 <CardHeader>
-                  <CardTitle>Profile Images</CardTitle>
-                  <CardDescription>Update your cover image and avatar</CardDescription>
+                  <CardTitle className={isOnboarding ? "text-white" : ""}>
+                    Profile Images
+                  </CardTitle>
+                  <CardDescription
+                    className={isOnboarding ? "text-gray-300" : ""}
+                  >
+                    Update your cover image and avatar
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="relative mb-4">
                     <div className="h-32 w-full bg-gray-200 dark:bg-gray-700 rounded-xl overflow-hidden">
                       {profile.coverImage ? (
                         <Image
-                          src={profile.coverImage}
+                          src={profile.coverImage || "/placeholder.svg"}
                           alt="Cover"
                           className="w-full h-full object-cover"
                           width={500}
@@ -295,7 +352,11 @@ export default function Component() {
                   </div>
                   <div className="flex items-center space-x-4">
                     <Avatar className="h-20 w-20">
-                      <AvatarImage src={profile.avatarImage} alt={profile.name} className="w-full h-full object-cover"/>
+                      <AvatarImage
+                        src={profile.avatarImage || "/placeholder.svg"}
+                        alt={profile.name}
+                        className="w-full h-full object-cover"
+                      />
                       <AvatarFallback>{profile.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <input
@@ -308,7 +369,7 @@ export default function Component() {
                     <Button
                       type="button"
                       onClick={() => avatarInputRef.current?.click()}
-                      className="bg-red-500 dark:bg-white text-white dark:text-black hover:bg-red400 dark:hover:bg-red-400 dark:hover:text-white rounded-xl"
+                      className={`${isOnboarding ? "bg-white text-black hover:bg-gray-100" : "bg-red-500 dark:bg-white text-white dark:text-black hover:bg-red-400 dark:hover:bg-red-400 dark:hover:text-white"} rounded-xl`}
                       disabled={isUploading}
                     >
                       Change Avatar
@@ -317,44 +378,77 @@ export default function Component() {
                   {isUploading && (
                     <div className="mt-2">
                       <Progress value={uploadProgress} className="w-full" />
-                      <p className="text-sm text-gray-500 mt-1">Uploading: {uploadProgress}%</p>
+                      <p
+                        className={`text-sm mt-1 ${isOnboarding ? "text-gray-300" : "text-gray-500"}`}
+                      >
+                        Uploading: {uploadProgress}%
+                      </p>
                     </div>
                   )}
                 </CardContent>
               </Card>
 
               {/* Basic Information Card */}
-              <Card className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow">
+              <Card
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg"} shadow`}
+              >
                 <CardHeader>
-                  <CardTitle>Basic Information</CardTitle>
-                  <CardDescription>Update your personal details</CardDescription>
+                  <CardTitle className={isOnboarding ? "text-white" : ""}>
+                    Basic Information
+                  </CardTitle>
+                  <CardDescription
+                    className={isOnboarding ? "text-gray-300" : ""}
+                  >
+                    Update your personal details
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
+                    <Label
+                      htmlFor="name"
+                      className={isOnboarding ? "text-gray-300" : ""}
+                    >
+                      Name
+                    </Label>
                     <Input
                       id="name"
                       name="name"
                       value={profile.name}
                       onChange={handleInputChange}
                       required
-                      className="rounded-xl dark:bg-gray-900"
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
+                    <Label
+                      htmlFor="username"
+                      className={isOnboarding ? "text-gray-300" : ""}
+                    >
+                      Username
+                    </Label>
                     <Input
                       id="username"
                       name="username"
                       value={profile.username}
                       onChange={handleInputChange}
                       required
-                      className="rounded-xl dark:bg-gray-900"
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
                     />
-                    {isCheckingUsername && <p className="text-sm text-gray-500">Checking username availability...</p>}
+                    {isCheckingUsername && (
+                      <p
+                        className={`text-sm ${isOnboarding ? "text-gray-300" : "text-gray-500"}`}
+                      >
+                        Checking username availability...
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label
+                      htmlFor="email"
+                      className={isOnboarding ? "text-gray-300" : ""}
+                    >
+                      Email
+                    </Label>
                     <Input
                       id="email"
                       name="email"
@@ -362,11 +456,16 @@ export default function Component() {
                       onChange={handleInputChange}
                       required
                       disabled
-                      className="rounded-xl dark:bg-gray-900"
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="bio">Bio</Label>
+                    <Label
+                      htmlFor="bio"
+                      className={isOnboarding ? "text-gray-300" : ""}
+                    >
+                      Bio
+                    </Label>
                     <Textarea
                       id="bio"
                       name="bio"
@@ -374,9 +473,11 @@ export default function Component() {
                       onChange={handleInputChange}
                       maxLength={MAX_BIO_LENGTH}
                       rows={3}
-                      className="rounded-xl dark:bg-gray-900"
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
                     />
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p
+                      className={`text-sm ${isOnboarding ? "text-gray-400" : "text-gray-500 dark:text-gray-400"}`}
+                    >
                       {profile.bio.length}/{MAX_BIO_LENGTH} characters
                     </p>
                   </div>
@@ -384,10 +485,18 @@ export default function Component() {
               </Card>
 
               {/* Social Media Links Card */}
-              <Card className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow">
+              <Card
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg"} shadow`}
+              >
                 <CardHeader>
-                  <CardTitle>Social Media Links</CardTitle>
-                  <CardDescription>Connect your social media accounts</CardDescription>
+                  <CardTitle className={isOnboarding ? "text-white" : ""}>
+                    Social Media Links
+                  </CardTitle>
+                  <CardDescription
+                    className={isOnboarding ? "text-gray-300" : ""}
+                  >
+                    Connect your social media accounts
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center space-x-2">
@@ -397,7 +506,7 @@ export default function Component() {
                       placeholder="https://github.com/username"
                       value={profile.socialLinks.github}
                       onChange={handleInputChange}
-                      className="rounded-xl dark:bg-gray-900"
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -407,7 +516,7 @@ export default function Component() {
                       placeholder="https://twitter.com/username"
                       value={profile.socialLinks.twitter}
                       onChange={handleInputChange}
-                      className="rounded-xl dark:bg-gray-900"
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -417,7 +526,7 @@ export default function Component() {
                       placeholder="https://instagram.com/username"
                       value={profile.socialLinks.instagram}
                       onChange={handleInputChange}
-                      className="rounded-xl dark:bg-gray-900"
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -427,7 +536,7 @@ export default function Component() {
                       placeholder="https://linkedin.com/username"
                       value={profile.socialLinks.linkedin}
                       onChange={handleInputChange}
-                      className="rounded-xl dark:bg-gray-900"
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -437,79 +546,99 @@ export default function Component() {
                       placeholder="https://mywebsite.com/"
                       value={profile.socialLinks.website}
                       onChange={handleInputChange}
-                      className="rounded-xl dark:bg-gray-900"
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-900"}`}
                     />
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Password Change Card */}
-              <Card className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow">
-                <CardHeader>
-                  <CardTitle>Change Password</CardTitle>
-                  <CardDescription>Update your account password</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="currentPassword">Current Password</Label>
-                    <Input
-                      id="currentPassword"
-                      name="currentPassword"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="rounded-xl dark:bg-gray-900"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      name="newPassword"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      className="rounded-xl dark:bg-gray-900"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmNewPassword">Confirm New Password</Label>
-                    <Input
-                      id="confirmNewPassword"
-                      name="confirmNewPassword"
-                      type="password"
-                      value={confirmNewPassword}
-                      onChange={(e) => setConfirmNewPassword(e.target.value)}
-                      className="rounded-xl dark:bg-gray-900"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Password Change Card - Only show if not onboarding */}
+              {!isOnboarding && (
+                <Card className="bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow">
+                  <CardHeader>
+                    <CardTitle>Change Password</CardTitle>
+                    <CardDescription>
+                      Update your account password
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="currentPassword">Current Password</Label>
+                      <Input
+                        id="currentPassword"
+                        name="currentPassword"
+                        type="password"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        className="rounded-xl dark:bg-gray-900"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="newPassword">New Password</Label>
+                      <Input
+                        id="newPassword"
+                        name="newPassword"
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className="rounded-xl dark:bg-gray-900"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="confirmNewPassword">
+                        Confirm New Password
+                      </Label>
+                      <Input
+                        id="confirmNewPassword"
+                        name="confirmNewPassword"
+                        type="password"
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        className="rounded-xl dark:bg-gray-900"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
 
             {/* Submit Button */}
             <div className="flex flex-col space-y-4">
               <Button
                 type="submit"
-                className="w-full bg-red-500 dark:bg-red-600 text-white hover:bg-red-600 dark:hover:bg-red-700 h-10 text-base rounded-xl"
+                className={`w-full h-10 text-base rounded-xl ${
+                  isOnboarding
+                    ? "bg-white text-black hover:bg-gray-100"
+                    : "bg-red-500 dark:bg-red-600 text-white hover:bg-red-600 dark:hover:bg-red-700"
+                }`}
                 disabled={isLoading || isUploading || isCheckingUsername}
               >
-                {isLoading ? "Updating..." : "Update Profile"}
+                {isLoading
+                  ? "Updating..."
+                  : isOnboarding
+                    ? "Complete Setup"
+                    : "Update Profile"}
               </Button>
-              <Button
-                type="button"
-                className="w-full bg-transparent dark:bg-transparent text-gray-900 dark:text-gray-100 hover:bg-transparent shadow-none"
-                onClick={() => window.open(`https://supportthis.org/${profile.username}/`, '_blank')}
-              >
-                View Public Profile 
-                <ArrowUpRight className="h-4 w-4 ml-2" />
-              </Button>
+              {!isOnboarding && (
+                <Button
+                  type="button"
+                  className="w-full bg-transparent dark:bg-transparent text-gray-900 dark:text-gray-100 hover:bg-transparent shadow-none"
+                  onClick={() =>
+                    window.open(
+                      `https://supportthis.org/${profile.username}/`,
+                      "_blank",
+                    )
+                  }
+                >
+                  View Public Profile
+                  <ArrowUpRight className="h-4 w-4 ml-2" />
+                </Button>
+              )}
             </div>
           </form>
         </div>
-         <Footer />
+        {!isOnboarding && <Footer />}
       </div>
-
     </div>
   );
 }
