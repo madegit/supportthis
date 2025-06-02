@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import Link from "next/link"
-import { AlertCircle, CheckCircle2, Eye, EyeOff, Check, X } from "lucide-react"
-import OnboardingProfileSetup from "@/components/onboarding-profile-setup"
+import { useState, useEffect } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import Link from "next/link";
+import { AlertCircle, CheckCircle2, Eye, EyeOff, Check, X } from "lucide-react";
+import OnboardingProfileSetup from "@/components/onboarding-profile-setup";
 
 // Custom scrollbar hiding utility
 const scrollbarHideStyles = `
@@ -29,29 +29,31 @@ const scrollbarHideStyles = `
   .scrollbar-default::-webkit-scrollbar {
     display: block;
   }
-`
+`;
 
 interface SignupFlowProps {
-  onComplete?: () => void
+  onComplete?: () => void;
 }
 
 export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
-  const [currentStep, setCurrentStep] = useState(1)
-  const [username, setUsername] = useState("")
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false)
-  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null)
-  const [usernameError, setUsernameError] = useState("")
+  const [currentStep, setCurrentStep] = useState(1);
+  const [username, setUsername] = useState("");
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(
+    null,
+  );
+  const [usernameError, setUsernameError] = useState("");
 
   // Step 2 form data
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [alert, setAlert] = useState({ type: "", message: "" })
-  const [isLoading, setIsLoading] = useState(false)
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [alert, setAlert] = useState({ type: "", message: "" });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const steps = [
     {
@@ -72,49 +74,53 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
       active: currentStep === 3,
       completed: currentStep > 3,
     },
-  ]
+  ];
 
   // Username validation and checking
   useEffect(() => {
     const checkUsername = async () => {
       if (username.length < 3) {
-        setUsernameAvailable(null)
-        setUsernameError("")
-        return
+        setUsernameAvailable(null);
+        setUsernameError("");
+        return;
       }
 
       if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
-        setUsernameAvailable(false)
-        setUsernameError("Username can only contain letters, numbers, and underscores (3-20 characters)")
-        return
+        setUsernameAvailable(false);
+        setUsernameError(
+          "Username can only contain letters, numbers, and underscores (3-20 characters)",
+        );
+        return;
       }
 
-      setIsCheckingUsername(true)
+      setIsCheckingUsername(true);
       try {
-        const response = await fetch(`/api/check-username?username=${username}`)
-        const data = await response.json()
-        setUsernameAvailable(data.available)
-        setUsernameError(data.available ? "" : "Username is already taken")
+        const response = await fetch(
+          `/api/check-username?username=${username}`,
+        );
+        const data = await response.json();
+        setUsernameAvailable(data.available);
+        setUsernameError(data.available ? "" : "Username is already taken");
       } catch (error) {
-        setUsernameError("Error checking username availability")
+        setUsernameError("Error checking username availability");
       }
-      setIsCheckingUsername(false)
-    }
+      setIsCheckingUsername(false);
+    };
 
-    const debounceTimer = setTimeout(checkUsername, 500)
-    return () => clearTimeout(debounceTimer)
-  }, [username])
+    const debounceTimer = setTimeout(checkUsername, 500);
+    return () => clearTimeout(debounceTimer);
+  }, [username]);
 
   const handleUsernameNext = () => {
     if (usernameAvailable && username.length >= 3) {
-      setCurrentStep(2)
+      setCurrentStep(2);
     }
-  }
+  };
 
   const handleCreateAccount = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setAlert({ type: "", message: "" })
+    e.preventDefault();
+    setIsLoading(true);
+    setAlert({ type: "", message: "" });
 
     try {
       const response = await fetch("/api/auth/signup", {
@@ -126,59 +132,59 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
           password,
           username,
         }),
-      })
+      });
 
       if (response.ok) {
         setAlert({
           type: "success",
           message: "Account created successfully! Setting up your profile...",
-        })
+        });
 
         // Sign in the user
         const result = await signIn("credentials", {
           redirect: false,
           email,
           password,
-        })
+        });
 
         if (result?.error) {
-          setAlert({ type: "error", message: result.error })
+          setAlert({ type: "error", message: result.error });
         } else {
-          setTimeout(() => setCurrentStep(3), 1000)
+          setTimeout(() => setCurrentStep(3), 1000);
         }
       } else {
-        const data = await response.json()
+        const data = await response.json();
         setAlert({
           type: "error",
           message: data.message || "An error occurred during sign up",
-        })
+        });
       }
     } catch (error) {
-      setAlert({ type: "error", message: "An unexpected error occurred" })
+      setAlert({ type: "error", message: "An unexpected error occurred" });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleOAuthSignUp = async (provider: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const result = await signIn(provider, {
         callbackUrl: "/dashboard",
         redirect: false,
-      })
+      });
       if (result?.error) {
-        setAlert({ type: "error", message: result.error })
+        setAlert({ type: "error", message: result.error });
       }
     } catch (error) {
       setAlert({
         type: "error",
         message: "An error occurred during OAuth sign up",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -186,7 +192,9 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">Choose Your Username</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">
+                Choose Your Username
+              </h2>
               <p className="text-muted-foreground text-sm md:text-base">
                 This will be your unique identifier on SupportThis
               </p>
@@ -218,9 +226,13 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                     </div>
                   )}
                 </div>
-                {usernameError && <p className="text-red-400 text-sm">{usernameError}</p>}
+                {usernameError && (
+                  <p className="text-red-400 text-sm">{usernameError}</p>
+                )}
                 {usernameAvailable && username.length >= 3 && (
-                  <p className="text-green-400 text-sm">✓ Username is available!</p>
+                  <p className="text-green-400 text-sm">
+                    ✓ Username is available!
+                  </p>
                 )}
               </div>
 
@@ -235,29 +247,43 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
               <div className="text-center">
                 <p className="text-muted-foreground text-sm">
                   Already have an account?{" "}
-                  <Link href="/signin" className="text-foreground hover:underline">
+                  <Link
+                    href="/signin"
+                    className="text-foreground hover:underline"
+                  >
                     Log in
                   </Link>
                 </p>
               </div>
             </div>
           </div>
-        )
+        );
 
       case 2:
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">Create Account</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">
+                Create Account
+              </h2>
               <p className="text-muted-foreground text-sm md:text-base">
                 Enter your personal data to create your account.
               </p>
             </div>
 
             {alert.type && (
-              <Alert variant={alert.type === "error" ? "destructive" : "default"} className="bg-card border-border">
-                {alert.type === "error" ? <AlertCircle className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
-                <AlertDescription className="text-foreground">{alert.message}</AlertDescription>
+              <Alert
+                variant={alert.type === "error" ? "destructive" : "default"}
+                className="bg-card border-border"
+              >
+                {alert.type === "error" ? (
+                  <AlertCircle className="h-4 w-4" />
+                ) : (
+                  <CheckCircle2 className="h-4 w-4" />
+                )}
+                <AlertDescription className="text-foreground">
+                  {alert.message}
+                </AlertDescription>
               </Alert>
             )}
 
@@ -294,7 +320,11 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                 className="bg-card border-border text-foreground hover:bg-gray-700 h-11 rounded-lg flex items-center justify-center space-x-2"
                 disabled={isLoading}
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                 </svg>
                 <span>GitHub</span>
@@ -306,7 +336,9 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                 <div className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-background px-2 text-muted-foreground">Or</span>
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or
+                </span>
               </div>
             </div>
 
@@ -376,10 +408,16 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-gray-300"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
-                <p className="text-muted-foreground text-xs">Must be at least 8 characters.</p>
+                <p className="text-muted-foreground text-xs">
+                  Must be at least 8 characters.
+                </p>
               </div>
 
               <Button
@@ -394,31 +432,38 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
             <div className="text-center">
               <p className="text-muted-foreground text-sm">
                 Already have an account?{" "}
-                <Link href="/signin" className="text-foreground hover:underline">
+                <Link
+                  href="/signin"
+                  className="text-foreground hover:underline"
+                >
                   Log in
                 </Link>
               </p>
             </div>
           </div>
-        )
+        );
 
       case 3:
         return (
           <div className="h-full">
             <div className="text-center mb-6">
-              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">Set up your profile</h2>
-              <p className="text-muted-foreground text-sm md:text-base">Complete your profile to get started</p>
+              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">
+                Set up your profile
+              </h2>
+              <p className="text-muted-foreground text-sm md:text-base">
+                Complete your profile to get started
+              </p>
             </div>
             <div className="flex-1 overflow-auto">
               <OnboardingProfileSetup onComplete={onComplete} />
             </div>
           </div>
-        )
+        );
 
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <div
@@ -429,7 +474,7 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
         {scrollbarHideStyles}
       </style>
       {/* Left Side - Steps with Mesh Gradient Background */}
-      <div className="w-[90vw] lg:w-[45vw] h-[90vh] mx-auto flex items-center justify-center order-1 lg:order-1">
+      <div className="w-[90vw] lg:w-[45vw] h-[60vh] lg:h-[90vh] mx-auto flex items-center justify-center order-1 lg:order-1">
         <div
           className="w-full rounded-2xl relative overflow-hidden h-full"
           style={{
@@ -449,7 +494,9 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
             </div>
 
             <div className="text-center mb-8 md:mb-12">
-              <h1 className="text-2xl md:text-3xl font-bold mb-3">Get Started with Us</h1>
+              <h1 className="text-2xl md:text-3xl font-bold mb-3">
+                Get Started with Us
+              </h1>
               <p className="text-gray-200 text-sm">
                 Complete these easy steps to register
                 <br />
@@ -462,7 +509,9 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                 <div
                   key={step.number}
                   className={`flex items-center p-3 rounded-lg ${
-                    step.active ? "bg-white text-black" : "bg-black/20 text-white backdrop-blur-sm"
+                    step.active
+                      ? "bg-white text-black"
+                      : "bg-black/20 text-white backdrop-blur-sm"
                   }`}
                 >
                   <div
@@ -474,7 +523,11 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                           : "bg-white/20 text-white"
                     }`}
                   >
-                    {step.completed ? <Check className="h-3 w-3" /> : step.number}
+                    {step.completed ? (
+                      <Check className="h-3 w-3" />
+                    ) : (
+                      step.number
+                    )}
                   </div>
                   <span className="text-sm font-medium">{step.title}</span>
                 </div>
@@ -487,9 +540,11 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
       {/* Right Side - Form */}
       <div className="flex-1 bg-background flex flex-col order-2 lg:order-2 overflow-auto lg:overflow-hidden">
         <div className="flex-1 flex items-center justify-center overflow-auto scrollbar-hide md:scrollbar-default">
-          <div className="w-full max-w-md p-6 md:p-12">{renderStepContent()}</div>
+          <div className="w-full max-w-md p-6 md:p-12">
+            {renderStepContent()}
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
