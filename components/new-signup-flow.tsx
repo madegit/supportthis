@@ -251,7 +251,7 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                     href="/signin"
                     className="text-foreground hover:underline"
                   >
-                    Log in
+                    Sign in
                   </Link>
                 </p>
               </div>
@@ -436,7 +436,7 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                   href="/signin"
                   className="text-foreground hover:underline"
                 >
-                  Log in
+                  Sign in
                 </Link>
               </p>
             </div>
