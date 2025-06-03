@@ -192,17 +192,17 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                 Choose Your Username
               </h2>
-              <p className="text-muted-foreground text-sm md:text-base">
+              <p className="text-gray-300 text-sm md:text-base">
                 This will be your unique identifier on SupportThis
               </p>
             </div>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-foreground">
+                <Label htmlFor="username" className="text-gray-200">
                   Username
                 </Label>
                 <div className="relative">
@@ -212,7 +212,7 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                     placeholder="e.g. johndoe"
                     value={username}
                     onChange={(e) => setUsername(e.target.value.toLowerCase())}
-                    className="bg-card/80 border-border text-foreground placeholder-muted-foreground rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                    className="bg-gray-800/80 border-gray-600 text-white placeholder-gray-400 rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
                   />
                   {username.length >= 3 && (
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -245,13 +245,10 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
               </Button>
 
               <div className="text-center">
-                <p className="text-muted-foreground text-sm">
+                <p className="text-gray-300 text-sm">
                   Already have an account?{" "}
-                  <Link
-                    href="/signin"
-                    className="text-foreground hover:underline"
-                  >
-                    Log in
+                  <Link href="/signin" className="text-white hover:underline">
+                    Sign in
                   </Link>
                 </p>
               </div>
@@ -263,10 +260,10 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                 Create Account
               </h2>
-              <p className="text-muted-foreground text-sm md:text-base">
+              <p className="text-gray-300 text-sm md:text-base">
                 Enter your personal data to create your account.
               </p>
             </div>
@@ -274,14 +271,14 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
             {alert.type && (
               <Alert
                 variant={alert.type === "error" ? "destructive" : "default"}
-                className="bg-card border-border"
+                className="bg-gray-800 border-gray-700"
               >
                 {alert.type === "error" ? (
                   <AlertCircle className="h-4 w-4" />
                 ) : (
                   <CheckCircle2 className="h-4 w-4" />
                 )}
-                <AlertDescription className="text-foreground">
+                <AlertDescription className="text-gray-200">
                   {alert.message}
                 </AlertDescription>
               </Alert>
@@ -291,7 +288,7 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
               <Button
                 onClick={() => handleOAuthSignUp("google")}
                 variant="outline"
-                className="bg-card border-border text-foreground hover:bg-gray-700 h-11 rounded-lg flex items-center justify-center space-x-2"
+                className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700 h-11 rounded-lg flex items-center justify-center space-x-2"
                 disabled={isLoading}
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -317,7 +314,7 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
               <Button
                 onClick={() => handleOAuthSignUp("github")}
                 variant="outline"
-                className="bg-card border-border text-foreground hover:bg-gray-700 h-11 rounded-lg flex items-center justify-center space-x-2"
+                className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700 h-11 rounded-lg flex items-center justify-center space-x-2"
                 disabled={isLoading}
               >
                 <svg
@@ -333,19 +330,17 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border" />
+                <div className="w-full border-t border-gray-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or
-                </span>
+                <span className="bg-black px-2 text-gray-300">Or</span>
               </div>
             </div>
 
             <form onSubmit={handleCreateAccount} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName" className="text-foreground">
+                  <Label htmlFor="firstName" className="text-gray-200">
                     First Name
                   </Label>
                   <Input
@@ -355,11 +350,11 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     required
-                    className="bg-card/80 border-border text-foreground placeholder-muted-foreground rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                    className="bg-gray-800/80 border-gray-600 text-white placeholder-gray-400 rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lastName" className="text-foreground">
+                  <Label htmlFor="lastName" className="text-gray-200">
                     Last Name
                   </Label>
                   <Input
@@ -369,13 +364,13 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     required
-                    className="bg-card/80 border-border text-foreground placeholder-muted-foreground rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                    className="bg-gray-800/80 border-gray-600 text-white placeholder-gray-400 rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-foreground">
+                <Label htmlFor="email" className="text-gray-200">
                   Email
                 </Label>
                 <Input
@@ -385,12 +380,12 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-card/80 border-border text-foreground placeholder-muted-foreground rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                  className="bg-gray-800/80 border-gray-600 text-white placeholder-gray-400 rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-foreground">
+                <Label htmlFor="password" className="text-gray-200">
                   Password
                 </Label>
                 <div className="relative">
@@ -401,12 +396,12 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="bg-card/80 border-border text-foreground placeholder-muted-foreground rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 pr-10"
+                    className="bg-gray-800/80 border-gray-600 text-white placeholder-gray-400 rounded-lg h-11 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 pr-10"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-gray-300"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -415,7 +410,7 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
                     )}
                   </button>
                 </div>
-                <p className="text-muted-foreground text-xs">
+                <p className="text-gray-400 text-xs">
                   Must be at least 8 characters.
                 </p>
               </div>
@@ -430,13 +425,10 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
             </form>
 
             <div className="text-center">
-              <p className="text-muted-foreground text-sm">
+              <p className="text-gray-300 text-sm">
                 Already have an account?{" "}
-                <Link
-                  href="/signin"
-                  className="text-foreground hover:underline"
-                >
-                  Log in
+                <Link href="/signin" className="text-white hover:underline">
+                  Sign in
                 </Link>
               </p>
             </div>
@@ -447,10 +439,10 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
         return (
           <div className="h-full">
             <div className="text-center mb-6">
-              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                 Set up your profile
               </h2>
-              <p className="text-muted-foreground text-sm md:text-base">
+              <p className="text-gray-300 text-sm md:text-base">
                 Complete your profile to get started
               </p>
             </div>
@@ -467,14 +459,14 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
 
   return (
     <div
-      className="min-h-screen h-full bg-background flex flex-col lg:flex-row overflow-auto lg:overflow-hidden"
+      className="min-h-screen h-full bg-black flex flex-col lg:flex-row overflow-auto lg:overflow-hidden overflow-x-hidden"
       style={{ padding: "20px" }}
     >
       <style jsx global>
         {scrollbarHideStyles}
       </style>
       {/* Left Side - Steps with Mesh Gradient Background */}
-      <div className="w-[90vw] lg:w-[45vw] h-[60vh] lg:h-[90vh] mx-auto flex items-center justify-center order-1 lg:order-1">
+      <div className="w-full lg:w-[45vw] h-[60vh] lg:h-[90vh] mx-auto flex items-center justify-center order-1 lg:order-1">
         <div
           className="w-full rounded-2xl relative overflow-hidden h-full"
           style={{
@@ -485,7 +477,7 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
           }}
         >
           {/* Keep existing content inside this div unchanged */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 text-foreground">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 text-white">
             <div className="mb-6 md:mb-8 flex items-center">
               <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center mr-2">
                 <div className="w-3 h-3 bg-purple-600 rounded-full" />
@@ -538,7 +530,7 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
       </div>
 
       {/* Right Side - Form */}
-      <div className="flex-1 bg-background flex flex-col order-2 lg:order-2 overflow-auto lg:overflow-hidden">
+      <div className="flex-1 bg-black flex flex-col order-2 lg:order-2 overflow-auto lg:overflow-hidden">
         <div className="flex-1 flex items-center justify-center overflow-auto scrollbar-hide md:scrollbar-default">
           <div className="w-full max-w-md p-6 md:p-12">
             {renderStepContent()}

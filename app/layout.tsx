@@ -1,26 +1,26 @@
-import type React from "react";
-import "@/app/globals.css";
-import { Figtree } from "next/font/google";
-import { Providers } from "./providers";
-import { ThemeProvider } from "next-themes";
-import { EdgeStoreProvider } from "../lib/edgestore";
+import type React from "react"
+import "@/app/globals.css"
+import { Figtree } from "next/font/google"
+import { Providers } from "./providers"
+import { ThemeProvider } from "next-themes"
+import { EdgeStoreProvider } from "../lib/edgestore"
 
-const figtree = Figtree({ subsets: ["latin"] });
+const figtree = Figtree({ subsets: ["latin"] })
 
 export const metadata = {
   title: "SupportThis.org",
   description: "A platform for supporting your favorite creators",
-};
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={figtree.className}>
+      <body className={`${figtree.className} no-horizontal-scroll`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {" "}
           <EdgeStoreProvider>
@@ -29,5 +29,5 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

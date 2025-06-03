@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -17,25 +16,15 @@ import {
   Twitter,
   Instagram,
   Globe,
-  Star,
-  Coffee,
   Info,
-  Target,
   Rocket,
   Calendar,
   Github,
-  Mail,
-  Clock,
   Shield,
   UserPlus,
-  ChevronLeft,
-  ChevronRight,
   Linkedin,
-  LinkIcon,
   Facebook,
-  ShoppingCart,
   Text,
-  Zap,
   Copy,
 } from "lucide-react";
 import {
@@ -45,7 +34,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { motion, useAnimation } from "framer-motion";
 import { SupportFooter } from "@/components/frontSupportFooter";
 import Contributors from "./Contributors";
 import ProjectDetails from "./ProjectDetails";
@@ -214,11 +202,11 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
   };
 
   return (
-    <div className="min-h-screen bg-red-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 overflow-x-hidden">
+    <div className="min-h-screen bg-red-50 dark:bg-black text-gray-800 dark:text-gray-200 overflow-x-hidden">
       {/* Header */}
       <header
         ref={headerRef}
-        className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md sticky top-0 z-10"
+        className="bg-white/80 dark:bg-black/80 backdrop-blur-md sticky top-0 z-10"
       >
         <div className="container mx-auto h-16 flex items-center justify-between px-4">
           <nav className="flex space-x-4">
@@ -281,7 +269,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
               <div className="relative w-24 h-24 mx-auto mb-4">
                 <Avatar className="w-24 h-24 ring-2 ring-red-50 dark:ring-red-50">
                   <AvatarImage
-                    src={user.avatarImage}
+                    src={user.avatarImage || "/placeholder.svg"}
                     alt={user.name}
                     className="w-full h-full object-cover"
                   />
@@ -367,7 +355,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                 {/* Send Hearts */}
                 <Card
                   ref={incrementalSectionRef}
-                  className="mb-8 bg-white dark:bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow rounded-xl"
+                  className="mb-8 bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-blur-sm shadow rounded-xl border dark:border-gray-800"
                 >
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="tracking-tight flex items-center text-2xl">
@@ -396,7 +384,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                     </TooltipProvider>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex items-center justify-between bg-red-50 dark:bg-gray-700 rounded-xl p-4 mb-4">
+                    <div className="flex items-center justify-between bg-red-50 dark:bg-[#1a1a1a] rounded-xl p-4 mb-4">
                       <div className="flex items-center space-x-2">
                         <span className="text-red-500 dark:text-gray-200 flex items-center">
                           <Heart className="h-5 w-5 mr-1" /> x
@@ -411,7 +399,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                             className={`h-12 w-12 rounded-full ${
                               heartCount === amount
                                 ? "bg-red-500 text-white"
-                                : "bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-200"
+                                : "bg-white dark:bg-[#121212] text-gray-600 dark:text-gray-200"
                             } hover:bg-red-600 hover:text-white`}
                           >
                             {amount}
@@ -420,7 +408,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                         <Button
                           variant="outline"
                           onClick={() => setHeartCount(heartCount + 1)}
-                          className="h-12 w-12 rounded-full bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-200 hover:bg-red-600 dark:hover:bg-red-500 hover:text-white"
+                          className="h-12 w-12 rounded-full bg-white dark:bg-[#121212] text-gray-600 dark:text-gray-200 hover:bg-red-600 dark:hover:bg-red-500 hover:text-white"
                         >
                           +1
                         </Button>
@@ -430,16 +418,16 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                       placeholder="Name or @yoursocial"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="mb-4 rounded-xl dark:bg-gray-900"
+                      className="mb-4 rounded-xl dark:bg-[#1a1a1a]"
                     />
                     <Textarea
                       placeholder="Say something nice..."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      className="mb-4 rounded-xl dark:bg-gray-900 min-h-[100px] resize-none"
+                      className="mb-4 rounded-xl dark:bg-[#1a1a1a] min-h-[100px] resize-none"
                       maxLength={250}
                     />
-                    <Button className="w-full bg-red-500 text-white dark:hover:text-white  transition-all duration-300 ease-in-out font-semibold tracking-tight hover:bg-red-400 h-12 text-base rounded-xl">
+                    <Button className="w-full bg-red-500 text-white dark:hover:text-white transition-all duration-300 ease-in-out font-semibold tracking-tight hover:bg-red-400 h-12 text-base rounded-xl">
                       Send {heartCount} Hearts{" "}
                       <Heart className="mx-2 h-5 w-5" /> $
                       {calculateHeartValue(heartCount)}
@@ -464,11 +452,6 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                   />
                 )}
 
-                {/* Leaderboard */}
-                <Leaderboard
-                  leaderboard={leaderboard}
-                  calculateHeartValue={calculateHeartValue}
-                />
 
                 {/* CTA Section */}
                 <CTASection />
@@ -518,7 +501,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
             <DialogTrigger asChild>
               <Button
                 variant="outline"
-                className="bg-white dark:bg-gray-700 hover:bg-red-600 dark:hover:bg-red-400 hover:text-white h-12 px-3 rounded-xl w-[17%]"
+                className="bg-white dark:bg-[#121212] hover:bg-red-600 dark:hover:bg-red-400 hover:text-white h-12 px-3 rounded-xl w-[17%]"
               >
                 <Share2 className="h-5 w-5" />
               </Button>
@@ -564,8 +547,6 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
           </Dialog>
         </div>
       </div>
-
-      <SupportFooter ref={footerRef} />
     </div>
   );
 }

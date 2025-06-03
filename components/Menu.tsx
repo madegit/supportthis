@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 import { ChevronDown, MenuIcon, LogOut } from "lucide-react";
 import {
   ArrowUpRight,
@@ -112,7 +112,7 @@ export function ProfileMenu() {
   return (
     <>
       {/* Vertical Menu (Desktop) */}
-      <div className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80 backdrop-filter backdrop-blur-lg p-4 border-r dark:border-gray-800">
+      <div className="hidden md:flex flex-col w-64 bg-white dark:bg-[#121212] bg-opacity-80 dark:bg-opacity-80 backdrop-filter backdrop-blur-lg p-4 border-r dark:border-gray-800">
         <div className="mb-4 mt-5">
           <div className="w-full p-5 h-8 mx-auto flex items-center text-gray-900 dark:text-white">
             SupportThis.org
@@ -123,7 +123,7 @@ export function ProfileMenu() {
 
       {/* Mobile Menu (Slide from right) */}
       <div
-        className={`fixed inset-y-0 right-0 w-64 bg-white dark:bg-gray-900 p-4 transform ${
+        className={`fixed inset-y-0 right-0 w-64 bg-white dark:bg-[#121212] p-4 transform ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out z-50 md:hidden backdrop-filter backdrop-blur-lg bg-opacity-90 dark:bg-opacity-90 flex flex-col border-l dark:border-gray-800`}
       >
@@ -154,7 +154,7 @@ export function ProfileMenu() {
       <div className="fixed top-4 right-4 z-40 md:hidden">
         <button
           onClick={() => setIsMobileMenuOpen(true)}
-          className="w-10 h-10 flex items-center justify-center bg-white dark:bg-gray-900 rounded-full m-2 backdrop-blur-md bg-opacity-80 dark:bg-opacity-80 border dark:border-gray-800"
+          className="w-10 h-10 flex items-center justify-center bg-white dark:bg-[#121212] rounded-full m-2 backdrop-blur-md bg-opacity-80 dark:bg-opacity-80 border dark:border-gray-800"
         >
           <MenuIcon size={24} className="text-gray-700 dark:text-gray-300" />
         </button>
