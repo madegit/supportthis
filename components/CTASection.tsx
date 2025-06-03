@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function CTASection() {
   return (
-    <Card className="mb-8 bg-white dark:bg-[#121212] bg-opacity-50 backdrop-blur-sm shadow rounded-xl">
+    <Card className="mb-8 bg-white dark:bg-[#121212] bg-opacity-50 backdrop-blur-sm shadow border dark:border-black rounded-xl">
       <CardContent className="p-6 text-center">
         <h3 className="text-2xl font-bold mb-2 tracking-tight">
           Let your audience show love with one-time tips.

@@ -1,20 +1,25 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Anvil } from "lucide-react"
-import type { ReactNode } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Anvil } from "lucide-react";
+import type { ReactNode } from "react";
 
 interface ProjectDetail {
-  title: string
-  content: string
-  icon: ReactNode
+  title: string;
+  content: string;
+  icon: ReactNode;
 }
 
 interface ProjectDetailsProps {
-  projectDetails: ProjectDetail[]
-  openAccordionItem: string
-  setOpenAccordionItem: (value: string) => void
+  projectDetails: ProjectDetail[];
+  openAccordionItem: string;
+  setOpenAccordionItem: (value: string) => void;
 }
 
 export default function ProjectDetails({
@@ -23,7 +28,7 @@ export default function ProjectDetails({
   setOpenAccordionItem,
 }: ProjectDetailsProps) {
   return (
-    <Card className="mb-8 bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-blur-sm border dark:border-gray-800 shadow rounded-xl">
+    <Card className="mb-8 bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-blur-sm border dark:border-black shadow rounded-xl">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="tracking-tight flex items-center text-2xl">
           <Anvil className="mr-2 h-6 w-6 text-red-500" />
@@ -39,7 +44,11 @@ export default function ProjectDetails({
           className="w-full"
         >
           {projectDetails.map((detail, index) => (
-            <AccordionItem key={index} value={`item-${index}`} className="border-b dark:border-gray-700">
+            <AccordionItem
+              key={index}
+              value={`item-${index}`}
+              className="border-b dark:border-gray-700"
+            >
               <AccordionTrigger className="hover:no-underline dark:text-white hover:text-red-500 dark:hover:text-red-400">
                 <div className="flex items-center">
                   <span className="text-red-500 mr-2">{detail.icon}</span>
@@ -54,5 +63,5 @@ export default function ProjectDetails({
         </Accordion>
       </CardContent>
     </Card>
-  )
+  );
 }

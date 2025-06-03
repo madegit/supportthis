@@ -35,7 +35,7 @@ const CustomTooltip = ({
 }: TooltipProps<number, string>) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white dark:bg-[#121212] border border-gray-200 dark:border-gray-700 p-2 shadow rounded">
+      <div className="bg-white dark:bg-[#121212] border border-gray-200 dark:border-black p-2 shadow rounded">
         <p className="text-sm font-semibold text-gray-900 dark:text-white">
           {label}
         </p>
@@ -70,7 +70,7 @@ export const VisitsChart: React.FC = () => {
     );
   if (!analytics)
     return (
-      <div className="flex items-center justify-center h-100 bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-gray-800">
+      <div className="flex items-center justify-center h-100 bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-black">
         <span className="text-gray-900 dark:text-white">
           Loading your stats...
         </span>
@@ -135,7 +135,7 @@ export const VisitsChart: React.FC = () => {
     .reduce((sum, item) => sum + item.visits, 0);
 
   return (
-    <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-gray-800">
+    <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-black">
       <div className="flex items-center mb-4">
         <BarChart2 className="mr-2 text-red-500" size={24} />
         <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
