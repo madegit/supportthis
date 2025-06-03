@@ -138,9 +138,9 @@ export function DashboardComponent() {
           <VisitsChart />
 
           {/* Financial Metrics Card */}
-          <div className="bg-red-100 dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow relative border dark:border-gray-800">
+          <div className="bg-red-100 dark:bg-red-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow relative border dark:border-black">
             <div className="absolute top-4 right-4 w-8 h-8 bg-red-500 dark:bg-red-400 rounded-full flex items-center justify-center">
-              <div className="w-6 h-6 bg-red-100 dark:bg-[#121212] rounded-full"></div>
+              <div className="w-6 h-6 bg-red-100 dark:bg-red-900 dark:bg-opacity-50 rounded-full"></div>
             </div>
             <div className="flex items-center mb-4">
               <TrendingUp
@@ -157,7 +157,7 @@ export function DashboardComponent() {
             <p className="text-lg font-semibold mb-4 tracking-tight text-gray-700 dark:text-gray-300">
               Total Funds Raised
             </p>
-            <hr className="my-4 border-red-200 dark:border-gray-700" />
+            <hr className="my-4 border-red-200 dark:border-gray" />
             <div className="flex items-center text-red-500 dark:text-red-400 mb-4">
               <ArrowUpRight size={20} />
               <span className="ml-1 font-semibold tracking-tight">
@@ -209,7 +209,7 @@ export function DashboardComponent() {
           </div>
 
           {/* Project Goals Card */}
-          <div className="bg-red-500 dark:bg-red-700 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow text-white border dark:border-gray-800">
+          <div className="bg-red-500 dark:bg-red-700 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow text-white border dark:border-black">
             <div className="flex items-center mb-4">
               <Target className="mr-2 text-white" size={24} />
               <h2 className="text-xl tracking-tight">Project Goals</h2>
@@ -241,7 +241,7 @@ export function DashboardComponent() {
           </div>
 
           {/* Top Supporters Card */}
-          <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-gray-800">
+          <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-black">
             <div className="flex items-center mb-4">
               <Crown
                 className="mr-2 text-red-500 dark:text-red-400"
@@ -278,7 +278,7 @@ export function DashboardComponent() {
           </div>
 
           {/* Balance and Actions */}
-          <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-gray-800">
+          <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-black">
             <div className="flex items-center mb-2">
               <PieChart
                 className="mr-2 text-red-500 dark:text-red-400"
@@ -295,7 +295,7 @@ export function DashboardComponent() {
               **** 5382
             </p>
             <div className="space-y-2">
-              <button className="w-full bg-red-100 dark:bg-[#1a1a1a] text-red-500 dark:text-red-400 py-2 rounded-xl font-semibold flex items-center justify-center tracking-tight border dark:border-gray-700">
+              <button className="w-full bg-red-100 dark:bg-[#1a1a1a] text-red-500 dark:text-red-400 py-2 rounded-xl font-semibold flex items-center justify-center tracking-tight border dark:border-[#1a1a1a]">
                 History <BarChart2 className="ml-2" size={18} />
               </button>
               <button className="w-full bg-red-500 dark:bg-red-600 text-white py-2 rounded-xl font-semibold flex items-center justify-center tracking-tight">
@@ -305,7 +305,7 @@ export function DashboardComponent() {
           </div>
 
           {/* Upcoming Payment */}
-          <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-gray-800">
+          <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-black">
             <div className="flex items-center mb-2">
               <Music
                 className="mr-2 text-red-500 dark:text-red-400"
@@ -332,7 +332,7 @@ export function DashboardComponent() {
               More ways to earn
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-gray-800">
+              <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-black">
                 <div className="w-12 h-12 bg-red-100 dark:bg-[#1a1a1a] rounded-full flex items-center justify-center mb-4">
                   <Lock className="text-red-500 dark:text-red-400" size={24} />
                 </div>
@@ -346,7 +346,7 @@ export function DashboardComponent() {
                   Enable <ArrowRight className="ml-2" size={16} />
                 </button>
               </div>
-              <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-gray-800">
+              <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-black">
                 <div className="w-12 h-12 bg-red-100 dark:bg-[#1a1a1a] rounded-full flex items-center justify-center mb-4">
                   <ShoppingBag
                     className="text-red-500 dark:text-red-400"
@@ -363,7 +363,7 @@ export function DashboardComponent() {
                   Enable <ArrowRight className="ml-2" size={16} />
                 </button>
               </div>
-              <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-gray-800">
+              <div className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow border dark:border-black">
                 <div className="w-12 h-12 bg-red-100 dark:bg-[#1a1a1a] rounded-full flex items-center justify-center mb-4">
                   <Edit className="text-red-500 dark:text-red-400" size={24} />
                 </div>

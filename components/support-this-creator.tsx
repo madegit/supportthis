@@ -355,7 +355,7 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                 {/* Send Hearts */}
                 <Card
                   ref={incrementalSectionRef}
-                  className="mb-8 bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-blur-sm shadow rounded-xl border dark:border-gray-800"
+                  className="mb-8 bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-blur-sm shadow rounded-xl border dark:border-black"
                 >
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="tracking-tight flex items-center text-2xl">
@@ -451,7 +451,6 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                     setOpenAccordionItem={setOpenAccordionItem}
                   />
                 )}
-
 
                 {/* CTA Section */}
                 <CTASection />

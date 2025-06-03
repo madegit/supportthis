@@ -18,7 +18,7 @@ export default function Contributors({
   calculateHeartValue,
 }: ContributorsProps) {
   return (
-    <Card className="mb-8 bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-blur-sm border dark:border-gray-800 shadow rounded-xl">
+    <Card className="mb-8 bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-blur-sm border dark:border-black shadow rounded-xl">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="tracking-tight flex items-center text-2xl">
           <MessageCircleHeart className="mr-2 h-6 w-6 text-red-500" />

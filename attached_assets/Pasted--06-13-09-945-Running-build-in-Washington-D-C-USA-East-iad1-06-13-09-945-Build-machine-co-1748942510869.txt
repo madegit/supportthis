@@ -1,0 +1,70 @@
+[06:13:09.945] Running build in Washington, D.C., USA (East) – iad1
+[06:13:09.945] Build machine configuration: 2 cores, 8 GB
+[06:13:09.997] Cloning github.com/madegit/supportthis (Branch: feat/get-started, Commit: ff3962e)
+[06:13:10.672] Cloning completed: 675.000ms
+[06:13:13.943] Restored build cache from previous deployment (72EYaQsbSXoMHx9vkjEhh9oDnUe1)
+[06:13:14.611] Running "vercel build"
+[06:13:16.366] Vercel CLI 42.2.0
+[06:13:16.682] Installing dependencies...
+[06:13:18.346] 
+[06:13:18.346] up to date in 2s
+[06:13:18.347] 
+[06:13:18.347] 162 packages are looking for funding
+[06:13:18.347]   run `npm fund` for details
+[06:13:18.356] Detected Next.js version: 14.2.13
+[06:13:18.362] Running "npm run build"
+[06:13:18.489] 
+[06:13:18.489] > SupportThis.org@0.1.0 build
+[06:13:18.489] > next build
+[06:13:18.489] 
+[06:13:19.188]   ▲ Next.js 14.2.13
+[06:13:19.189] 
+[06:13:19.267]    Creating an optimized production build ...
+[06:13:35.721] Browserslist: caniuse-lite is outdated. Please run:
+[06:13:35.721]   npx update-browserslist-db@latest
+[06:13:35.722]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[06:13:37.170]  ✓ Compiled successfully
+[06:13:37.171]    Linting and checking validity of types ...
+[06:13:42.929] 
+[06:13:42.930] ./app/dashboard/projects/[id]/edit/page.tsx
+[06:13:42.930] 39:6  Warning: React Hook useEffect has missing dependencies: 'fetchProject' and 'router'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+[06:13:42.930] 161:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+[06:13:42.930] 
+[06:13:42.930] ./app/dashboard/projects/[id]/page.tsx
+[06:13:42.931] 39:6  Warning: React Hook useEffect has a missing dependency: 'fetchProject'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+[06:13:42.931] 138:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+[06:13:42.931] 
+[06:13:42.931] ./app/dashboard/projects/create/page.tsx
+[06:13:42.932] 125:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+[06:13:42.932] 
+[06:13:42.932] ./app/dashboard/projects/page.tsx
+[06:13:42.932] 39:6  Warning: React Hook useEffect has a missing dependency: 'router'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+[06:13:42.932] 
+[06:13:42.933] ./components/ImageSlider.tsx
+[06:13:42.933] 46:6  Warning: React Hook useEffect has a missing dependency: 'nextImage'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+[06:13:42.933] 
+[06:13:42.933] ./components/product-details.tsx
+[06:13:42.936] 75:6  Warning: React Hook useEffect has a missing dependency: 'nextImage'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+[06:13:42.936] 107:41  Warning: The ref value 'addToCartRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'addToCartRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+[06:13:42.936] 
+[06:13:42.936] ./components/support-this-creator.tsx
+[06:13:42.937] 158:50  Warning: The ref value 'incrementalSectionRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'incrementalSectionRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+[06:13:42.937] 159:65  Warning: The ref value 'headerRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'headerRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+[06:13:42.938] 160:65  Warning: The ref value 'footerRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'footerRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+[06:13:42.938] 
+[06:13:42.939] info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+[06:13:54.473] Failed to compile.
+[06:13:54.473] 
+[06:13:54.473] ./components/ui/dropdown-menu.tsx:4:40
+[06:13:54.473] Type error: Cannot find module '@radix-ui/react-dropdown-menu' or its corresponding type declarations.
+[06:13:54.473] 
+[06:13:54.473] [0m [90m 2 |[39m[0m
+[06:13:54.474] [0m [90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[0m
+[06:13:54.474] [0m[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mDropdownMenuPrimitive[39m [36mfrom[39m [32m"@radix-ui/react-dropdown-menu"[39m[0m
+[06:13:54.474] [0m [90m   |[39m                                        [31m[1m^[22m[39m[0m
+[06:13:54.474] [0m [90m 5 |[39m [36mimport[39m { [33mCheck[39m[33m,[39m [33mChevronRight[39m[33m,[39m [33mCircle[39m } [36mfrom[39m [32m"lucide-react"[39m[0m
+[06:13:54.476] [0m [90m 6 |[39m[0m
+[06:13:54.476] [0m [90m 7 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m[0m
+[06:13:54.547] Error: Command "npm run build" exited with 1
+[06:13:54.937] 
+[06:13:58.105] Exiting build container

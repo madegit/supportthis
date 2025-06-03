@@ -282,7 +282,7 @@ export default function ProfileManagement({
           {alert.type && (
             <Alert
               variant={alert.type === "error" ? "destructive" : "default"}
-              className={`mb-6 ${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] border dark:border-gray-800"}`}
+              className={`mb-6 ${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] border dark:border-black"}`}
             >
               {alert.type === "error" ? (
                 <AlertCircle className="h-5 w-5" />
@@ -306,7 +306,7 @@ export default function ProfileManagement({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Profile Images Card */}
               <Card
-                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg border dark:border-black"} shadow`}
               >
                 <CardHeader>
                   <CardTitle
@@ -400,7 +400,7 @@ export default function ProfileManagement({
 
               {/* Basic Information Card */}
               <Card
-                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg border dark:border-black"} shadow`}
               >
                 <CardHeader>
                   <CardTitle
@@ -508,7 +508,7 @@ export default function ProfileManagement({
 
               {/* Social Media Links Card */}
               <Card
-                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg border dark:border-black"} shadow`}
               >
                 <CardHeader>
                   <CardTitle
@@ -580,7 +580,7 @@ export default function ProfileManagement({
 
               {/* Password Change Card - Only show if not onboarding */}
               {!isOnboarding && (
-                <Card className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg shadow border dark:border-gray-800">
+                <Card className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg shadow border dark:border-black">
                   <CardHeader>
                     <CardTitle className="dark:text-white">
                       Change Password
