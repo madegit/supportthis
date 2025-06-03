@@ -1,5 +1,5 @@
-import ProfileManagement from '@/components/profilesetting'
+import ProfileManagement from "@/components/profilesetting";
 
 export default function ProfileSetting() {
-  return <ProfileManagement />
+  return <ProfileManagement />;
 }

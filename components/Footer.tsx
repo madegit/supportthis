@@ -1,7 +1,7 @@
-import DarkModeToggle from './dark-mode-switch'
+import DarkModeToggle from "./dark-mode-switch";
 export function Footer() {
   return (
-    <footer className="bg-black dark:bg-gray-800 text-white dark:text-gray-200 py-8">
+    <footer className="bg-black text-white dark:text-gray-200 py-8">
       <div className="container mx-auto px-4 text-center">
         <div className="w-full flex justify-center mb-3">
           <DarkModeToggle />
@@ -20,9 +20,18 @@ export function Footer() {
             Refer a Creator
           </a>
         </div>
-        <p className="text-sm mt-2 text-gray-600 tracking-tight">Copyright © 2024 - <a href="https://supportthis.org/" target="_blank" rel="noopener noreferrer" className="hover:underline">SupportThis.org</a></p>
-
+        <p className="text-sm mt-2 text-gray-600 tracking-tight">
+          Copyright © 2024 -{" "}
+          <a
+            href="https://supportthis.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
+            SupportThis.org
+          </a>
+        </p>
       </div>
     </footer>
-  )
+  );
 }

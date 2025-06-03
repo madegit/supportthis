@@ -1,25 +1,28 @@
-import { Suspense } from 'react'
-import { notFound } from 'next/navigation'
-import { getUserByUsername } from '@/lib/api'
-import dynamic from 'next/dynamic'
-import { Skeleton } from '@/components/ui/skeleton'
-import { trackPageView } from '@/lib/analytics'
+import { Suspense } from "react";
+import { notFound } from "next/navigation";
+import { getUserByUsername } from "@/lib/api";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
+import { trackPageView } from "@/lib/analytics";
 
-const SupportThisCreator = dynamic(() => import('@/components/support-this-creator'), {
-  loading: () => <UserProfileSkeleton />,
-})
+const SupportThisCreator = dynamic(
+  () => import("@/components/support-this-creator"),
+  {
+    loading: () => <UserProfileSkeleton />,
+  },
+);
 
 async function UserProfileWrapper({ username }: { username: string }) {
-  const user = await getUserByUsername(username)
+  const user = await getUserByUsername(username);
 
   if (!user) {
-    notFound()
+    notFound();
   }
 
   // Track the page view
-  await trackPageView(username, `/[username]`)
+  await trackPageView(username, `/[username]`);
 
-  return <SupportThisCreator user={user} />
+  return <SupportThisCreator user={user} />;
 }
 
 export default function UserPage({ params }: { params: { username: string } }) {
@@ -27,13 +30,13 @@ export default function UserPage({ params }: { params: { username: string } }) {
     <Suspense fallback={<UserProfileSkeleton />}>
       <UserProfileWrapper username={params.username} />
     </Suspense>
-  )
+  );
 }
 
 function UserProfileSkeleton() {
   return (
-    <div className="min-h-screen bg-red-50 dark:bg-gray-900 py-8 px-4">
-      <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl overflow-hidden">
+    <div className="min-h-screen bg-red-50 dark:bg-black py-8 px-4 overflow-x-hidden">
+      <div className="max-w-4xl mx-auto bg-white dark:bg-[#121212] rounded-xl overflow-hidden border dark:border-gray-800">
         <Skeleton className="h-48 w-full" />
         <div className="p-6">
           <Skeleton className="h-32 w-32 rounded-full mb-4" />
@@ -50,21 +53,26 @@ function UserProfileSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export async function generateMetadata({ params }: { params: { username: string } }) {
-  const user = await getUserByUsername(params.username)
+export async function generateMetadata({
+  params,
+}: {
+  params: { username: string };
+}) {
+  const user = await getUserByUsername(params.username);
 
   if (!user) {
     return {
-      title: 'User Not Found',
-      description: 'The requested user profile could not be found.',
-    }
+      title: "User Not Found",
+      description: "The requested user profile could not be found.",
+    };
   }
 
   return {
     title: `${user.name}'s Profile`,
-    description: user.bio || `Check out ${user.name}'s profile and featured project.`,
-  }
+    description:
+      user.bio || `Check out ${user.name}'s profile and featured project.`,
+  };
 }

@@ -282,7 +282,7 @@ export default function ProfileManagement({
           {alert.type && (
             <Alert
               variant={alert.type === "error" ? "destructive" : "default"}
-              className={`mb-6 ${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-900 border dark:border-gray-800"}`}
+              className={`mb-6 ${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] border dark:border-gray-800"}`}
             >
               {alert.type === "error" ? (
                 <AlertCircle className="h-5 w-5" />
@@ -292,7 +292,11 @@ export default function ProfileManagement({
               <AlertTitle>
                 {alert.type === "error" ? "Error" : "Success"}
               </AlertTitle>
-              <AlertDescription className={isOnboarding ? "text-gray-300" : ""}>
+              <AlertDescription
+                className={
+                  isOnboarding ? "text-gray-300" : "dark:text-gray-300"
+                }
+              >
                 {alert.message}
               </AlertDescription>
             </Alert>
@@ -302,7 +306,7 @@ export default function ProfileManagement({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Profile Images Card */}
               <Card
-                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
               >
                 <CardHeader>
                   <CardTitle
@@ -320,7 +324,7 @@ export default function ProfileManagement({
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="relative mb-4">
-                    <div className="h-32 w-full bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden">
+                    <div className="h-32 w-full bg-gray-200 dark:bg-[#1a1a1a] rounded-xl overflow-hidden">
                       {profile.coverImage ? (
                         <Image
                           src={profile.coverImage || "/placeholder.svg"}
@@ -361,7 +365,7 @@ export default function ProfileManagement({
                         alt={profile.name}
                         className="w-full h-full object-cover"
                       />
-                      <AvatarFallback className="dark:bg-gray-800 dark:text-white">
+                      <AvatarFallback className="dark:bg-[#1a1a1a] dark:text-white">
                         {profile.name?.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
@@ -375,7 +379,7 @@ export default function ProfileManagement({
                     <Button
                       type="button"
                       onClick={() => avatarInputRef.current?.click()}
-                      className={`${isOnboarding ? "bg-white text-black hover:bg-gray-100" : "bg-red-500 dark:bg-white text-white dark:text-black hover:bg-red-400 dark:hover:bg-red-400 dark:hover:text-white"} rounded-xl`}
+                      className={`${isOnboarding ? "bg-white text-black hover:bg-gray-100" : "bg-red-500 dark:bg-red-600 text-white hover:bg-red-400 dark:hover:bg-red-700"} rounded-xl`}
                       disabled={isUploading}
                     >
                       Change Avatar
@@ -396,7 +400,7 @@ export default function ProfileManagement({
 
               {/* Basic Information Card */}
               <Card
-                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
               >
                 <CardHeader>
                   <CardTitle
@@ -428,7 +432,7 @@ export default function ProfileManagement({
                       value={profile.name}
                       onChange={handleInputChange}
                       required
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="space-y-2">
@@ -446,7 +450,7 @@ export default function ProfileManagement({
                       value={profile.username}
                       onChange={handleInputChange}
                       required
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"}`}
                     />
                     {isCheckingUsername && (
                       <p
@@ -472,7 +476,7 @@ export default function ProfileManagement({
                       onChange={handleInputChange}
                       required
                       disabled
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="space-y-2">
@@ -491,7 +495,7 @@ export default function ProfileManagement({
                       onChange={handleInputChange}
                       maxLength={MAX_BIO_LENGTH}
                       rows={3}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"}`}
                     />
                     <p
                       className={`text-sm ${isOnboarding ? "text-gray-400" : "text-gray-500 dark:text-gray-400"}`}
@@ -504,7 +508,7 @@ export default function ProfileManagement({
 
               {/* Social Media Links Card */}
               <Card
-                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
+                className={`${isOnboarding ? "bg-gray-700 border-gray-600" : "bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg border dark:border-gray-800"} shadow`}
               >
                 <CardHeader>
                   <CardTitle
@@ -528,7 +532,7 @@ export default function ProfileManagement({
                       placeholder="https://github.com/username"
                       value={profile.socialLinks.github}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -538,7 +542,7 @@ export default function ProfileManagement({
                       placeholder="https://twitter.com/username"
                       value={profile.socialLinks.twitter}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -548,7 +552,7 @@ export default function ProfileManagement({
                       placeholder="https://instagram.com/username"
                       value={profile.socialLinks.instagram}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -558,7 +562,7 @@ export default function ProfileManagement({
                       placeholder="https://linkedin.com/username"
                       value={profile.socialLinks.linkedin}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -568,7 +572,7 @@ export default function ProfileManagement({
                       placeholder="https://mywebsite.com/"
                       value={profile.socialLinks.website}
                       onChange={handleInputChange}
-                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-gray-800 dark:border-gray-700 dark:text-white"}`}
+                      className={`rounded-xl ${isOnboarding ? "bg-gray-800 border-gray-600 text-white" : "dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"}`}
                     />
                   </div>
                 </CardContent>
@@ -576,7 +580,7 @@ export default function ProfileManagement({
 
               {/* Password Change Card - Only show if not onboarding */}
               {!isOnboarding && (
-                <Card className="bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg shadow border dark:border-gray-800">
+                <Card className="bg-white dark:bg-[#121212] bg-opacity-50 dark:bg-opacity-100 backdrop-filter backdrop-blur-lg shadow border dark:border-gray-800">
                   <CardHeader>
                     <CardTitle className="dark:text-white">
                       Change Password
@@ -599,7 +603,7 @@ export default function ProfileManagement({
                         type="password"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                        className="rounded-xl dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"
                       />
                     </div>
                     <div className="space-y-2">
@@ -615,7 +619,7 @@ export default function ProfileManagement({
                         type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                        className="rounded-xl dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"
                       />
                     </div>
                     <div className="space-y-2">
@@ -631,7 +635,7 @@ export default function ProfileManagement({
                         type="password"
                         value={confirmNewPassword}
                         onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        className="rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                        className="rounded-xl dark:bg-[#1a1a1a] dark:border-gray-700 dark:text-white"
                       />
                     </div>
                   </CardContent>
