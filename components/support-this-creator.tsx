@@ -452,11 +452,6 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
                   />
                 )}
 
-                {/* Leaderboard */}
-                <Leaderboard
-                  leaderboard={leaderboard}
-                  calculateHeartValue={calculateHeartValue}
-                />
 
                 {/* CTA Section */}
                 <CTASection />
@@ -552,8 +547,6 @@ export default function SupportThisCreator({ user }: SupportThisCreatorProps) {
           </Dialog>
         </div>
       </div>
-
-      <SupportFooter ref={footerRef} />
     </div>
   );
 }
