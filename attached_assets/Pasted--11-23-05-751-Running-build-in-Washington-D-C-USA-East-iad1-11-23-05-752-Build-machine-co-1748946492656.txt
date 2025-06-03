@@ -1,0 +1,70 @@
+[11:23:05.751] Running build in Washington, D.C., USA (East) – iad1
+[11:23:05.752] Build machine configuration: 2 cores, 8 GB
+[11:23:05.797] Cloning github.com/madegit/supportthis (Branch: feat/get-started, Commit: c0f44c0)
+[11:23:06.439] Cloning completed: 642.000ms
+[11:23:08.376] Restored build cache from previous deployment (72EYaQsbSXoMHx9vkjEhh9oDnUe1)
+[11:23:08.986] Running "vercel build"
+[11:23:09.490] Vercel CLI 42.2.0
+[11:23:09.800] Installing dependencies...
+[11:23:11.838] 
+[11:23:11.839] added 36 packages, removed 1 package, and changed 4 packages in 2s
+[11:23:11.840] 
+[11:23:11.840] 162 packages are looking for funding
+[11:23:11.840]   run `npm fund` for details
+[11:23:11.848] Detected Next.js version: 14.2.13
+[11:23:11.854] Running "npm run build"
+[11:23:11.977] 
+[11:23:11.977] > SupportThis.org@0.1.0 build
+[11:23:11.978] > next build
+[11:23:11.978] 
+[11:23:12.643]   ▲ Next.js 14.2.13
+[11:23:12.644] 
+[11:23:12.709]    Creating an optimized production build ...
+[11:23:32.585] Browserslist: caniuse-lite is outdated. Please run:
+[11:23:32.585]   npx update-browserslist-db@latest
+[11:23:32.585]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[11:23:34.935]  ✓ Compiled successfully
+[11:23:34.937]    Linting and checking validity of types ...
+[11:23:40.962] 
+[11:23:40.962] ./app/dashboard/projects/[id]/edit/page.tsx
+[11:23:40.962] 39:6  Warning: React Hook useEffect has missing dependencies: 'fetchProject' and 'router'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+[11:23:40.962] 161:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+[11:23:40.962] 
+[11:23:40.962] ./app/dashboard/projects/[id]/page.tsx
+[11:23:40.962] 39:6  Warning: React Hook useEffect has a missing dependency: 'fetchProject'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+[11:23:40.962] 138:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+[11:23:40.962] 
+[11:23:40.962] ./app/dashboard/projects/create/page.tsx
+[11:23:40.963] 125:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+[11:23:40.963] 
+[11:23:40.963] ./app/dashboard/projects/page.tsx
+[11:23:40.963] 39:6  Warning: React Hook useEffect has a missing dependency: 'router'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+[11:23:40.963] 
+[11:23:40.963] ./components/ImageSlider.tsx
+[11:23:40.963] 46:6  Warning: React Hook useEffect has a missing dependency: 'nextImage'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+[11:23:40.963] 
+[11:23:40.963] ./components/product-details.tsx
+[11:23:40.963] 75:6  Warning: React Hook useEffect has a missing dependency: 'nextImage'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+[11:23:40.964] 107:41  Warning: The ref value 'addToCartRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'addToCartRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+[11:23:40.964] 
+[11:23:40.964] ./components/support-this-creator.tsx
+[11:23:40.964] 158:50  Warning: The ref value 'incrementalSectionRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'incrementalSectionRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+[11:23:40.964] 159:65  Warning: The ref value 'headerRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'headerRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+[11:23:40.964] 160:65  Warning: The ref value 'footerRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'footerRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+[11:23:40.964] 
+[11:23:40.965] info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+[11:23:52.101] Failed to compile.
+[11:23:52.101] 
+[11:23:52.102] ./components/ui/sheet.tsx:17:3
+[11:23:52.102] Type error: Property 'className' does not exist on type 'DialogPortalProps'.
+[11:23:52.102] 
+[11:23:52.102] [0m [90m 15 |[39m[0m
+[11:23:52.102] [0m [90m 16 |[39m [36mconst[39m [33mSheetPortal[39m [33m=[39m ({[0m
+[11:23:52.102] [0m[31m[1m>[22m[39m[90m 17 |[39m   className[33m,[39m[0m
+[11:23:52.105] [0m [90m    |[39m   [31m[1m^[22m[39m[0m
+[11:23:52.105] [0m [90m 18 |[39m   [33m...[39mprops[0m
+[11:23:52.105] [0m [90m 19 |[39m }[33m:[39m [33mSheetPrimitive[39m[33m.[39m[33mDialogPortalProps[39m) [33m=>[39m ([0m
+[11:23:52.105] [0m [90m 20 |[39m   [33m<[39m[33mSheetPrimitive[39m[33m.[39m[33mPortal[39m className[33m=[39m{cn(className)} {[33m...[39mprops} [33m/[39m[33m>[39m[0m
+[11:23:52.174] Error: Command "npm run build" exited with 1
+[11:23:52.517] 
+[11:23:55.511] Exiting build container
