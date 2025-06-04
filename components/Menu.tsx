@@ -112,7 +112,7 @@ export function ProfileMenu() {
   return (
     <>
       {/* Vertical Menu (Desktop) */}
-      <div className="hidden md:flex flex-col w-64 bg-white dark:bg-[#121212] bg-opacity-80 dark:bg-opacity-80 backdrop-filter backdrop-blur-lg p-4 border-r dark:border-black">
+      <div className="hidden md:flex flex-col w-64 bg-white dark:bg-[#121212] bg-opacity-80 dark:bg-opacity-80 backdrop-filter rounded-xl m-6 mr-0 backdrop-blur-lg p-4 border-r dark:border-black">
         <div className="mb-4 mt-5">
           <div className="w-full p-5 h-8 mx-auto flex items-center text-gray-900 dark:text-white">
             SupportThis.org
