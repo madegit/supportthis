@@ -460,15 +460,14 @@ export default function NewSignupFlow({ onComplete }: SignupFlowProps) {
   return (
     <div
       className="min-h-screen h-full bg-black flex flex-col lg:flex-row overflow-auto lg:overflow-hidden overflow-x-hidden"
-      style={{ padding: "20px" }}
     >
       <style jsx global>
         {scrollbarHideStyles}
       </style>
       {/* Left Side - Steps with Mesh Gradient Background */}
-      <div className="w-full lg:w-[45vw] h-[60vh] lg:h-[90vh] mx-auto flex items-center justify-center order-1 lg:order-1">
+      <div className="w-full lg:w-[45vw] h-[60vh] lg:h-[100vh] mx-auto flex items-center justify-center order-1 lg:order-1">
         <div
-          className="w-full rounded-2xl relative overflow-hidden h-full"
+          className="w-full relative overflow-hidden h-full"
           style={{
             backgroundImage: "url('/mesh-gradient.svg')",
             backgroundSize: "cover",
